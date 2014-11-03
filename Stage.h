@@ -5,9 +5,6 @@
 //  Created by 유정민 on 2014. 10. 24..
 //
 //
-//  Revised by 이상민 on 2014. 10. 28..
-//	수정될까...
-//  Class 이름들 정리해여 >_<
 
 #ifndef __BreakGongDae__Stage__
 #define __BreakGongDae__Stage__

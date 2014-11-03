@@ -4,9 +4,7 @@
 //
 //  Created by 유정민 on 2014. 10. 24..
 //
-//	푸시푸시베이베푸시푸시베이베
-//	지금은 수정중
-// 충돌충돌
+//
 
 #include "Stage.h"
 #include "Building.h"
