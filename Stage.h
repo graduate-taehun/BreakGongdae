@@ -9,26 +9,7 @@
 #ifndef __BreakGongDae__Stage__
 #define __BreakGongDae__Stage__
 
-#include "cocos2d.h"
-USING_NS_CC;
-
-enum state{ G, AIR };
-enum attack{ Y, N, B };
-
-class Grosss :	public Sprite
-{
-	Sprite *gros;
-	state s;
-	attack a;
-public:
-	Sprite* getgros();
-	Grosss();
-	void grosinit();
-	state getstate();
-	void setstate(state);
-	attack getattack();
-	void setattack(attack);
-};
+#include "Character.h"
 
 class Stage : public LayerColor
 {
@@ -49,9 +30,10 @@ public:
     
 
 protected:
-    static const int GROUND = 50;
+    static const int GROUND_HEIGHT = 50;
     static const int CHARACTER_TAG = 11;
     static const int EDGE_TAG = 0;
+    static const int BLOCK_TAG=1;
     
     static Size visibleSize;
     
@@ -69,8 +51,7 @@ protected:
 private:
     static float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
     static int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
-	friend class Grosss;
-	Grosss g;
+	
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */

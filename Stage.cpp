@@ -13,31 +13,6 @@ Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 float Stage::posCharacter[3] = { Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3, Stage::visibleSize.width / 2, Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3 };
 int Stage::cntofPosCharacter = 1;
 
-Grosss::Grosss()
-{
-	grosinit();
-	s = G;
-	a = N;
-}
-
-void Grosss::grosinit() {
-	gros = Sprite::create("grossini.png");
-	gros->setPosition(Stage::visibleSize.width / 2, Stage::GROUND + gros->getContentSize().height / 2);
-	auto body = PhysicsBody::createBox(gros->getContentSize(), PhysicsMaterial(1., 0., 0.), Vec2(0, 0));
-	body->setAngularVelocityLimit(0);
-	body->setCategoryBitmask(0x01); // 0001
-	body->setContactTestBitmask(0x04); // 0100
-	body->setCollisionBitmask(0x03); // 0011
-	gros->setPhysicsBody(body);
-}
-
-Sprite* Grosss::getgros(){ return gros; }
-state Grosss::getstate(){ return s; }
-void Grosss::setstate(state ss){ s = ss; }
-attack Grosss::getattack(){ return a; }
-void Grosss::setattack(attack aa){ a = aa; }
-
-
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
@@ -52,9 +27,9 @@ Scene* Stage::createScene()
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(gravity);
     
-    auto body = PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10-GROUND), PhysicsMaterial(0.,0.,0.),1);
+    auto body = PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10-GROUND_HEIGHT), PhysicsMaterial(0.,0.,0.),1);
     auto edgeNode = Node::create();
-    edgeNode->setPosition(Point(visibleSize.width / 2, visibleSize.height*5+GROUND/2));
+    edgeNode->setPosition(Point(visibleSize.width / 2, visibleSize.height*5+GROUND_HEIGHT/2));
     edgeNode->setTag(EDGE_TAG);
     edgeNode->setPhysicsBody(body);
     scene->addChild(edgeNode);
@@ -75,7 +50,7 @@ bool Stage::init()
         return false;
     }
     //visibleSize=Director::getInstance()->getVisibleSize();
-    auto keylistener = EventListenerKeyboard::create();
+    auto *keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
     keylistener->onKeyReleased = CC_CALLBACK_2(Stage::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keylistener, this);
@@ -85,13 +60,18 @@ bool Stage::init()
     background->setPosition(visibleSize.width/2,visibleSize.height*5);
     addChild(background);
     
-
-	addChild(g.getgros());
-	g.setTag(CHARACTER_TAG);
+    auto *character=Character::create();
+	character->setTag(CHARACTER_TAG);
+    character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
+    addChild(character);
+    
 
 	auto *block = Sprite::create("block.png");
-	block->setScale(0.1, 0.1);
-	auto block_body = PhysicsBody::createBox(block->getContentSize() / 10, PhysicsMaterial(0., 0., 0.), Vec2(0, 0));
+    block->setScale(0.1,0.1);
+    
+    //block->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
+    
+	auto *block_body = PhysicsBody::createBox(block->getContentSize()/10, PhysicsMaterial(0., 0., 0.), Vec2(0,0));
 	block_body->setAngularVelocityLimit(0);
 
 	// 郊韓拭 薗顕
@@ -100,42 +80,41 @@ bool Stage::init()
 	block_body->setCollisionBitmask(0x06);	// 0110
 
 	block->setPhysicsBody(block_body);
-	block->setPosition(visibleSize.width / 2, GROUND + block->getContentSize().height);
+	block->setPosition(visibleSize.width / 2, GROUND_HEIGHT + block->getContentSize().height+1000);
+    
+    block->setTag(BLOCK_TAG);
 	addChild(block);
-	block->setTag(1);
 	
-	auto contactListener = EventListenerPhysicsContact::create();
+	auto *contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	
     return true;
 }
-/*Stage::~Stage() {
-    
-}*/
 
 void Stage::jump_scheduler(float time) {
-    auto character = g.getgros();
+    auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
     if(character->getPosition().y >=visibleSize.height/2) {
         //배경을 내림
         this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
-        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND/2+(visibleSize.height/2-character->getPosition().y)));
+        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
-    else if(character->getPosition().y<=GROUND+character->getContentSize().height/2+1) {
+    else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
         //캐릭터 안흔들리게
         character->getPhysicsBody()->setAngularVelocity(0.);
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
         character->setRotation(0);
-        character->setPosition(Vec2(posCharacter[cntofPosCharacter],GROUND+character->getContentSize().height/2));
+        character->setPosition(Vec2(posCharacter[cntofPosCharacter],GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
+        character->setState(sGround);
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
     else {
         //배경 안움직임
         this->setPosition(this->getPosition().x,0);
         
-        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND/2);
+        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
         //안흔들리게
         character->setRotation(0);
         character->getPhysicsBody()->setAngularVelocity(0.);
@@ -147,7 +126,7 @@ void Stage::skill_blocking(){
 
 }*/
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
-    auto character = g.getgros();
+    auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
     
     switch (keyCode){
             
@@ -165,10 +144,10 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         }
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         {
-			if (g.getstate() == G){
-				g.setstate(AIR);
-				auto act = JumpBy::create(1, Vec2(0, 1000), 1000, 1);
-				character->runAction(act);
+			if (character->getState() == sGround){
+				character->setState(sAir);
+				auto jump = JumpBy::create(1, Vec2(0, 1000), 1000, 1);
+				character->runAction(jump);
 
 				//점프동작
 				if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
@@ -180,9 +159,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 		// 採呪奄
 		case EventKeyboard::KeyCode::KEY_Z:
 		{ 
-			if (g.getattack() == N)
+			if (character->getAttack() == N)
 			{
-				g.setattack(Y);
+                character->setAttack(Y);
 				Vector<SpriteFrame*> animFrames(15);
 				char str[100] = { 0 };
 				for (int i = 1; i < 15; i++){
@@ -220,7 +199,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
 {
-	auto character = g.getgros();
+	auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
 	
 	switch (keyCode){
 		case EventKeyboard::KeyCode::KEY_Z:{
@@ -228,22 +207,30 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 			character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001
-			g.setattack(N);
+			character->setAttack(N);
 		}
 	}
 }
 
 bool Stage::onContactBegin(PhysicsContact& contact)
 {
-	auto character = g.getgros();
+	//auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
 
 	auto sp1 = (Sprite*)contact.getShapeA()->getBody()->getNode();
-	int tag1 = sp1->getTag();
-
-	auto sp2 = (Sprite*)contact.getShapeB()->getBody()->getNode();
-	int tag2 = sp2->getTag();
-	
-	removeChild(sp1, true);
-	
+    auto sp2 = (Sprite*)contact.getShapeB()->getBody()->getNode();
+    
+    auto character=dynamic_cast<Character *>((sp1->getTag()==BLOCK_TAG)?sp2:sp1);
+    auto block=/*dynamic_cast<Block *>*/((sp1->getTag()==BLOCK_TAG)?sp1:sp2);
+    
+    switch (character->getAttack()) {
+        case Y:
+            removeChild(block, true);
+            break;
+        case B:
+            block->getPhysicsBody()->setVelocity(Vec2(0,0));
+            break;
+        case N:
+            break;
+    }
 	return true;
 }
