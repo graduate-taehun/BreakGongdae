@@ -104,24 +104,26 @@ bool Stage::init()
 	//body->setContactTestBitmask(0x04); // 0100
 	//body->setCollisionBitmask(0x03); // 0011
 
-	auto *block = Building::createWithNumbsersOfBlockAndImage(10,"block.png");
+	auto *Building = Building::createWithNumbsersOfBlockAndImage(10,"block.png");
     
     
     //block->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
     
-	auto *block_body = PhysicsBody::createBox(block->getContentSize(), PhysicsMaterial(0., 0., 0.), Vec2(0,0));
-	block_body->setAngularVelocityLimit(0);
+	auto *Building_body = PhysicsBody::createBox(Building->getContentSize(), PhysicsMaterial(0., 0., 0.), Vec2(0,0));
+    
+	Building_body->setAngularVelocityLimit(0);
+    //Building_body->setPositionOffset(Vec2(0,Building->getContentSize().height/2));
 
 	// 郊韓拭 薗顕
-	block_body->setCategoryBitmask(0x04);	// 0100
-	block_body->setContactTestBitmask(0x08); // 1000
-	block_body->setCollisionBitmask(0x06);	// 0110
+	Building_body->setCategoryBitmask(0x04);	// 0100
+	Building_body->setContactTestBitmask(0x08); // 1000
+	Building_body->setCollisionBitmask(0x06);	// 0110
 
-	block->setPhysicsBody(block_body);
-	block->setPosition(visibleSize.width / 2, GROUND_HEIGHT + block->getContentSize().height+1000);
+	Building->setPhysicsBody(Building_body);
     
-    block->setTag(BLOCK_TAG);
-	addChild(block);
+	Building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+1000);
+    Building->setTag(Building_TAG);
+	addChild(Building);
 	
 	auto *contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
@@ -282,15 +284,15 @@ bool Stage::onContactBegin(PhysicsContact& contact)
 	auto sp1 = (Sprite*)contact.getShapeA()->getBody()->getNode();
     auto sp2 = (Sprite*)contact.getShapeB()->getBody()->getNode();
     
-    auto character=dynamic_cast<Character *>((sp1->getTag()==BLOCK_TAG)?sp2:sp1);
-    auto block=/*dynamic_cast<Block *>*/((sp1->getTag()==BLOCK_TAG)?sp1:sp2);
+    auto character=dynamic_cast<Character *>((sp1->getTag()==Building_TAG)?sp2:sp1);
+    auto Building=/*dynamic_cast<Building *>*/((sp1->getTag()==Building_TAG)?sp1:sp2);
     
     switch (character->getAttack()) {
         case Y:
-            removeChild(block, true);
+            removeChild(Building, true);
             break;
         case B:
-            block->getPhysicsBody()->setVelocity(Vec2(0,0));
+            Building->getPhysicsBody()->setVelocity(Vec2(0,0));
             break;
         case N:
             break;

@@ -22,14 +22,17 @@ bool Building::init(int numbers, string filename) {
     
     for(int i=0; i<numbers; i++) {
         auto *block=Block::create();
-        block->setPosition(Vec2(0,i*block->getContentSize().height));
+        
         block->setTexture(filename);
-        block->setScale(0.1,0.1);
-        block->setContentSize(Size(block->getContentSize().width/10,block->getContentSize().height/10));
+        //block->setScale(0.1,0.1);
+        //block->setContentSize(Size(block->getContentSize().width/10,block->getContentSize().height/10));
+        setContentSize(Size(block->getContentSize().width,block->getContentSize().height*numbers));
+        block->setPosition(Vec2(0,(i-(numbers/2)+0.5)*block->getContentSize().height));
         block->durability=10;
         blocks.push(block);
         addChild(block);
     }
+    
      return true;
 }
 

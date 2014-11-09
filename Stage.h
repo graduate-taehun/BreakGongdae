@@ -25,6 +25,7 @@ public:
 	// implement the "static create()" method manually
 	CREATE_FUNC(ScoreBoard);
 };
+
 class MenuStage : public Layer
 {
 public:
@@ -67,7 +68,7 @@ protected:
     static const int GROUND_HEIGHT = 50;
     static const int CHARACTER_TAG = 11;
     static const int EDGE_TAG = 0;
-    static const int BLOCK_TAG = 1;
+    static const int Building_TAG = 1;
 	static const int TITLE_TAG = 2;
 	static const int HP_BAR_TAG = 3;
 	static const int STATUS_TAG = 4;
