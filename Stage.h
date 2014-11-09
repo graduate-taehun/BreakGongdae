@@ -28,6 +28,7 @@ public:
     //virtual bool onTouchBegan(Touch *touch, Event * event);
     //virtual void onTouchEnded(Touch *touch, Event * event);
     
+	void stopAttack();
 
 protected:
     static const int GROUND_HEIGHT = 50;
