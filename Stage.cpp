@@ -85,9 +85,6 @@ bool Stage::init()
 	status_bar->setTag(HP_BAR_TAG);
 	status_bar->setPosition(visibleSize.width / 8, visibleSize.height*19/20);
 	
-	auto body = PhysicsBody::createBox(status_bar->getContentSize()/2, PhysicsMaterial(1., 0., 0.), Vec2(0, 0));
-	status_bar->setPhysicsBody(body);
-	status_bar->getPhysicsBody()->setDynamic(false);
 	addChild(status_bar);
 
 	//body->setAngularVelocityLimit(0);
