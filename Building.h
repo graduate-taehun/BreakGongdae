@@ -26,10 +26,10 @@ public:
 using namespace std;
 class Building : Layer {
 private:
-    queue<Block> blocks;
+    queue<Block *> blocks;
 public:
-    //Constructor(에서 Layer::init 호출)
-    static Building* create(/*넣어야함*/);
+    bool init(int numbers);
+    static Building createWithNumbsersOfBlock(int numbers);
     void setPositionOfBottom();
     Point getPositionOfTop();
     void attack();

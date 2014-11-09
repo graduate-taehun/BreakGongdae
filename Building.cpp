@@ -8,10 +8,17 @@
 
 #include "Building.h"
 
-Building* Building::create(/*넣어야함*/)
+bool Building::init(int numbers) {
+    if(!Layer::init()) return false;
+    for(int i=0; i<numbers; ) {
+        
+    }
+}
+
+Building* Building::createWithNumbsersOfBlock(int numbers)
 {
-    Building *pRet = new Building(/*넣어야함*/);
-    if (pRet && pRet->init())
+    Building *pRet = new Building();
+    if (pRet && pRet->init(numbers))
     {
         pRet->autorelease();
         return pRet;

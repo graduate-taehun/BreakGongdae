@@ -65,12 +65,12 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
     addChild(character);
     
-	LabelBMFont *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
+    auto *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
 	pLabel_Title->setTag(TITLE_TAG);
 	pLabel_Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 	addChild(pLabel_Title);
 
-	CCLabelTTF*  pLabel = CCLabelTTF::create("HP BAR", "Arial", 30);
+	auto *pLabel = CCLabelTTF::create("HP BAR", "Arial", 30);
 	pLabel->setTag(STATUS_TAG);
 	pLabel->setPosition(visibleSize.width / 8, visibleSize.height *18/20);
 	addChild(pLabel);
