@@ -10,7 +10,23 @@
 #define __BreakGongDae__Stage__
 
 #include "Character.h"
+class MenuStage : public Layer
+{
+public:
+	// there's no 'id' in cpp, so we recommend returning the class instance pointer
+	static Scene* createScene();
 
+	void menuCallback1(Ref* pSender);
+	void menuCallback2(Ref* pSender);
+	void menuCallback3(Ref* pSender);
+
+	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+	virtual bool init();
+
+
+	// implement the "static create()" method manually
+	CREATE_FUNC(MenuStage);
+};
 class Stage : public LayerColor
 {
 public:
@@ -28,14 +44,16 @@ public:
     //virtual bool onTouchBegan(Touch *touch, Event * event);
     //virtual void onTouchEnded(Touch *touch, Event * event);
     
-	void stopAttack();
 
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int CHARACTER_TAG = 11;
     static const int EDGE_TAG = 0;
-    static const int BLOCK_TAG=1;
-    
+    static const int BLOCK_TAG = 1;
+	static const int TITLE_TAG = 2;
+	static const int HP_BAR_TAG = 3;
+	static const int STATUS_TAG = 4;
+
     static Size visibleSize;
     
 

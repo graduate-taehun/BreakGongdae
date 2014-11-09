@@ -65,6 +65,35 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
     addChild(character);
     
+	LabelBMFont *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
+	pLabel_Title->setTag(TITLE_TAG);
+	pLabel_Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+	addChild(pLabel_Title);
+
+	CCLabelTTF*  pLabel = CCLabelTTF::create("HP BAR", "Arial", 30);
+	pLabel->setTag(STATUS_TAG);
+	pLabel->setPosition(visibleSize.width / 8, visibleSize.height *18/20);
+	addChild(pLabel);
+
+	//	pLabel->setFontFillColor(Color3B::RED);
+	//	pLabel->enableShadow(Size(10, 10), 255, 3.0);    // 그림자 떨어진 크기, 투명도, 두께
+	//	pLabel->enableStroke(Color3B::RED, 2.0); // 외곽선 색상, 두께
+	//	pLabel->setFontFillColor(Color3B(0, 0, 0));   // pLabel->setColor(Color3B::RED);
+
+	auto *status_bar = Sprite::create("Hp.jpg");
+	status_bar->setScale(0.5, 0.125);
+	status_bar->setTag(HP_BAR_TAG);
+	status_bar->setPosition(visibleSize.width / 8, visibleSize.height*19/20);
+	
+	auto body = PhysicsBody::createBox(status_bar->getContentSize()/2, PhysicsMaterial(1., 0., 0.), Vec2(0, 0));
+	status_bar->setPhysicsBody(body);
+	status_bar->getPhysicsBody()->setDynamic(false);
+	addChild(status_bar);
+
+	//body->setAngularVelocityLimit(0);
+	//body->setCategoryBitmask(0x01); // 0001
+	//body->setContactTestBitmask(0x04); // 0100
+	//body->setCollisionBitmask(0x03); // 0011
 
 	auto *block = Sprite::create("block.png");
     block->setScale(0.1,0.1);
@@ -94,8 +123,16 @@ bool Stage::init()
 
 void Stage::jump_scheduler(float time) {
     auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
+	auto pLabel_Title = dynamic_cast<LabelBMFont *>(getChildByTag(TITLE_TAG));
+	auto pLabel = dynamic_cast<CCLabelTTF *>(getChildByTag(STATUS_TAG));
+	auto status_bar = dynamic_cast<Sprite *>(getChildByTag(HP_BAR_TAG));
+
     if(character->getPosition().y >=visibleSize.height/2) {
         //배경을 내림
+		status_bar->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
+		pLabel->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
+		pLabel_Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
+	
         this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
@@ -112,10 +149,13 @@ void Stage::jump_scheduler(float time) {
     }
     else {
         //배경 안움직임
+		status_bar->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
+		pLabel->setPosition(visibleSize.width / 8, visibleSize.height * 18 / 20);
+		pLabel_Title->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 19 / 20);
         this->setPosition(this->getPosition().x,0);
-        
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
-        //안흔들리게
+        
+		//안흔들리게
         character->setRotation(0);
         character->getPhysicsBody()->setAngularVelocity(0.);
     }
@@ -159,12 +199,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 		// 採呪奄
 		case EventKeyboard::KeyCode::KEY_Z:
 		{ 
-											  character->stopActionByTag(21);
-											  character->setAttack(N);
 			if (character->getAttack() == N)
 			{
                 character->setAttack(Y);
-
 				Vector<SpriteFrame*> animFrames(15);
 				char str[100] = { 0 };
 				for (int i = 1; i < 15; i++){
@@ -176,17 +213,15 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 				animFrames.pushBack(frame);
 				auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 				auto animate = Animate::create(animation);
-				
 
-				auto pCallback = CallFunc::create(CC_CALLBACK_0(Stage::stopAttack, this));
-				auto pSequence = Sequence::create(animate, pCallback, nullptr);
-				pSequence->setTag(21);
-				character->runAction(pSequence);
-				
+				character->runAction(animate);
+
 				character->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
 				character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 				character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001
+
 			}
+
 			break;
 		}
 		// 厳奄
@@ -202,12 +237,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     }
 }
 
-void Stage::stopAttack()
-{
-	auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-	character->setAttack(N);
-}
-
 void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
 {
 	auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
@@ -218,7 +247,7 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 			character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001
-			//character->setAttack(N);
+			character->setAttack(N);
 		}
 	}
 }
@@ -244,4 +273,50 @@ bool Stage::onContactBegin(PhysicsContact& contact)
             break;
     }
 	return true;
+}
+
+Scene* MenuStage::createScene()
+{
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
+
+	// 'layer' is an autorelease object
+	auto layer = MenuStage::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
+}
+// on "init" you need to initialize your instance
+bool MenuStage::init()
+{
+	if (!Layer::init())
+	{
+		return false;
+	}
+
+	auto item_1 = MenuItemFont::create("Start", CC_CALLBACK_1(MenuStage::menuCallback1, this));
+	auto item_2 = MenuItemFont::create("Score", CC_CALLBACK_1(MenuStage::menuCallback2, this));
+	auto item_3 = MenuItemFont::create("exit", CC_CALLBACK_1(MenuStage::menuCallback3, this));
+
+	auto menu = Menu::create(item_1, item_2, item_3, NULL);
+	menu->alignItemsVertically();
+	this->addChild(menu);
+
+	return true;
+}
+
+void MenuStage::menuCallback1(Ref* pSender)
+{
+	Director::getInstance()->replaceScene(Stage::createScene());
+}
+void MenuStage::menuCallback2(Ref* pSender)
+{
+	CCLOG("menuCallback");
+}
+void MenuStage::menuCallback3(Ref* pSender)
+{
+	Director::getInstance()->end();
 }
