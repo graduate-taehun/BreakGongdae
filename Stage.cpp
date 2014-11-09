@@ -196,6 +196,8 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 		// 採呪奄
 		case EventKeyboard::KeyCode::KEY_Z:
 		{ 
+											  character->stopActionByTag(21);
+											  character->setAttack(N);
 			if (character->getAttack() == N)
 			{
                 character->setAttack(Y);
@@ -211,7 +213,12 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 				auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 				auto animate = Animate::create(animation);
 
-				character->runAction(animate);
+
+				auto pCallback = CallFunc::create(CC_CALLBACK_0(Stage::stopAttack, this));
+				auto pSequence = Sequence::create(animate, pCallback, nullptr);
+				pSequence->setTag(21);
+				character->runAction(pSequence);
+
 
 				character->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
 				character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
@@ -234,6 +241,13 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     }
 }
 
+void Stage::stopAttack()
+{
+	auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
+	character->setAttack(N);
+}
+
+
 void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
 {
 	auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
@@ -244,7 +258,7 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 			character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001
-			character->setAttack(N);
+			//character->setAttack(N);
 		}
 	}
 }
