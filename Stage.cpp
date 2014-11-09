@@ -315,11 +315,22 @@ Scene* MenuStage::createScene()
 // on "init" you need to initialize your instance
 bool MenuStage::init()
 {
+	
 	if (!Layer::init())
 	{
 		return false;
 	}
 
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	/*LabelBMFont *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
+	pLabel_Title->setTag(TITLE_TAG);
+	pLabel_Title->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 19 / 20);
+	addChild(pLabel_Title);*/
+	auto label = LabelBMFont::create("BreakGongDae", "futura-48.fnt", 50);
+	label->setPosition(Vec2(visibleSize.width / 2,
+		visibleSize.height - label->getContentSize().height-80));
+	this->addChild(label, 1);
+	
 	auto item_1 = MenuItemFont::create("Start", CC_CALLBACK_1(MenuStage::menuCallback1, this));
 	auto item_2 = MenuItemFont::create("Score", CC_CALLBACK_1(MenuStage::menuCallback2, this));
 	auto item_3 = MenuItemFont::create("exit", CC_CALLBACK_1(MenuStage::menuCallback3, this));
@@ -413,7 +424,6 @@ bool ScoreBoard::init()
 	auto label8 = LabelTTF::create(str[8], "Arial", 24);
 	auto label9 = LabelTTF::create(str[9], "Arial", 24);
 	// position the label on the center of the screen
-
 	label->setPosition(Vec2(origin.x + visibleSize.width / 2,
 		origin.y + visibleSize.height - label->getContentSize().height));
 	label0->setPosition(Vec2(origin.x + visibleSize.width / 2,
