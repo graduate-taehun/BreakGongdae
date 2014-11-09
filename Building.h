@@ -13,29 +13,28 @@
 #include <queue>
 USING_NS_CC;
 
-class Block : Sprite {
-private:
-    int durability;
+class Block : public Sprite {
 public:
     Block(int _durability=10) : durability(_durability) {}
+    int durability;
     void attack();
     virtual bool init();
     CREATE_FUNC(Block);
 };
 
 using namespace std;
-class Building : Layer {
+class Building : public Layer {
 private:
     queue<Block *> blocks;
 public:
-    bool init(int numbers);
-    static Building createWithNumbsersOfBlock(int numbers);
+    virtual bool init(int numbers, string filename);
+    static Building* createWithNumbsersOfBlockAndImage(int numbers, string filename);
+    
     void setPositionOfBottom();
     Point getPositionOfTop();
     void attack();
     void destroyAll();
+
 };
-
-
 
 #endif /* defined(__BreakGongDae__Building__) */

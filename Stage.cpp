@@ -92,12 +92,12 @@ bool Stage::init()
 	//body->setContactTestBitmask(0x04); // 0100
 	//body->setCollisionBitmask(0x03); // 0011
 
-	auto *block = Sprite::create("block.png");
-    block->setScale(0.1,0.1);
+	auto *block = Building::createWithNumbsersOfBlockAndImage(10,"block.png");
+    
     
     //block->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
     
-	auto *block_body = PhysicsBody::createBox(block->getContentSize()/10, PhysicsMaterial(0., 0., 0.), Vec2(0,0));
+	auto *block_body = PhysicsBody::createBox(block->getContentSize(), PhysicsMaterial(0., 0., 0.), Vec2(0,0));
 	block_body->setAngularVelocityLimit(0);
 
 	// 郊韓拭 薗顕
