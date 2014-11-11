@@ -4,7 +4,7 @@
 //
 //  Created by 유정민 on 2014. 10. 24..
 //
-//asdf
+//
 
 #include "Stage.h"
 #include "Building.h"
@@ -78,12 +78,12 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
     addChild(character);
     
-    auto *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
+	LabelBMFont *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
 	pLabel_Title->setTag(TITLE_TAG);
 	pLabel_Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 	addChild(pLabel_Title);
 
-	auto *pLabel = CCLabelTTF::create("HP BAR", "Arial", 30);
+	CCLabelTTF*  pLabel = CCLabelTTF::create("HP BAR", "Arial", 30);
 	pLabel->setTag(STATUS_TAG);
 	pLabel->setPosition(visibleSize.width / 8, visibleSize.height *18/20);
 	addChild(pLabel);
@@ -105,22 +105,21 @@ bool Stage::init()
 	//body->setContactTestBitmask(0x04); // 0100
 	//body->setCollisionBitmask(0x03); // 0011
 
-	auto *Building = Building::createWithNumbsersOfBlockAndImage(10,"block.png");
-    
+	auto *block = Sprite::create("block.png");
+    block->setScale(0.1,0.1);
     
     //block->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
     
-	auto *Building_body = PhysicsBody::createBox(Building->getContentSize(), PhysicsMaterial(0., 0., 0.), Vec2(0,0));
-    
-	Building_body->setAngularVelocityLimit(0);
-    //Building_body->setPositionOffset(Vec2(0,Building->getContentSize().height/2));
+	auto *block_body = PhysicsBody::createBox(block->getContentSize()/10, PhysicsMaterial(0., 0., 0.), Vec2(0,0));
+	block_body->setAngularVelocityLimit(0);
 
 	// 郊韓拭 薗顕
-	Building_body->setCategoryBitmask(0x04);	// 0100
-	Building_body->setContactTestBitmask(0x08); // 1000
-	Building_body->setCollisionBitmask(0x06);	// 0110
+	block_body->setCategoryBitmask(0x04);	// 0100
+	block_body->setContactTestBitmask(0x08); // 1000
+	block_body->setCollisionBitmask(0x06);	// 0110
 
-	Building->setPhysicsBody(Building_body);
+	block->setPhysicsBody(block_body);
+	block->setPosition(visibleSize.width / 2, GROUND_HEIGHT + block->getContentSize().height+1000);
     
 	Building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+1000);
     Building->setTag(BUILDING_TAG);
@@ -290,10 +289,10 @@ bool Stage::onContactBegin(PhysicsContact& contact)
     
     switch (character->getAttack()) {
         case Y:
-            removeChild(Building, true);
+            removeChild(block, true);
             break;
         case B:
-            Building->getPhysicsBody()->setVelocity(Vec2(0,0));
+            block->getPhysicsBody()->setVelocity(Vec2(0,0));
             break;
         case N:
             break;
