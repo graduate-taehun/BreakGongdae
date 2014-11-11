@@ -52,7 +52,7 @@ bool Stage::init()
 		CC_CALLBACK_1(Stage::menuCloseCallback, this));
 
 	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2,
-		closeItem->getContentSize().height / 2));
+                                closeItem->getContentSize().height / 2));
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(closeItem, NULL);
@@ -105,25 +105,25 @@ bool Stage::init()
 	//body->setContactTestBitmask(0x04); // 0100
 	//body->setCollisionBitmask(0x03); // 0011
 
-	auto *block = Sprite::create("block.png");
-    block->setScale(0.1,0.1);
+    auto *building = Building::createWithNumbsersAndImage(10, "block.png");
+    //building->setScale(0.1,0.1);
     
-    //block->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
+    //building->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
     
-	auto *block_body = PhysicsBody::createBox(block->getContentSize()/10, PhysicsMaterial(0., 0., 0.), Vec2(0,0));
-	block_body->setAngularVelocityLimit(0);
+	auto *building_body = PhysicsBody::createBox(building->getContentSize(), PhysicsMaterial(0., 0., 0.), Vec2(0,0));
+	building_body->setAngularVelocityLimit(0);
 
 	// 郊韓拭 薗顕
-	block_body->setCategoryBitmask(0x04);	// 0100
-	block_body->setContactTestBitmask(0x08); // 1000
-	block_body->setCollisionBitmask(0x06);	// 0110
+	building_body->setCategoryBitmask(0x04);	// 0100
+	building_body->setContactTestBitmask(0x08); // 1000
+	building_body->setCollisionBitmask(0x06);	// 0110
 
-	block->setPhysicsBody(block_body);
-	block->setPosition(visibleSize.width / 2, GROUND_HEIGHT + block->getContentSize().height+1000);
+	building->setPhysicsBody(building_body);
+	//building->setPosition(visibleSize.width / 2, GROUND_HEIGHT + building->getContentSize().height+1000);
     
-	Building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+1000);
-    Building->setTag(BUILDING_TAG);
-	addChild(Building);
+	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+1000);
+    building->setTag(BUILDING_TAG);
+	addChild(building);
 	
 	auto *contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
@@ -285,14 +285,14 @@ bool Stage::onContactBegin(PhysicsContact& contact)
     auto sp2 = (Sprite*)contact.getShapeB()->getBody()->getNode();
     
     auto character=dynamic_cast<Character *>((sp1->getTag()==BUILDING_TAG)?sp2:sp1);
-    auto Building=/*dynamic_cast<Building *>*/((sp1->getTag()==BUILDING_TAG)?sp1:sp2);
+    auto building=dynamic_cast<Building *>((sp1->getTag()==BUILDING_TAG)?sp1:sp2);
     
     switch (character->getAttack()) {
         case Y:
-            removeChild(block, true);
+            building->attack();
             break;
         case B:
-            block->getPhysicsBody()->setVelocity(Vec2(0,0));
+            building->getPhysicsBody()->setVelocity(Vec2(0,0));
             break;
         case N:
             break;

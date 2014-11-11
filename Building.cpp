@@ -32,7 +32,7 @@ int Block::getDurability() {
     return durability;
 }
 
-bool Building::init(int numbers, string filename) {
+bool Building::initWithNumbersAndImage(int numbers, string filename) {
     if(!Layer::init()) return false;
     
     removeAllChildren();
@@ -66,10 +66,10 @@ void Building::attack() {
     }
 }
 
-Building* Building::createWithNumbsersOfBlockAndImage(int numbers, string filename)
+Building* Building::createWithNumbsersAndImage(int numbers, string filename)
 {
-    Building *pRet = new Building();
-    if (pRet && pRet->init(numbers,filename))
+    Building *pRet = new Building(/*넣어야함*/);
+    if (pRet && pRet->initWithNumbersAndImage(numbers,filename))
     {
         pRet->autorelease();
         return pRet;

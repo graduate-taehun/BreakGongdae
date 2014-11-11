@@ -13,23 +13,13 @@
 
 class Stage : public LayerColor
 {
-public:
-
-	// there's no 'id' in cpp, so we recommend returning the class instance pointer
-    static cocos2d::Scene* createScene();
-    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
-    virtual bool init();
-
-    CREATE_FUNC(Stage);
-
-	
     
-    //void setPhyWorld(PhysicsWorld* world){ m_world = world; }
-    //~Stage();
-    //virtual bool onTouchBegan(Touch *touch, Event * event);
-    //virtual void onTouchEnded(Touch *touch, Event * event);
+private:
+    static float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
+    static int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
+    void stopAttack();
+    void menuCloseCallback(Ref* pSender);
     
-
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int CHARACTER_TAG = 11;
@@ -47,11 +37,14 @@ protected:
 	//void skill_blocking();
 	bool onContactBegin(PhysicsContact& contact);
 
-private:
-    static float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
-    static int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
-	void stopAttack();
-    void menuCloseCallback(Ref* pSender);
+public:
+    
+    // there's no 'id' in cpp, so we recommend returning the class instance pointer
+    static cocos2d::Scene* createScene();
+    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
+    virtual bool init();
+    
+    CREATE_FUNC(Stage);
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */

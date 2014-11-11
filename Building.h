@@ -28,14 +28,14 @@ class Building : public Layer {
 private:
     queue<Block *> blocks;
 public:
-    virtual bool init(int numbers, string filename);
-    static Building* createWithNumbsersOfBlockAndImage(int numbers, string filename);
-    
+    virtual bool initWithNumbersAndImage(int numbers, string filename);
+    static Building* createWithNumbsersAndImage(int numbers, string filename);
     void setPositionOfBottom();
     Point getPositionOfTop();
     void attack();
     void destroyAll();
-
 };
+
+
 
 #endif /* defined(__BreakGongDae__Building__) */
