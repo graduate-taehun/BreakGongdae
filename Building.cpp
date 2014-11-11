@@ -8,10 +8,28 @@
 
 #include "Building.h"
 
-bool Block::init() {
+Block* Block::createWithDurability(int _durability) {
+    Block *pRet = new Block();
+    if (pRet && pRet->init(_durability)) {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool Block::init(int _durability) {
     if(!Sprite::init()) return false;
-    
+    durability=_durability;
     return true;
+}
+
+int Block::getDurability() {
+    return durability;
 }
 
 bool Building::init(int numbers, string filename) {
@@ -21,14 +39,13 @@ bool Building::init(int numbers, string filename) {
     blocks.~queue();
     
     for(int i=0; i<numbers; i++) {
-        auto *block=Block::create();
+        auto *block=Block::createWithDurability(10);
         
         block->setTexture(filename);
         //block->setScale(0.1,0.1);
         //block->setContentSize(Size(block->getContentSize().width/10,block->getContentSize().height/10));
         setContentSize(Size(block->getContentSize().width,block->getContentSize().height*numbers));
         block->setPosition(Vec2(0,(i-(numbers/2)+0.5)*block->getContentSize().height));
-        block->durability=10;
         blocks.push(block);
         addChild(block);
     }
@@ -42,7 +59,7 @@ void Block::attack() {
 
 void Building::attack() {
     blocks.back()->attack();
-    if(blocks.back()->durability<0) {
+    if(blocks.back()->getDurability()<0) {
         setContentSize(Size(getContentSize().width,getContentSize().height-blocks.back()->getContentSize().height));
         removeChild(blocks.back());
         blocks.pop();

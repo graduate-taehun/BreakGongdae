@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "Stage.h"
+#include "Menu&Score.h"
 USING_NS_CC;
 
 AppDelegate::AppDelegate() {

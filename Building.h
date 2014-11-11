@@ -14,12 +14,13 @@
 USING_NS_CC;
 
 class Block : public Sprite {
-public:
-    Block(int _durability=10) : durability(_durability) {}
     int durability;
+public:
+    //Block(int _durability=10) : durability(_durability) {}
+    int getDurability();
     void attack();
-    virtual bool init();
-    CREATE_FUNC(Block);
+    virtual bool init(int _durability);
+    static Block* createWithDurability(int _durability);
 };
 
 using namespace std;
