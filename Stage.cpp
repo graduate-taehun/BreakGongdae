@@ -9,6 +9,7 @@
 #include "Stage.h"
 #include "Building.h"
 #include "Menu&Score.h"
+#include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 float Stage::posCharacter[3] = { Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3, Stage::visibleSize.width / 2, Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3 };
@@ -46,13 +47,9 @@ Scene* Stage::createScene()
 
 bool Stage::init()
 {
-	auto closeItem = MenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
-		CC_CALLBACK_1(Stage::menuCloseCallback, this));
+	auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 
-	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2,
-                                closeItem->getContentSize().height / 2));
+	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(closeItem, NULL);
@@ -63,7 +60,10 @@ bool Stage::init()
         return false;
     }
     //visibleSize=Director::getInstance()->getVisibleSize();
-    auto *keylistener = EventListenerKeyboard::create();
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
+	
+	auto *keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
     keylistener->onKeyReleased = CC_CALLBACK_2(Stage::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keylistener, this);
@@ -207,7 +207,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 				}
 				break;
         }
-            // 採呪奄
+        // 부수기
         case EventKeyboard::KeyCode::KEY_Z:
         {
             character->stopActionByTag(21);
@@ -242,7 +242,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 			break;
 		}
-		// 厳奄
+		// 막기
 		case EventKeyboard::KeyCode::KEY_X:
 		{
 			character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010
