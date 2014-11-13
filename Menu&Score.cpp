@@ -41,7 +41,6 @@ bool MenuStage::init()
     
     return true;
 }
-
 void MenuStage::menuCallback1(Ref* pSender)
 {
     Director::getInstance()->replaceScene(Stage::createScene());
@@ -93,13 +92,9 @@ bool ScoreBoard::init()
     //    you may modify it.
     
     // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
+    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
     
-    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2,
-                                origin.y + closeItem->getContentSize().height / 2));
+    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
     
     // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
@@ -125,28 +120,17 @@ bool ScoreBoard::init()
     auto label9 = LabelTTF::create(str[9], "Arial", 24);
     // position the label on the center of the screen
     
-    label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-    label0->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 + 200));
-    label1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 + 150));
-    label2->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 + 100));
-    label3->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 + 50));
-    label4->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2));
-    label5->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 - 50));
-    label6->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 - 100));
-    label7->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 - 150));
-    label8->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 - 200));
-    label9->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 - 250));
+    label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - label->getContentSize().height));
+    label0->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200));
+    label1->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 150));
+    label2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 100));
+    label3->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 50));
+    label4->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+    label5->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
+    label6->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 100));
+    label7->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 150));
+    label8->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 200));
+    label9->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 250));
     
     // add the label as a child to this layer
     this->addChild(label, 1);

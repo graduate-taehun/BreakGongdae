@@ -47,13 +47,9 @@ Scene* Stage::createScene()
 
 bool Stage::init()
 {
-	auto closeItem = MenuItemImage::create(
-		"CloseNormal.png",
-		"CloseSelected.png",
-		CC_CALLBACK_1(Stage::menuCloseCallback, this));
+	auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 
-	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2,
-                                closeItem->getContentSize().height / 2));
+	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(closeItem, NULL);
@@ -189,7 +185,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             }
             break;
         }
-            // 採呪奄
+        // 부수기
         case EventKeyboard::KeyCode::KEY_Z:
         {
             auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
@@ -227,7 +223,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 			break;
 		}
-		// 厳奄
+		// 막기
 		case EventKeyboard::KeyCode::KEY_X:
 		{
 			character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010

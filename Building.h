@@ -37,6 +37,4 @@ public:
     void destroyAll();
 };
 
-
-
 #endif /* defined(__BreakGongDae__Building__) */
