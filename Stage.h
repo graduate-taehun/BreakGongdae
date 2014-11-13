@@ -28,6 +28,7 @@ protected:
 	static const int TITLE_TAG = 2;
 	static const int HP_BAR_TAG = 3;
 	static const int STATUS_TAG = 4;
+    static const int ATTACK_TAG = 21;
 
     static Size visibleSize;
     

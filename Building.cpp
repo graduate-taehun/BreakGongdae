@@ -36,21 +36,31 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
     if(!Layer::init()) return false;
     
     removeAllChildren();
-    blocks.~queue();
+    delete blocks;
+    blocks=new queue<Block *>();
     
     for(int i=0; i<numbers; i++) {
-        auto *block=Block::createWithDurability(10);
+        auto block=Block::createWithDurability(3);
         
         block->setTexture(filename);
-        //block->setScale(0.1,0.1);
-        //block->setContentSize(Size(block->getContentSize().width/10,block->getContentSize().height/10));
-        setContentSize(Size(block->getContentSize().width,block->getContentSize().height*numbers));
+        setContentSize(Size(block->getContentSize().width, block->getContentSize().height*numbers));
         block->setPosition(Vec2(0,(i-(numbers/2)+0.5)*block->getContentSize().height));
-        blocks.push(block);
+        
+        blocks->push(block);
         addChild(block);
     }
     
-     return true;
+    auto body = PhysicsBody::createBox(getContentSize());
+    body->setCategoryBitmask(0x04);	// 0100
+    body->setContactTestBitmask(0x08); // 1000
+    body->setCollisionBitmask(0x06);	// 0110
+    body->setRotationEnable(false);
+    setPhysicsBody(body);
+    return true;
+}
+
+Building::~Building() {
+    delete blocks;
 }
 
 void Block::attack() {
@@ -58,17 +68,34 @@ void Block::attack() {
 }
 
 void Building::attack() {
-    blocks.back()->attack();
-    if(blocks.back()->getDurability()<0) {
-        setContentSize(Size(getContentSize().width,getContentSize().height-blocks.back()->getContentSize().height));
-        removeChild(blocks.back());
-        blocks.pop();
+    auto bottom=blocks->front();
+    bottom->attack();
+    if(bottom->getDurability()<0) {
+        
+        //getPhysicsBody()->setPositionOffset(Vec2(0,-blocks->back()->getContentSize().height/2));
+        
+        
+        removeChild(bottom);
+        blocks->pop();
+
+        setPosition(Vec2(getPosition().x,getPosition().y+blocks->back()->getContentSize().height/2));
+
+        for(int i=0; i<getChildren().size(); i++) {
+            getChildren().at(i)->setPosition(Vec2(getChildren().at(i)->getPosition().x,getChildren().at(i)->getPosition().y-getChildren().at(i)->getContentSize().height/2));
+        }
+        setContentSize(Size(getContentSize().width,blocks->back()->getContentSize().height*blocks->size()));
+        
+        getPhysicsBody()->removeAllShapes();
+        getPhysicsBody()->addShape(PhysicsShapeBox::create(Size(getContentSize().width,getContentSize().height)));
     }
+}
+void Building::setPositionOfBottom(Point p) {
+    
 }
 
 Building* Building::createWithNumbsersAndImage(int numbers, string filename)
 {
-    Building *pRet = new Building(/*넣어야함*/);
+    Building *pRet = new Building();
     if (pRet && pRet->initWithNumbersAndImage(numbers,filename))
     {
         pRet->autorelease();

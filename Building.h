@@ -26,11 +26,12 @@ public:
 using namespace std;
 class Building : public Layer {
 private:
-    queue<Block *> blocks;
+    queue<Block *>* blocks;
 public:
+    ~Building();
     virtual bool initWithNumbersAndImage(int numbers, string filename);
     static Building* createWithNumbsersAndImage(int numbers, string filename);
-    void setPositionOfBottom();
+    void setPositionOfBottom(Point p);
     Point getPositionOfTop();
     void attack();
     void destroyAll();

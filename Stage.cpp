@@ -9,6 +9,7 @@
 #include "Stage.h"
 #include "Building.h"
 #include "Menu&Score.h"
+#include <cstdlib>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 float Stage::posCharacter[3] = { Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3, Stage::visibleSize.width / 2, Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3 };
@@ -63,19 +64,20 @@ bool Stage::init()
         return false;
     }
     //visibleSize=Director::getInstance()->getVisibleSize();
-    auto *keylistener = EventListenerKeyboard::create();
+    auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
     keylistener->onKeyReleased = CC_CALLBACK_2(Stage::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keylistener, this);
 
-    auto *background=Sprite::create("stage_background.png");
+    auto background=Sprite::create("stage_background.png");
     background->setContentSize(Size(visibleSize.width,visibleSize.height*10));
     background->setPosition(visibleSize.width/2,visibleSize.height*5);
     addChild(background);
     
-    auto *character=Character::create();
+    auto character=Character::create();
 	character->setTag(CHARACTER_TAG);
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
+    character->getPhysicsBody()->setRotationEnable(false);
     addChild(character);
     
 	LabelBMFont *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
@@ -93,39 +95,20 @@ bool Stage::init()
 	//	pLabel->enableStroke(Color3B::RED, 2.0); // 외곽선 색상, 두께
 	//	pLabel->setFontFillColor(Color3B(0, 0, 0));   // pLabel->setColor(Color3B::RED);
 
-	auto *status_bar = Sprite::create("Hp.jpg");
+	auto status_bar = Sprite::create("Hp.jpg");
 	status_bar->setScale(0.5, 0.125);
 	status_bar->setTag(HP_BAR_TAG);
 	status_bar->setPosition(visibleSize.width / 8, visibleSize.height*19/20);
 	
 	addChild(status_bar);
 
-	//body->setAngularVelocityLimit(0);
-	//body->setCategoryBitmask(0x01); // 0001
-	//body->setContactTestBitmask(0x04); // 0100
-	//body->setCollisionBitmask(0x03); // 0011
 
-    auto *building = Building::createWithNumbsersAndImage(10, "block.png");
-    //building->setScale(0.1,0.1);
-    
-    //building->setContentSize(Size(block->getContentSize().width*0.6,block->getContentSize().height*0.15));
-    
-	auto *building_body = PhysicsBody::createBox(building->getContentSize(), PhysicsMaterial(0., 0., 0.), Vec2(0,0));
-	building_body->setAngularVelocityLimit(0);
-
-	// 郊韓拭 薗顕
-	building_body->setCategoryBitmask(0x04);	// 0100
-	building_body->setContactTestBitmask(0x08); // 1000
-	building_body->setCollisionBitmask(0x06);	// 0110
-
-	building->setPhysicsBody(building_body);
-	//building->setPosition(visibleSize.width / 2, GROUND_HEIGHT + building->getContentSize().height+1000);
-    
-	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+1000);
+    auto building = Building::createWithNumbsersAndImage(10, "block.png");
+	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+2000);
     building->setTag(BUILDING_TAG);
 	addChild(building);
 	
-	auto *contactListener = EventListenerPhysicsContact::create();
+	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	
@@ -149,9 +132,8 @@ void Stage::jump_scheduler(float time) {
     }
     else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
         //캐릭터 안흔들리게
-        character->getPhysicsBody()->setAngularVelocity(0.);
+        //character->getPhysicsBody()->setAngularVelocity(0.);
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
-        character->setRotation(0);
         character->setPosition(Vec2(posCharacter[cntofPosCharacter],GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
@@ -167,8 +149,8 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
         
 		//안흔들리게
-        character->setRotation(0);
-        character->getPhysicsBody()->setAngularVelocity(0.);
+        //character->setRotation(0);
+        //character->getPhysicsBody()->setAngularVelocity(0.);
     }
 }
 /*
@@ -195,25 +177,28 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         }
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         {
-			if (character->getState() == sGround){
-				character->setState(sAir);
-				auto jump = JumpBy::create(1, Vec2(0, 1000), 1000, 1);
-				character->runAction(jump);
-
-				//점프동작
-				if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
-					schedule(schedule_selector(Stage::jump_scheduler));
-					break;
-				}
-				break;
+            if (character->getState() == sGround) {
+                character->setState(sAir);
+                auto jump = JumpBy::create(1, Vec2(0, 1000), 1000, 1);
+                character->runAction(jump);
+                
+                //점프동작
+                if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
+                    schedule(schedule_selector(Stage::jump_scheduler));
+                break;
+            }
+            break;
         }
             // 採呪奄
         case EventKeyboard::KeyCode::KEY_Z:
         {
-            character->stopActionByTag(21);
-            character->setAttack(N);
-            if (character->getAttack() == N)
-            {
+            auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
+            character->stopActionByTag(ATTACK_TAG);
+            if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<5) {
+                building->attack();
+            }
+            //character->setAttack(N);
+            if (character->getAttack() == N) {
                 character->setAttack(Y);
                 Vector<SpriteFrame*> animFrames(15);
                 char str[100] = { 0 };
@@ -230,7 +215,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 				auto pCallback = CallFunc::create(CC_CALLBACK_0(Stage::stopAttack, this));
 				auto pSequence = Sequence::create(animate, pCallback, nullptr);
-				pSequence->setTag(21);
+				pSequence->setTag(ATTACK_TAG);
 				character->runAction(pSequence);
 
 
@@ -272,7 +257,7 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 			character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001
-			//character->setAttack(N);
+			character->setAttack(N);
 		}
 	}
 }
@@ -281,15 +266,16 @@ bool Stage::onContactBegin(PhysicsContact& contact)
 {
 	//auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
 
-	auto sp1 = (Sprite*)contact.getShapeA()->getBody()->getNode();
-    auto sp2 = (Sprite*)contact.getShapeB()->getBody()->getNode();
+	auto sp1 = contact.getShapeA()->getBody()->getNode();
+    auto sp2 = contact.getShapeB()->getBody()->getNode();
     
-    auto character=dynamic_cast<Character *>((sp1->getTag()==BUILDING_TAG)?sp2:sp1);
+    
+    auto character=dynamic_cast<Character *>((sp1->getTag()==CHARACTER_TAG)?sp1:sp2);
     auto building=dynamic_cast<Building *>((sp1->getTag()==BUILDING_TAG)?sp1:sp2);
     
     switch (character->getAttack()) {
         case Y:
-            building->attack();
+            //building->attack();
             break;
         case B:
             building->getPhysicsBody()->setVelocity(Vec2(0,0));
