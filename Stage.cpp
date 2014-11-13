@@ -10,6 +10,7 @@
 #include "Building.h"
 #include "Menu&Score.h"
 #include <cstdlib>
+#include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 float Stage::posCharacter[3] = { Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3, Stage::visibleSize.width / 2, Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3 };
@@ -60,7 +61,10 @@ bool Stage::init()
         return false;
     }
     //visibleSize=Director::getInstance()->getVisibleSize();
-    auto keylistener = EventListenerKeyboard::create();
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
+	
+	auto *keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
     keylistener->onKeyReleased = CC_CALLBACK_2(Stage::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keylistener, this);
