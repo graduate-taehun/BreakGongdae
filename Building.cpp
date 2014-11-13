@@ -70,7 +70,7 @@ void Block::attack() {
 void Building::attack() {
     auto bottom=blocks->front();
     bottom->attack();
-    if(bottom->getDurability()<0) {
+    if(bottom->getDurability()<=0) {
         
         //getPhysicsBody()->setPositionOffset(Vec2(0,-blocks->back()->getContentSize().height/2));
         
