@@ -49,7 +49,8 @@ Scene* Stage::createScene()
 bool Stage::init()
 {
 	auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
-
+	Game_Pause = 0;
+	CCDirector::sharedDirector()->resume();
 	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
 	// create menu, it's an autorelease object
@@ -103,11 +104,11 @@ bool Stage::init()
 	addChild(status_bar);
 
 
-    auto building = Building::createWithNumbsersAndImage(10, "block.png");
+    /*auto building = Building::createWithNumbsersAndImage(10, "block.png");
 	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+2000);
     building->setTag(BUILDING_TAG);
 	addChild(building);
-	
+	*/
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -160,24 +161,24 @@ void Stage::skill_blocking(){
 }*/
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-    
+	int i = 0;
     switch (keyCode){
             
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         {
-            if(cntofPosCharacter!=0)
+            if(cntofPosCharacter!=0&&Game_Pause==0)
                 character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
             break;
         }
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         {
-            if(cntofPosCharacter!=2)
+            if(cntofPosCharacter!=2&&Game_Pause==0)
                 character->setPosition(posCharacter[++cntofPosCharacter],character->getPosition().y);
             break;
         }
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         {
-            if (character->getState() == sGround) {
+            if (character->getState() == sGround&&Game_Pause==0) {
                 character->setState(sAir);
                 auto jump = JumpBy::create(1, Vec2(0, 1000), 1000, 1);
                 character->runAction(jump);
@@ -234,6 +235,25 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 			character->getPhysicsBody()->setContactTestBitmask(0x01); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001
 			break;
+		}
+		case EventKeyboard::KeyCode::KEY_ESCAPE:
+		{
+			if (Game_Pause == 0)
+			{
+				CCDirector::sharedDirector()->pause();
+				Game_Pause = 1;
+				//CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
+				//this->addChild(pScene, 2000, 2000);
+			}
+			else if (Game_Pause == 1 )
+			{
+			   CCDirector::sharedDirector()->resume();
+			   Game_Pause = 0;
+			   //CCString* popParam = CCString::create("1");
+			   //CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
+
+			   //팝업창 제거
+			}
 		}
         default:
             break;
@@ -299,3 +319,66 @@ void Stage::menuCloseCallback(Ref* pSender)
 	exit(0);
 #endif
 }
+/*void Stage::setGamePause(bool p)
+{
+	Game_Pause = p;
+}*/
+/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽*/
+
+CCScene* PopLayer::scene()
+{
+	CCScene *scene = CCScene::create();
+
+	PopLayer *layer = PopLayer::create();
+
+	scene->addChild(layer);
+
+	return scene;
+}
+
+bool PopLayer::init()
+{
+	if (!CCLayerColor::initWithColor(ccc4(0, 0, 0, 0)))  //투명하게
+	{
+		return false;
+	}
+	////////////////////////
+
+	CCString* popParam = CCString::create("0");
+	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
+
+	winSize = CCDirector::sharedDirector()->getWinSize();
+
+	//메뉴추가
+	CCMenuItemFont* pMenuItem = CCMenuItemFont::create("Resume", this,
+		menu_selector(PopLayer::doClose));
+	pMenuItem->setColor(ccc3(0, 0, 0));
+	CCMenu* pMenu2 = CCMenu::create(pMenuItem, NULL);
+	pMenu2->setPosition(ccp(450,300));
+	this->addChild(pMenu2, 10);
+
+	//backLayer추가
+	backLayer = CCLayerColor::create(ccc4(0, 0, 0, 50), winSize.width, winSize.height);
+	backLayer->setAnchorPoint(ccp(0, 0));
+	backLayer->setPosition(ccp(0, 0));
+	this->addChild(backLayer);
+
+	//popUpLayer추가
+	popUpLayer = CCLayerColor::create(ccc4(255, 0, 0, 255), 250, 150);
+	popUpLayer->setAnchorPoint(ccp(0, 0));
+	popUpLayer->setPosition(ccp((winSize.width - popUpLayer->getContentSize().width) / 2,
+		(winSize.height - popUpLayer->getContentSize().height) / 2 ));
+	this->addChild(popUpLayer);
+
+	return true;
+}
+
+void PopLayer::doClose(CCObject* pSender)
+{
+
+	CCString* popParam = CCString::create("1");
+	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
+	//팝업창 제거
+	this->removeFromParentAndCleanup(true);
+
+}/**/

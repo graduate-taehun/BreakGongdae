@@ -37,6 +37,7 @@ protected:
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
 	//void skill_blocking();
 	bool onContactBegin(PhysicsContact& contact);
+	bool Game_Pause;
 
 public:
     
@@ -44,8 +45,25 @@ public:
     static cocos2d::Scene* createScene();
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
-    
+	//void setGamePause(bool p);
     CREATE_FUNC(Stage);
+};
+class PopLayer : public cocos2d::CCLayerColor
+{
+public:
+	virtual bool init();
+
+	static cocos2d::CCScene* scene();
+
+	CREATE_FUNC(PopLayer);
+
+	cocos2d::CCSize winSize;
+
+	CCLayerColor* backLayer;
+	CCLayerColor* popUpLayer;
+
+	void PopLayer::doClose(CCObject* pSender);
+
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */
