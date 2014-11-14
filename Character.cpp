@@ -28,3 +28,5 @@ State Character::getState(){ return state; }
 void Character::setState(State _state){ state = _state; }
 Attack Character::getAttack(){ return attack; }
 void Character::setAttack(Attack _attack){ attack = _attack; }
+int Character::getScore(){ return Score; }
+void Character::setScore(int i){ Score = i; }

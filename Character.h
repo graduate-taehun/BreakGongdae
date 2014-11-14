@@ -19,6 +19,7 @@ class Character : public Sprite
 {
     State state;
     Attack attack;
+	int Score;
 public:
     virtual bool init();
     CREATE_FUNC(Character);
@@ -26,6 +27,8 @@ public:
     void setState(State _state);
     Attack getAttack();
     void setAttack(Attack _attack);
+	int getScore();
+	void setScore(int i);
 };
 
 #endif /* defined(__BreakGongDae__Character__) */

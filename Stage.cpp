@@ -52,7 +52,7 @@ bool Stage::init()
 	Game_Pause = 0;
 	CCDirector::sharedDirector()->resume();
 	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
-
+	
 	// create menu, it's an autorelease object
 	auto menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Vec2::ZERO);
@@ -79,8 +79,8 @@ bool Stage::init()
 	character->setTag(CHARACTER_TAG);
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
     character->getPhysicsBody()->setRotationEnable(false);
-    addChild(character);
-    
+	character->setScore(0);
+	addChild(character);
 	LabelBMFont *pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
 	pLabel_Title->setTag(TITLE_TAG);
 	pLabel_Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
@@ -109,6 +109,11 @@ bool Stage::init()
     building->setTag(BUILDING_TAG);
 	addChild(building);
 	*/
+	pLabel2 = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
+	pLabel2->setPosition(visibleSize.width / 8, visibleSize.height * 17 / 20);
+	pLabel2->setColor(ccc3(255, 255, 255));
+	//pLabel2->setOpacity(100.0);
+	this->addChild(pLabel2, 12);
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -127,6 +132,7 @@ void Stage::jump_scheduler(float time) {
 		status_bar->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
 		pLabel->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
 		pLabel_Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
+		pLabel2->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 7 / 20);
 	
         this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
@@ -146,6 +152,7 @@ void Stage::jump_scheduler(float time) {
 		status_bar->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
 		pLabel->setPosition(visibleSize.width / 8, visibleSize.height * 18 / 20);
 		pLabel_Title->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 19 / 20);
+		pLabel2->setPosition(visibleSize.width / 8,  visibleSize.height * 17 / 20);
         this->setPosition(this->getPosition().x,0);
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
         
@@ -197,6 +204,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             character->stopActionByTag(ATTACK_TAG);
             if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<5) {
                 building->attack();
+				character->setScore(character->getScore() + 1);
+				sprintf(coinScore, "score: %d", character->getScore());
+				pLabel2->setString(coinScore);
             }
             //character->setAttack(N);
             if (character->getAttack() == N) {
@@ -234,6 +244,10 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 			character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x01); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001
+			//z가 작동하지 않아서 일단 막기를 눌렀을떄 점수가 상승하는것으로 표현한다
+			character->setScore(character->getScore() + 1);
+			sprintf(coinScore, "score : %d", character->getScore());
+			pLabel2->setString(coinScore);//
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_ESCAPE:
