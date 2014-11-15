@@ -38,7 +38,7 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
     //초기화
     material=PhysicsMaterial(1000000000.0f,0.0f,0.0f);
     removeAllChildren();
-    delete blocks;
+    //delete blocks;
     
     blocks=new queue<Block *>();
     auto body = PhysicsBody::createBox(getContentSize(),material);

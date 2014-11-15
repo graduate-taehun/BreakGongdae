@@ -128,6 +128,7 @@ void Stage::jump_scheduler(float time) {
         
         //점프 중지
         character->setState(sGround);
+		character->getPhysicsBody()->setCategoryBitmask(0x01);
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
     else {
@@ -185,6 +186,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         {
             if (character->getState() == sGround&&Game_Pause==0) {
                 character->setState(sAir);
+				character->getPhysicsBody()->setCategoryBitmask(0x03);
                 auto jump = JumpBy::create(3, Vec2(0,building->getPositionOfTop()), building->getPositionOfTop(), 1);
                 jump->setTag(JUMP_TAG);
                 character->runAction(jump);
