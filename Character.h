@@ -10,6 +10,7 @@
 #define __BreakGongDae__Character__
 
 #include "cocos2d.h"
+
 USING_NS_CC;
 
 enum State{ sGround, sAir };
@@ -20,14 +21,18 @@ class Character : public Sprite
 private:
     State state;
     ActionState action;
-
+    void stopAttackAction();
+    
 public:
+    constexpr static const float ATTACK_FRAME=0.1f;
+    static const int ATTACK_TAG = 21;
     virtual bool init();
     CREATE_FUNC(Character);
     State getState();
     void setState(State _state);
     ActionState getActionState();
     void setActionState(ActionState _action);
+    void doAttackAction();
 };
 
 #endif /* defined(__BreakGongDae__Character__) */

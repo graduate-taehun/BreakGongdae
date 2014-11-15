@@ -12,24 +12,24 @@
 #include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
-float Stage::posCharacter[3] = { Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3, Stage::visibleSize.width / 2, Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3 };
-int Stage::cntofPosCharacter = 1;
+
 
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
     //origin=Director::getInstance()->getVisibleOrigin();
-    posCharacter[0]=Stage::visibleSize.width/2-Stage::visibleSize.width/3;
+    /*posCharacter[0]=Stage::visibleSize.width/2-Stage::visibleSize.width/3;
     posCharacter[1]=Stage::visibleSize.width/2;
-    posCharacter[2]=Stage::visibleSize.width/2+Stage::visibleSize.width/3;
+    posCharacter[2]=Stage::visibleSize.width/2+Stage::visibleSize.width/3;*/
     
     Vect gravity = Vect(0.0f, -400.0f);
     
     auto scene = Scene::createWithPhysics();
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(gravity);
+    scene->getPhysicsWorld()->setSubsteps(3);
     
-    auto body = PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10-GROUND_HEIGHT), PhysicsMaterial(0.,0.,0.),1);
+    auto body = PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10-GROUND_HEIGHT));
     auto edgeNode = Node::create();
     edgeNode->setPosition(Point(visibleSize.width / 2, visibleSize.height*5+GROUND_HEIGHT/2));
     edgeNode->setTag(EDGE_TAG);
@@ -37,9 +37,7 @@ Scene* Stage::createScene()
     scene->addChild(edgeNode);
     
     auto layer = Stage::create();
-    //layer->setPhyWorld(scene->getPhysicsWorld());
-    layer->setContentSize(Size(visibleSize.width,visibleSize.height*10));
-    
+
     scene->addChild(layer);
     
     return scene;
@@ -51,6 +49,13 @@ bool Stage::init()
     {
         return false;
     }
+    setContentSize(Size(visibleSize.width,visibleSize.height*10));
+    
+    posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
+    posCharacter[1]=Stage::visibleSize.width / 2;
+    posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
+    cntofPosCharacter = 1;
+    
 	// create menu, it's an autorelease object
 	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 	Game_Pause = 0;
@@ -63,13 +68,17 @@ bool Stage::init()
     
     //visibleSize=Director::getInstance()->getVisibleSize();
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
 	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
     keylistener->onKeyReleased = CC_CALLBACK_2(Stage::onKeyReleased, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keylistener, this);
-
+    
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+    
     auto background=Sprite::create("stage_background.png");
     background->setContentSize(Size(visibleSize.width,visibleSize.height*10));
     background->setPosition(visibleSize.width/2,visibleSize.height*5);
@@ -78,6 +87,11 @@ bool Stage::init()
     character=Character::create();
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
+    
+    building = Building::createWithNumbsersAndImage(10, "block.png");
+    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+2000);
+    //building->getPhysicsBody()->setVelocity(Vec2(0,-300));
+    addChild(building);
 
 	status = Status::create();
 	status->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
@@ -91,19 +105,7 @@ bool Stage::init()
 	Score->setPosition(visibleSize.width / 8, visibleSize.height * 18 / 20);
 	Score->setColor(ccc3(0, 0, 0));
 	addChild(Score, 12);
-	
-	
-    building = Building::createWithNumbsersAndImage(10, "block.png");
-	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+2000);
-    
-    //building->setTag(BUILDING_TAG);
-	addChild(building);
-	
-
-	auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
-	
+   
     return true;
 }
 void Stage::jump_scheduler(float time) {
@@ -117,8 +119,6 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
     else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
-        //캐릭터 안흔들리게
-        //character->getPhysicsBody()->setAngularVelocity(0.);
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
         character->setPosition(Vec2(posCharacter[cntofPosCharacter],GROUND_HEIGHT+character->getContentSize().height/2));
         
@@ -139,11 +139,29 @@ void Stage::jump_scheduler(float time) {
 
 
 void Stage::attack_scheduler(float time) {
-    if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<5) {
-        building->attack();
+    if(character->getActionState()==None) {
+        unschedule(schedule_selector(Stage::attack_scheduler));
+        return;
+    }
+    if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<100) {
+        if(building->attack()) {
+            //new Building
+            unschedule(schedule_selector(Stage::attack_scheduler));
+            return;
+        }
         status->increaseScore(1);
         sprintf(status->getcoinScore(), "score : %d", status->getScore());
         Score->setString(status->getcoinScore());
+    }
+}
+
+void Stage::block_scheduler(float time) {
+    if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<10) {
+        //float charactervel=character->getPhysicsBody()->getVelocity().y;
+        character->stopActionByTag(Character::ATTACK_TAG);
+        character->getPhysicsBody()->setVelocity(Vec2(0,-500+building->getPhysicsBody()->getVelocity().y));
+        building->getPhysicsBody()->setVelocity(Vec2(0,0));
+        if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
 }
 
@@ -167,7 +185,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         {
             if (character->getState() == sGround&&Game_Pause==0) {
                 character->setState(sAir);
-                auto jump = JumpBy::create(1, Vec2(0, 1000), 1000, 1);
+                auto jump = JumpBy::create(3, Vec2(0,building->getPositionOfTop()), building->getPositionOfTop(), 1);
                 jump->setTag(JUMP_TAG);
                 character->runAction(jump);
                 
@@ -182,36 +200,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         case EventKeyboard::KeyCode::KEY_Z:
         {
             //auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
-            //character->stopActionByTag(ATTACK_TAG);
             
-            schedule(schedule_selector(Stage::attack_scheduler),ATTACK_FRAME);
+            
+            schedule(schedule_selector(Stage::attack_scheduler),Character::ATTACK_FRAME);
             //character->setAttack(N);
-            if (character->getActionState() == None) {
-                character->setActionState(Attacking);
-                Vector<SpriteFrame*> animFrames(3);
-                char str[100] = { 0 };
-                for (int i = 1; i < 4; i++){
-                    sprintf(str, "grossini_dance_%02d.png", i);
-                    auto frame = SpriteFrame::create(str, Rect(0, 0, 80, 115));
-                    animFrames.pushBack(frame);
-                }
-                auto frame = SpriteFrame::create("grossini_dance_05.png", Rect(0, 0, 80, 115));
-                animFrames.pushBack(frame);
-                auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
-				auto animate = Animate::create(animation);
-
-
-				auto pCallback = CallFunc::create(CC_CALLBACK_0(Stage::stopAttack, this));
-				auto pSequence = Sequence::create(animate, pCallback, nullptr);
-				pSequence->setTag(ATTACK_TAG);
-				character->runAction(pSequence);
-
-
-				/*character->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
-				character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
-				character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
-
-			}
+            character->doAttackAction();
 
 			break;
 		}
@@ -219,6 +212,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 		case EventKeyboard::KeyCode::KEY_X:
 		{
             character->setActionState(Blocking);
+            schedule(schedule_selector(Stage::block_scheduler));
 			/*character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x01); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
@@ -266,12 +260,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     }
 }
 
-void Stage::stopAttack()
-{
-	//auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-	character->setActionState(None);
-    unschedule(schedule_selector(Stage::attack_scheduler));
-}
+
 
 void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
 {
@@ -280,30 +269,25 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 	switch (keyCode){
         case EventKeyboard::KeyCode::KEY_X: {
             character->setActionState(None);
+            unschedule(schedule_selector(Stage::block_scheduler));
         }
-		case EventKeyboard::KeyCode::KEY_Z: {
-
-			/*character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
-			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
-			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001*/
-            character->setActionState(None);
-		}
 	}
 }
 
 bool Stage::onContactBegin(PhysicsContact& contact)
 {
+    //auto jump=character->getActionByTag(JUMP_TAG);
     character->stopActionByTag(JUMP_TAG);
     switch (character->getActionState()) {
         case Attacking:
             //building->attack();
             break;
         case Blocking:
-            character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-            building->getPhysicsBody()->setVelocity(Vec2(0,0));
+            //character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
+            //building->getPhysicsBody()->setVelocity(Vec2(0,0));
             break;
         case None:
-            character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
+            //character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
             break;
     }
 	return true;

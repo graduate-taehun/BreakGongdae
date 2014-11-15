@@ -16,17 +16,15 @@
 class Stage : public LayerColor
 {
 private:
-    static float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
-    static int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
+    float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
+    int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
     void stopAttack();
     void menuCloseCallback(Ref* pSender);
     
 protected:
     static const int GROUND_HEIGHT = 50;
-    static const int ATTACK_TAG = 21;
     static const int EDGE_TAG = 0;
     static const int JUMP_TAG=22;
-    constexpr static const float ATTACK_FRAME=0.2f;
     
     Menu* menu;
 	MenuItemImage* closeItem;
@@ -45,7 +43,7 @@ protected:
     
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
     void attack_scheduler(float time);
-    void blokc_scheduler(float time);
+    void block_scheduler(float time);
     
 	//void skill_blocking();
 	bool onContactBegin(PhysicsContact& contact);

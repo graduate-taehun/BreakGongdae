@@ -32,9 +32,9 @@ public:
     ~Building();
     virtual bool initWithNumbersAndImage(int numbers, string filename);
     static Building* createWithNumbsersAndImage(int numbers, string filename);
-    void setPositionOfBottom(Point p);
-    Point getPositionOfTop();
-    bool attack();
+    void setPositionOfBottom(Vec2 p);
+    float getPositionOfTop();
+    bool attack(); //다 없어지면 true 리턴
     void destroyAll();
 };
 
