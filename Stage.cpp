@@ -51,13 +51,12 @@ bool Stage::init()
     {
         return false;
     }
-    
-	closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
+	// create menu, it's an autorelease object
+	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 	Game_Pause = 0;
 	CCDirector::sharedDirector()->resume();
 	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
-	
-	// create menu, it's an autorelease object
+
 	menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
@@ -77,63 +76,43 @@ bool Stage::init()
     addChild(background);
     
     character=Character::create();
-	//character->setTag(CHARACTER_TAG);
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
-    
-	pLabel_Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
-	//pLabel_Title->setTag(TITLE_TAG);
-	pLabel_Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
-	addChild(pLabel_Title);
 
-	pLabel = CCLabelTTF::create("HP BAR", "Arial", 30);
-	//pLabel->setTag(STATUS_TAG);
-	pLabel->setPosition(visibleSize.width / 8, visibleSize.height *18/20);
-	addChild(pLabel);
+	status = Status::create();
+	status->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
+	addChild(status);
 
-	//	pLabel->setFontFillColor(Color3B::RED);
-	//	pLabel->enableShadow(Size(10, 10), 255, 3.0);    // 그림자 떨어진 크기, 투명도, 두께
-	//	pLabel->enableStroke(Color3B::RED, 2.0); // 외곽선 색상, 두께
-	//	pLabel->setFontFillColor(Color3B(0, 0, 0));   // pLabel->setColor(Color3B::RED);
+	Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
+	Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+	addChild(Title);
 
-	status_bar = Sprite::create("Hp.jpg");
-	status_bar->setScale(0.5, 0.125);
-	//status_bar->setTag(HP_BAR_TAG);
-	status_bar->setPosition(visibleSize.width / 8, visibleSize.height*19/20);
-	addChild(status_bar);
-
-
+	Score = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
+	Score->setPosition(visibleSize.width / 8, visibleSize.height * 18 / 20);
+	Score->setColor(ccc3(0, 0, 0));
+	addChild(Score, 12);
+	
+	/*
     building = Building::createWithNumbsersAndImage(10, "block.png");
 	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+2000);
     //building->setTag(BUILDING_TAG);
 	addChild(building);
-	
-    pLabel2 = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
-	pLabel2->setPosition(visibleSize.width / 8, visibleSize.height * 17 / 20);
-    pLabel2->setColor(ccc3(255, 255, 255));
-	addChild(pLabel2, 12);
-    
+	*/
+
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	
     return true;
 }
-
 void Stage::jump_scheduler(float time) {
-    /*auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-	auto pLabel_Title = dynamic_cast<LabelBMFont *>(getChildByTag(TITLE_TAG));
-	auto pLabel = dynamic_cast<CCLabelTTF *>(getChildByTag(STATUS_TAG));
-	auto status_bar = dynamic_cast<Sprite *>(getChildByTag(HP_BAR_TAG));*/
-
     if(character->getPosition().y >=visibleSize.height/2) {
         //배경을 내림
-		status_bar->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
-		pLabel->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
-		pLabel_Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
-		pLabel2->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 7 / 20);
-	
-        this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
+		status->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
+		Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
+		Score->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
+ 
+		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
     else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
@@ -148,24 +127,22 @@ void Stage::jump_scheduler(float time) {
     }
     else {
         //배경 안움직임
-		status_bar->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
-		pLabel->setPosition(visibleSize.width / 8, visibleSize.height * 18 / 20);
-		pLabel_Title->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 19 / 20);
-		pLabel2->setPosition(visibleSize.width / 8,  visibleSize.height * 17 / 20);
-        this->setPosition(this->getPosition().x,0);
+		status->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
+		Title->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 19 / 20);
+		Score->setPosition(visibleSize.width / 8,  visibleSize.height * 18 / 20);
+
+		this->setPosition(this->getPosition().x,0);
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
     }
 }
 /*
 void Stage::skill_blocking(){
-	
 
 }*/
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     //auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-	int i = 0;
+//	int i = 0;
     switch (keyCode){
-            
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         {
             if(cntofPosCharacter!=0&&Game_Pause==0)
@@ -194,7 +171,8 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             break;
         }
         // 부수기
-        case EventKeyboard::KeyCode::KEY_Z:
+		/*
+		case EventKeyboard::KeyCode::KEY_Z:
         {
             //auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
             character->stopActionByTag(ATTACK_TAG);
@@ -219,21 +197,18 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                 auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
 				auto animate = Animate::create(animation);
 
-
 				auto pCallback = CallFunc::create(CC_CALLBACK_0(Stage::stopAttack, this));
 				auto pSequence = Sequence::create(animate, pCallback, nullptr);
 				pSequence->setTag(ATTACK_TAG);
 				character->runAction(pSequence);
-
 
 				character->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
 				character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 				character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001
 
 			}
-
 			break;
-		}
+		}*/
 		// 막기
 		case EventKeyboard::KeyCode::KEY_X:
 		{
@@ -245,6 +220,20 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 			/*character->increaseScore(1);
 			sprintf(coinScore, "score : %d", character->getScore());
 			pLabel2->setString(coinScore);//*/
+			break;
+		}
+		// 나중에 막기 X로 옮길 것
+		case EventKeyboard::KeyCode::KEY_C:
+		{
+			status->increaseScore(10);
+			sprintf(status->getcoinScore(), "score : %d", status->getScore());
+			Score->setString(status->getcoinScore());
+			break;
+		}
+		case EventKeyboard::KeyCode::KEY_V:
+		{
+			status->decreaseHP(status->getMAX_HP()/10);
+			status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_ESCAPE:
@@ -277,7 +266,6 @@ void Stage::stopAttack()
 	character->setActionState(None);
 }
 
-
 void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
 {
 	//auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
@@ -287,7 +275,6 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
             character->setActionState(None);
         }
 		case EventKeyboard::KeyCode::KEY_Z: {
-
 			character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
 			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001
@@ -336,9 +323,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 CCScene* PopLayer::scene()
 {
 	CCScene *scene = CCScene::create();
-
 	PopLayer *layer = PopLayer::create();
-
 	scene->addChild(layer);
 
 	return scene;
@@ -350,16 +335,14 @@ bool PopLayer::init()
 	{
 		return false;
 	}
-	////////////////////////
-
+	
 	CCString* popParam = CCString::create("0");
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 
 	winSize = CCDirector::sharedDirector()->getWinSize();
 
 	//메뉴추가
-	CCMenuItemFont* pMenuItem = CCMenuItemFont::create("Resume", this,
-		menu_selector(PopLayer::doClose));
+	CCMenuItemFont* pMenuItem = CCMenuItemFont::create("Resume", this, menu_selector(PopLayer::doClose));
 	pMenuItem->setColor(ccc3(0, 0, 0));
 	CCMenu* pMenu2 = CCMenu::create(pMenuItem, NULL);
 	pMenu2->setPosition(ccp(450,300));
@@ -383,10 +366,9 @@ bool PopLayer::init()
 
 void PopLayer::doClose(CCObject* pSender)
 {
-
 	CCString* popParam = CCString::create("1");
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
 
-}/**/
+}

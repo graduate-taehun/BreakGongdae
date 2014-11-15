@@ -10,11 +10,11 @@
 #define __BreakGongDae__Stage__
 
 #include "Character.h"
+#include "Status.h"
 #include "Building.h"
 
 class Stage : public LayerColor
 {
-    
 private:
     static float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
     static int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
@@ -23,26 +23,20 @@ private:
     
 protected:
     static const int GROUND_HEIGHT = 50;
-    /*static const int CHARACTER_TAG = 11;
-    static const int BUILDING_TAG = 1;
-	static const int TITLE_TAG = 2;
-	static const int HP_BAR_TAG = 3;
-	static const int STATUS_TAG = 4;*/
     static const int ATTACK_TAG = 21;
     static const int EDGE_TAG = 0;
     static const int JUMP_TAG=22;
     
     Menu* menu;
-    MenuItemImage* closeItem;
-    CCLabelTTF* pLabel2;
-    LabelBMFont *pLabel_Title;
-    CCLabelTTF* pLabel;
-    Sprite* status_bar;
+	MenuItemImage* closeItem;
     
+	LabelBMFont *Title;
+	CCLabelTTF *Score;
+ 
+    Status* status;
     Character* character;
     Building* building;
-    
-
+   
     static Size visibleSize;
     
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
@@ -53,9 +47,7 @@ protected:
 	bool Game_Pause;
 
 public:
-	char coinScore[100];
-    // there's no 'id' in cpp, so we recommend returning the class instance pointer
-    static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene();
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();
 	//void setGamePause(bool p);
