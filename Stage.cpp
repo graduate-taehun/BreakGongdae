@@ -16,7 +16,6 @@ Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
 Vec2 Stage::posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
 Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 
-
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
@@ -55,9 +54,9 @@ bool Stage::init()
     }
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
-    posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
+    posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 2;
     posCharacter[1]=Stage::visibleSize.width / 2;
-    posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
+    posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 2;
     cntofPosCharacter = 1;
     
 	// create menu, it's an autorelease object
@@ -122,14 +121,16 @@ void Stage::jump_scheduler(float time) {
 		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
-    else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
+    else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+5) {
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
-        character->setPosition(Vec2(posCharacter[cntofPosCharacter],GROUND_HEIGHT+character->getContentSize().height/2));
+        character->getPhysicsBody()->setDynamic(false);
+        character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
         character->setState(sGround);
 		character->getPhysicsBody()->setCategoryBitmask(0x01);
         unschedule(schedule_selector(Stage::jump_scheduler));
+        character->getPhysicsBody()->setDynamic(true);
     }
     else {
         //배경 안움직임
@@ -169,88 +170,87 @@ void Stage::block_scheduler(float time) {
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     //auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
 //	int i = 0;
-    switch (keyCode){
-        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        {
-            if(cntofPosCharacter!=0&&Game_Pause==0)
-                character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
-            break;
-        }
-        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        {
-            if(cntofPosCharacter!=2&&Game_Pause==0)
-                character->setPosition(posCharacter[++cntofPosCharacter],character->getPosition().y);
-            break;
-        }
-        case EventKeyboard::KeyCode::KEY_UP_ARROW:
-        {
-            if (character->getState() == sGround&&Game_Pause==0) {
-                character->setState(sAir);
-				character->getPhysicsBody()->setCategoryBitmask(0x03);
-                auto jump = JumpBy::create(3, Vec2(0,building->getPositionOfTop()), building->getPositionOfTop(), 1);
-                jump->setTag(JUMP_TAG);
-                character->runAction(jump);
-                
-                //점프동작
-                if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
-                    schedule(schedule_selector(Stage::jump_scheduler));
+    if(Game_Pause==0) {
+        switch (keyCode){
+            case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+            {
+                if(cntofPosCharacter!=0)
+                    character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
                 break;
             }
-            break;
-        }
-        // 부수기
-        case EventKeyboard::KeyCode::KEY_Z:
-        {
-            //auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
-            
-            //schedule(schedule_selector(Stage::attack_scheduler),Character::ATTACK_FRAME);
-            character->doAttackAction();
-            if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<100) {
-                if(building->attack()) {
-                    //new Building
-                    //unschedule(schedule_selector(Stage::attack_scheduler));
+            case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+            {
+                if(cntofPosCharacter!=2)
+                    character->setPosition(posCharacter[++cntofPosCharacter],character->getPosition().y);
+                break;
+            }
+            case EventKeyboard::KeyCode::KEY_UP_ARROW:
+            {
+                if (character->getState() == sGround) {
+                    character->setState(sAir);
+                    character->getPhysicsBody()->setCategoryBitmask(0x03);
+                    auto jump = JumpTo::create(3, Vec2(character->getPosition().x,building->getPositionOfTop()), building->getPositionOfTop(), 1);
+                    jump->setTag(JUMP_TAG);
+                    character->runAction(jump);
+                    
+                    //점프동작
+                    if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
+                        schedule(schedule_selector(Stage::jump_scheduler));
                     break;
                 }
-                status->increaseScore(1);
-                sprintf(status->getcoinScore(), "score : %d", status->getScore());
-                Score->setString(status->getcoinScore());
+                break;
             }
-			break;
-		}
-		// 막기
-		case EventKeyboard::KeyCode::KEY_X:
-		{
-            character->setActionState(Blocking);
-            schedule(schedule_selector(Stage::block_scheduler));
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_V:
-		{
-			status->decreaseHP(status->getMAX_HP()/10);
-			status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
-			break;
-		}
-		case EventKeyboard::KeyCode::KEY_ESCAPE:
-		{
-			if (Game_Pause == 0)
-			{
-				CCDirector::sharedDirector()->pause();
-				Game_Pause = 1;
-				//CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
-				//this->addChild(pScene, 2000, 2000);
-			}
-			else if (Game_Pause == 1 )
-			{
-			   CCDirector::sharedDirector()->resume();
-			   Game_Pause = 0;
-			   //CCString* popParam = CCString::create("1");
-			   //CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
+            // 부수기
+            case EventKeyboard::KeyCode::KEY_Z:
+            {
+                character->doAttackAction();
+                if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<100) {
+                    if(building->attack()) {
+                        //new Building
+                        //unschedule(schedule_selector(Stage::attack_scheduler));
+                        break;
+                    }
+                    status->increaseScore(1);
+                    sprintf(status->getcoinScore(), "score : %d", status->getScore());
+                    Score->setString(status->getcoinScore());
+                }
+                break;
+            }
+            // 막기
+            case EventKeyboard::KeyCode::KEY_X:
+            {
+                character->setActionState(Blocking);
+                schedule(schedule_selector(Stage::block_scheduler));
+                break;
+            }
+            case EventKeyboard::KeyCode::KEY_V:
+            {
+                status->decreaseHP(status->getMAX_HP()/10);
+                status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
+                break;
+            }
+            case EventKeyboard::KeyCode::KEY_ESCAPE:
+            {
+                if (Game_Pause == 0)
+                {
+                    CCDirector::sharedDirector()->pause();
+                    Game_Pause = 1;
+                    //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
+                    //this->addChild(pScene, 2000, 2000);
+                }
+                else if (Game_Pause == 1 )
+                {
+                   CCDirector::sharedDirector()->resume();
+                   Game_Pause = 0;
+                   //CCString* popParam = CCString::create("1");
+                   //CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 
-			   //팝업창 제거
-			}
-		}
-        default:
-            break;
+                   //팝업창 제거
+                }
+            }
+            default:
+                break;
+        }
     }
 }
 

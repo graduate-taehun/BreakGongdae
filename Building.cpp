@@ -61,11 +61,12 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
         addChild(block);
     }
     
-    body->setCategoryBitmask(0x04);	// 0100
-    body->setContactTestBitmask(0x01); // 0001
-    body->setCollisionBitmask(0x06);	// 0110
-    
+    body->setCategoryBitmask(0x01);
+    body->setContactTestBitmask(0x01);
+    body->setCollisionBitmask(0x02);
+    //body->setGravityEnable(false);
     setPhysicsBody(body);
+
     return true;
 }
 
@@ -112,6 +113,7 @@ bool Building::attack() {
 void Building::setPositionOfBottom(float bottom) {
     setPosition(getPosition().x,bottom+getContentSize().height/2);
 }
+
 float Building::getPositionOfTop() {
     return getPosition().y+getContentSize().height/2;
 }
