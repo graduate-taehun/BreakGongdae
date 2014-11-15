@@ -16,12 +16,13 @@ bool Character::init() {
     action = None;
     score=0;
     
-    auto body = PhysicsBody::createBox(Sprite::getContentSize(), PhysicsMaterial(1., 0., 0.), Vec2(0, 0));
+    auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
+    //body->setMass(10.0f);
     body->setRotationEnable(false);
     
-    body->setCategoryBitmask(0x01); // 0001
-    body->setContactTestBitmask(0x04); // 0100
-    body->setCollisionBitmask(0x03); // 0011
+    //body->setCategoryBitmask(0x01); // 0001
+    body->setContactTestBitmask(0x01); // 0001
+    //body->setCollisionBitmask(0x03); // 0011
     setPhysicsBody(body);
     return true;
 }

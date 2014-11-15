@@ -27,6 +27,7 @@ using namespace std;
 class Building : public Layer {
 private:
     queue<Block *>* blocks;
+    PhysicsMaterial material;
 public:
     ~Building();
     virtual bool initWithNumbersAndImage(int numbers, string filename);

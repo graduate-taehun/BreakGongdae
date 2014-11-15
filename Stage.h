@@ -31,6 +31,7 @@ protected:
     static const int ATTACK_TAG = 21;
     static const int EDGE_TAG = 0;
     static const int JUMP_TAG=22;
+    constexpr static const float ATTACK_FRAME=0.2f;
     
     Menu* menu;
     MenuItemImage* closeItem;
@@ -47,7 +48,11 @@ protected:
     
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+    
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
+    void attack_scheduler(float time);
+    void blokc_scheduler(float time);
+    
 	//void skill_blocking();
 	bool onContactBegin(PhysicsContact& contact);
 	bool Game_Pause;

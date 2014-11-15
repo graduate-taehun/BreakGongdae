@@ -105,6 +105,7 @@ bool Stage::init()
 
     building = Building::createWithNumbsersAndImage(10, "block.png");
 	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+2000);
+    
     //building->setTag(BUILDING_TAG);
 	addChild(building);
 	
@@ -156,11 +157,16 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
     }
 }
-/*
-void Stage::skill_blocking(){
-	
 
-}*/
+void Stage::attack_scheduler(float time) {
+    if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<5) {
+        building->attack();
+        character->increaseScore(1);
+        sprintf(coinScore, "score: %d", character->getScore());
+        pLabel2->setString(coinScore);
+    }
+}
+
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     //auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
 	int i = 0;
@@ -197,26 +203,22 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         case EventKeyboard::KeyCode::KEY_Z:
         {
             //auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
-            character->stopActionByTag(ATTACK_TAG);
-            if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<5) {
-                building->attack();
-				character->increaseScore(1);
-				sprintf(coinScore, "score: %d", character->getScore());
-				pLabel2->setString(coinScore);
-            }
+            //character->stopActionByTag(ATTACK_TAG);
+            
+            schedule(schedule_selector(Stage::attack_scheduler),ATTACK_FRAME);
             //character->setAttack(N);
             if (character->getActionState() == None) {
                 character->setActionState(Attacking);
-                Vector<SpriteFrame*> animFrames(15);
+                Vector<SpriteFrame*> animFrames(3);
                 char str[100] = { 0 };
-                for (int i = 1; i < 15; i++){
+                for (int i = 1; i < 4; i++){
                     sprintf(str, "grossini_dance_%02d.png", i);
                     auto frame = SpriteFrame::create(str, Rect(0, 0, 80, 115));
                     animFrames.pushBack(frame);
                 }
                 auto frame = SpriteFrame::create("grossini_dance_05.png", Rect(0, 0, 80, 115));
                 animFrames.pushBack(frame);
-                auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+                auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
 				auto animate = Animate::create(animation);
 
 
@@ -226,9 +228,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 				character->runAction(pSequence);
 
 
-				character->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
+				/*character->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
 				character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
-				character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001
+				character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
 
 			}
 
@@ -238,9 +240,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 		case EventKeyboard::KeyCode::KEY_X:
 		{
             character->setActionState(Blocking);
-			character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010
+			/*character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x01); // 1000
-			character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001
+			character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
 			//z가 작동하지 않아서 일단 막기를 눌렀을떄 점수가 상승하는것으로 표현한다
 			/*character->increaseScore(1);
 			sprintf(coinScore, "score : %d", character->getScore());
@@ -275,6 +277,7 @@ void Stage::stopAttack()
 {
 	//auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
 	character->setActionState(None);
+    unschedule(schedule_selector(Stage::attack_scheduler));
 }
 
 
@@ -288,9 +291,9 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
         }
 		case EventKeyboard::KeyCode::KEY_Z: {
 
-			character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
+			/*character->getPhysicsBody()->setCategoryBitmask(0x01);// 0010
 			character->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
-			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001
+			character->getPhysicsBody()->setCollisionBitmask(0x03);	// 0001*/
             character->setActionState(None);
 		}
 	}
