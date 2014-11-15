@@ -92,13 +92,13 @@ bool Stage::init()
 	Score->setColor(ccc3(0, 0, 0));
 	addChild(Score, 12);
 	
-	/*
+	
     building = Building::createWithNumbsersAndImage(10, "block.png");
 	building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+2000);
     
     //building->setTag(BUILDING_TAG);
 	addChild(building);
-	*/
+	
 
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
@@ -137,12 +137,13 @@ void Stage::jump_scheduler(float time) {
     }
 }
 
+
 void Stage::attack_scheduler(float time) {
     if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<5) {
         building->attack();
-        character->increaseScore(1);
-        sprintf(coinScore, "score: %d", character->getScore());
-        pLabel2->setString(coinScore);
+        status->increaseScore(1);
+        sprintf(status->getcoinScore(), "score : %d", status->getScore());
+        Score->setString(status->getcoinScore());
     }
 }
 
@@ -178,8 +179,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             break;
         }
         // 부수기
-		/*
-		case EventKeyboard::KeyCode::KEY_Z:
+        case EventKeyboard::KeyCode::KEY_Z:
         {
             //auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
             //character->stopActionByTag(ATTACK_TAG);
@@ -200,6 +200,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                 auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
 				auto animate = Animate::create(animation);
 
+
 				auto pCallback = CallFunc::create(CC_CALLBACK_0(Stage::stopAttack, this));
 				auto pSequence = Sequence::create(animate, pCallback, nullptr);
 				pSequence->setTag(ATTACK_TAG);
@@ -211,8 +212,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 				character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
 
 			}
+
 			break;
-		}*/
+		}
 		// 막기
 		case EventKeyboard::KeyCode::KEY_X:
 		{

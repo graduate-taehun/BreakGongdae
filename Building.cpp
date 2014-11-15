@@ -34,7 +34,7 @@ int Block::getDurability() {
 
 bool Building::initWithNumbersAndImage(int numbers, string filename) {
     if(!Layer::init()) return false;
-    material=PhysicsMaterial(10.0f,0.5f,0.5f);
+    material=PhysicsMaterial(10.0f,0.0f,10.0f);
     removeAllChildren();
     delete blocks;
     blocks=new queue<Block *>();

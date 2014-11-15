@@ -9,7 +9,7 @@
 #include "Status.h"
 
 bool Status::init() {
-    if(!Sprite::initWithFile("status_hp.jpg"))
+    if(!Sprite::initWithFile("status_hp.png"))
         return false;
 
 	width = this->getContentSize().width;
