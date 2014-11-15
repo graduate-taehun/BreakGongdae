@@ -61,9 +61,10 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
         addChild(block);
     }
     
-    body->setCategoryBitmask(0x01);
+    body->setCategoryBitmask(0x03);
     body->setContactTestBitmask(0x01);
-    body->setCollisionBitmask(0x02);
+    body->setCollisionBitmask(0x01);
+    body->setVelocityLimit(500);
     //body->setGravityEnable(false);
     setPhysicsBody(body);
 
@@ -84,7 +85,8 @@ bool Building::attack() {
     if(bottom->getDurability()<=0) {
         //제거
         getPhysicsBody()->removeShape(blocks->size()-1);
-        removeChild(bottom);
+        removeChild(bottom,true);
+        
         blocks->pop();
         
         if(blocks->size()==0) return true;

@@ -32,12 +32,13 @@ Scene* Stage::createScene()
     scene->getPhysicsWorld()->setGravity(gravity);
     scene->getPhysicsWorld()->setSubsteps(3);
     
-    auto body = PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10-GROUND_HEIGHT));
-    auto edgeNode = Node::create();
-    edgeNode->setPosition(Point(visibleSize.width / 2, visibleSize.height*5+GROUND_HEIGHT/2));
-    edgeNode->setTag(EDGE_TAG);
-    edgeNode->setPhysicsBody(body);
-    scene->addChild(edgeNode);
+    auto body = PhysicsBody::createBox(Size(visibleSize.width*2,GROUND_HEIGHT),PhysicsMaterial(0.0f,0.0f,0.0f));
+    body->setDynamic(false);
+    auto groundNode = Node::create();
+    groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
+    groundNode->setTag(EDGE_TAG);
+    groundNode->setPhysicsBody(body);
+    scene->addChild(groundNode);
     
     auto layer = Stage::create();
 
@@ -119,18 +120,16 @@ void Stage::jump_scheduler(float time) {
 		Score->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
  
 		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
-        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
+        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
-    else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+5) {
+    else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
-        character->getPhysicsBody()->setDynamic(false);
         character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
         character->setState(sGround);
-		character->getPhysicsBody()->setCategoryBitmask(0x01);
+		character->getPhysicsBody()->setCollisionBitmask(0x01);
         unschedule(schedule_selector(Stage::jump_scheduler));
-        character->getPhysicsBody()->setDynamic(true);
     }
     else {
         //배경 안움직임
@@ -138,8 +137,10 @@ void Stage::jump_scheduler(float time) {
 		Title->setPosition(posTitle);
 		Score->setPosition(posScore);
 
+        //building->getPhysicsBody()->setGravityEnable(false);
+        //building->setPositionOfBottom(GROUND_HEIGHT+2000);
 		this->setPosition(this->getPosition().x,0);
-        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
+        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
 
@@ -160,9 +161,9 @@ void Stage::block_scheduler(float time) {
         //float charactervel=character->getPhysicsBody()->getVelocity().y;
         character->stopActionByTag(Character::ATTACK_TAG);
         character->getPhysicsBody()->setVelocity(Vec2(0,-500+building->getPhysicsBody()->getVelocity().y));
-        auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
-        building->runAction(jump);
-        //building->getPhysicsBody()->setVelocity(Vec2(0,0));
+        //auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
+        //building->runAction(jump);
+        building->getPhysicsBody()->setVelocity(Vec2(0,10));
         if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
 }
@@ -188,13 +189,15 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             {
                 if (character->getState() == sGround) {
                     character->setState(sAir);
-                    character->getPhysicsBody()->setCategoryBitmask(0x03);
-                    auto jump = JumpTo::create(3, Vec2(character->getPosition().x,building->getPositionOfTop()), building->getPositionOfTop(), 1);
+                    character->getPhysicsBody()->setCollisionBitmask(0x02);
+                    /*auto jump = JumpTo::create(3, Vec2(character->getPosition().x,building->getPositionOfTop()/3), building->getPositionOfTop(), 1);
+                    //auto jump = JumpTo::create(2, Vec2(character->getPosition().x,1000), 1000, 1);
                     jump->setTag(JUMP_TAG);
-                    character->runAction(jump);
+                    character->runAction(jump);*/
+                    character->getPhysicsBody()->setVelocity(Vec2(0,1000));
                     
                     //점프동작
-                    if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
+                    //if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
                         schedule(schedule_selector(Stage::jump_scheduler));
                     break;
                 }

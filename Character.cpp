@@ -13,19 +13,19 @@ float Character::ATTACK_FRAME = 0.1f;
 캐릭터 및 빌딩 비트마스크 처리
 (순서는 category,contact,collision)
 1. 캐릭터가 땅에 있을 때
-0001
-0001
-0011
+0001    0011
+0001    0001
+0001    0001
 
 2. 캐릭터가 점프했을 때
-0011
-0001
-0011
-
-3. 빌딩
 0001
 0001
 0010
+
+3. 빌딩
+0011
+0001
+0001
 */
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
@@ -39,7 +39,7 @@ bool Character::init() {
     
     body->setCategoryBitmask(0x01);
     body->setContactTestBitmask(0x01);
-    body->setCollisionBitmask(0x03);
+    body->setCollisionBitmask(0x01);
     setPhysicsBody(body);
     return true;
 }
