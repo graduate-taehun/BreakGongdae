@@ -19,9 +19,9 @@ bool Character::init() {
     
     body->setRotationEnable(false);
     
-    //body->setCategoryBitmask(0x01); // 0001
+    body->setCategoryBitmask(0x01); // 0001
     body->setContactTestBitmask(0x01); // 0001
-    //body->setCollisionBitmask(0x03); // 0011
+    body->setCollisionBitmask(0x03); // 0011
     setPhysicsBody(body);
     return true;
 }

@@ -12,15 +12,19 @@
 #include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
+Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
+Vec2 Stage::posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
+Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 
 
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
+    posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
+    posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
+    posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+    
     //origin=Director::getInstance()->getVisibleOrigin();
-    /*posCharacter[0]=Stage::visibleSize.width/2-Stage::visibleSize.width/3;
-    posCharacter[1]=Stage::visibleSize.width/2;
-    posCharacter[2]=Stage::visibleSize.width/2+Stage::visibleSize.width/3;*/
     
     Vect gravity = Vect(0.0f, -400.0f);
     
@@ -94,15 +98,15 @@ bool Stage::init()
     addChild(building);
 
 	status = Status::create();
-	status->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
+	status->setPosition(posStatus);
 	addChild(status);
 
 	Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
-	Title->setPosition(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+	Title->setPosition(posTitle);
 	addChild(Title);
 
 	Score = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
-	Score->setPosition(visibleSize.width / 8, visibleSize.height * 18 / 20);
+	Score->setPosition(posScore);
 	Score->setColor(ccc3(0, 0, 0));
 	addChild(Score, 12);
    
@@ -128,9 +132,9 @@ void Stage::jump_scheduler(float time) {
     }
     else {
         //배경 안움직임
-		status->setPosition(visibleSize.width / 8, visibleSize.height * 19 / 20);
-		Title->setPosition(visibleSize.width * 3 / 4, visibleSize.height * 19 / 20);
-		Score->setPosition(visibleSize.width / 8,  visibleSize.height * 18 / 20);
+		status->setPosition(posStatus);
+		Title->setPosition(posTitle);
+		Score->setPosition(posScore);
 
 		this->setPosition(this->getPosition().x,0);
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,visibleSize.height*5+GROUND_HEIGHT/2);
@@ -138,29 +142,25 @@ void Stage::jump_scheduler(float time) {
 }
 
 
-void Stage::attack_scheduler(float time) {
+/*void Stage::attack_scheduler(float time) {
     if(character->getActionState()==None) {
         unschedule(schedule_selector(Stage::attack_scheduler));
         return;
     }
-    if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<100) {
-        if(building->attack()) {
-            //new Building
-            unschedule(schedule_selector(Stage::attack_scheduler));
-            return;
-        }
-        status->increaseScore(1);
-        sprintf(status->getcoinScore(), "score : %d", status->getScore());
-        Score->setString(status->getcoinScore());
-    }
-}
+    
+}*/
 
 void Stage::block_scheduler(float time) {
+    if(time>=3.0f) {
+        unschedule(schedule_selector(Stage::block_scheduler));
+    }
     if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<10) {
         //float charactervel=character->getPhysicsBody()->getVelocity().y;
         character->stopActionByTag(Character::ATTACK_TAG);
         character->getPhysicsBody()->setVelocity(Vec2(0,-500+building->getPhysicsBody()->getVelocity().y));
-        building->getPhysicsBody()->setVelocity(Vec2(0,0));
+        auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
+        building->runAction(jump);
+        //building->getPhysicsBody()->setVelocity(Vec2(0,0));
         if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
 }
@@ -201,11 +201,18 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         {
             //auto building=dynamic_cast<Building *>(getChildByTag(BUILDING_TAG));
             
-            
-            schedule(schedule_selector(Stage::attack_scheduler),Character::ATTACK_FRAME);
-            //character->setAttack(N);
+            //schedule(schedule_selector(Stage::attack_scheduler),Character::ATTACK_FRAME);
             character->doAttackAction();
-
+            if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<100) {
+                if(building->attack()) {
+                    //new Building
+                    //unschedule(schedule_selector(Stage::attack_scheduler));
+                    break;
+                }
+                status->increaseScore(1);
+                sprintf(status->getcoinScore(), "score : %d", status->getScore());
+                Score->setString(status->getcoinScore());
+            }
 			break;
 		}
 		// 막기
@@ -213,21 +220,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 		{
             character->setActionState(Blocking);
             schedule(schedule_selector(Stage::block_scheduler));
-			/*character->getPhysicsBody()->setCategoryBitmask(0x04);// 0010
-			character->getPhysicsBody()->setContactTestBitmask(0x01); // 1000
-			character->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
-			//z가 작동하지 않아서 일단 막기를 눌렀을떄 점수가 상승하는것으로 표현한다
-			/*character->increaseScore(1);
-			sprintf(coinScore, "score : %d", character->getScore());
-			pLabel2->setString(coinScore);//*/
-			break;
-		}
-		// 나중에 막기 X로 옮길 것
-		case EventKeyboard::KeyCode::KEY_C:
-		{
-			status->increaseScore(10);
-			sprintf(status->getcoinScore(), "score : %d", status->getScore());
-			Score->setString(status->getcoinScore());
 			break;
 		}
 		case EventKeyboard::KeyCode::KEY_V:

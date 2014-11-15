@@ -21,10 +21,15 @@ private:
     void stopAttack();
     void menuCloseCallback(Ref* pSender);
     
+    static Vec2 posScore;
+    static Vec2 posTitle;
+    static Vec2 posStatus;
+    
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int EDGE_TAG = 0;
     static const int JUMP_TAG=22;
+    
     
     Menu* menu;
 	MenuItemImage* closeItem;
@@ -42,7 +47,7 @@ protected:
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
-    void attack_scheduler(float time);
+    //void attack_scheduler(float time);
     void block_scheduler(float time);
     
 	//void skill_blocking();
