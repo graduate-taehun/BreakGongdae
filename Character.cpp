@@ -14,7 +14,6 @@ bool Character::init() {
         return false;
     state = sGround;
     action = None;
-    score=0;
     
     auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
     //body->setMass(10.0f);
@@ -31,5 +30,3 @@ State Character::getState(){ return state; }
 void Character::setState(State _state){ state = _state; }
 ActionState Character::getActionState(){ return action; }
 void Character::setActionState(ActionState _action){ action = _action; }
-int Character::getScore(){ return score; }
-void Character::increaseScore(int i){ score += i; }

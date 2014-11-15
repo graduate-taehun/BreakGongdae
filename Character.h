@@ -17,9 +17,10 @@ enum ActionState{Attacking , None, Blocking };
 
 class Character : public Sprite
 {
+private:
     State state;
     ActionState action;
-	int score;
+
 public:
     virtual bool init();
     CREATE_FUNC(Character);
@@ -27,8 +28,6 @@ public:
     void setState(State _state);
     ActionState getActionState();
     void setActionState(ActionState _action);
-	int getScore();
-	void increaseScore(int i);
 };
 
 #endif /* defined(__BreakGongDae__Character__) */
