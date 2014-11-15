@@ -33,7 +33,7 @@ public:
     static Building* createWithNumbsersAndImage(int numbers, string filename);
     void setPositionOfBottom(Point p);
     Point getPositionOfTop();
-    void attack();
+    bool attack();
     void destroyAll();
 };
 

@@ -13,20 +13,22 @@ bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
     state = sGround;
-    attack = N;
+    action = None;
+    score=0;
     
     auto body = PhysicsBody::createBox(Sprite::getContentSize(), PhysicsMaterial(1., 0., 0.), Vec2(0, 0));
-    body->setAngularVelocityLimit(0);
+    body->setRotationEnable(false);
+    
     body->setCategoryBitmask(0x01); // 0001
     body->setContactTestBitmask(0x04); // 0100
     body->setCollisionBitmask(0x03); // 0011
-    Sprite::setPhysicsBody(body);
+    setPhysicsBody(body);
     return true;
 }
 
 State Character::getState(){ return state; }
 void Character::setState(State _state){ state = _state; }
-Attack Character::getAttack(){ return attack; }
-void Character::setAttack(Attack _attack){ attack = _attack; }
-int Character::getScore(){ return Score; }
-void Character::setScore(int i){ Score = i; }
+ActionState Character::getActionState(){ return action; }
+void Character::setActionState(ActionState _action){ action = _action; }
+int Character::getScore(){ return score; }
+void Character::increaseScore(int i){ score += i; }

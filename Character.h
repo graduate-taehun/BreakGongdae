@@ -13,22 +13,22 @@
 USING_NS_CC;
 
 enum State{ sGround, sAir };
-enum Attack{ Y, N, B };
+enum ActionState{Attacking , None, Blocking };
 
 class Character : public Sprite
 {
     State state;
-    Attack attack;
-	int Score;
+    ActionState action;
+	int score;
 public:
     virtual bool init();
     CREATE_FUNC(Character);
     State getState();
     void setState(State _state);
-    Attack getAttack();
-    void setAttack(Attack _attack);
+    ActionState getActionState();
+    void setActionState(ActionState _action);
 	int getScore();
-	void setScore(int i);
+	void increaseScore(int i);
 };
 
 #endif /* defined(__BreakGongDae__Character__) */

@@ -67,16 +67,14 @@ void Block::attack() {
     durability--;
 }
 
-void Building::attack() {
+bool Building::attack() {
     auto bottom=blocks->front();
     bottom->attack();
     if(bottom->getDurability()<=0) {
-        
-        //getPhysicsBody()->setPositionOffset(Vec2(0,-blocks->back()->getContentSize().height/2));
-        
-        
         removeChild(bottom);
         blocks->pop();
+        
+        if(blocks->size()==0) return true;
 
         setPosition(Vec2(getPosition().x,getPosition().y+blocks->back()->getContentSize().height/2));
 
@@ -88,7 +86,9 @@ void Building::attack() {
         getPhysicsBody()->removeAllShapes();
         getPhysicsBody()->addShape(PhysicsShapeBox::create(Size(getContentSize().width,getContentSize().height)));
     }
+    return false;
 }
+
 void Building::setPositionOfBottom(Point p) {
     
 }
