@@ -55,23 +55,20 @@ bool Stage::init()
     }
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
-    posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 2;
+    posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
     posCharacter[1]=Stage::visibleSize.width / 2;
-    posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 2;
+    posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
     cntofPosCharacter = 1;
     
-	// create menu, it's an autorelease object
-	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 	Game_Pause = 0;
+	closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 	CCDirector::sharedDirector()->resume();
 	closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
 	menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
-    
-    //visibleSize=Director::getInstance()->getVisibleSize();
-
+   
 	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
 	
 	auto keylistener = EventListenerKeyboard::create();
@@ -88,7 +85,7 @@ bool Stage::init()
     background->setPosition(visibleSize.width/2,visibleSize.height*5);
     addChild(background);
     
-    character=Character::create();
+    character = Character::create();
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
     
@@ -118,7 +115,8 @@ void Stage::jump_scheduler(float time) {
 		status->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
 		Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
 		Score->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
- 
+		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, character->getPosition().y - visibleSize.height/2 + closeItem->getContentSize().height / 2));
+
 		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
@@ -136,6 +134,7 @@ void Stage::jump_scheduler(float time) {
 		status->setPosition(posStatus);
 		Title->setPosition(posTitle);
 		Score->setPosition(posScore);
+		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
         //building->getPhysicsBody()->setGravityEnable(false);
         //building->setPositionOfBottom(GROUND_HEIGHT+2000);
@@ -169,9 +168,7 @@ void Stage::block_scheduler(float time) {
 }
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
-    //auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-//	int i = 0;
-    if(Game_Pause==0) {
+	if(Game_Pause==0) {
         switch (keyCode){
             case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
             {
@@ -257,12 +254,8 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     }
 }
 
-
-
 void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
 {
-	//auto character = dynamic_cast<Character *>(getChildByTag(CHARACTER_TAG));
-	
 	switch (keyCode){
         case EventKeyboard::KeyCode::KEY_X: {
             character->setActionState(None);

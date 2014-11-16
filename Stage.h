@@ -24,12 +24,11 @@ private:
     static Vec2 posScore;
     static Vec2 posTitle;
     static Vec2 posStatus;
-    
+	
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int EDGE_TAG = 0;
     static const int JUMP_TAG=22;
-    
     
     Menu* menu;
 	MenuItemImage* closeItem;
