@@ -16,11 +16,13 @@ Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
 Vec2 Stage::posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
 Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 Vec2 Stage::posCombo = Vec2(visibleSize.width / 8, visibleSize.height * 17 / 20);
+string Stage::fileBuilding[10] = { "Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png" };
+
 /*
 	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
 	1. 캐릭터가 땅에 있을 때
-	0010
-	0010
+	0011
+	0100
 	0001
 
 	2. 캐릭터가 점프했을 때
@@ -29,9 +31,14 @@ Vec2 Stage::posCombo = Vec2(visibleSize.width / 8, visibleSize.height * 17 / 20)
 	0011
 
 	3. 빌딩
-	0010
-	0010
+	0011
+	1000
 	0001
+
+	4. 바닥
+	1001
+	0011
+	0011
 */
 Scene* Stage::createScene()
 {
@@ -50,15 +57,18 @@ Scene* Stage::createScene()
     scene->getPhysicsWorld()->setSubsteps(3);
     
     auto body = PhysicsBody::createBox(Size(visibleSize.width*2,GROUND_HEIGHT),PhysicsMaterial(0.0f,0.0f,0.0f));
-    body->setDynamic(false);
+	body->setCategoryBitmask(0x09);
+	body->setContactTestBitmask(0x03);
+	body->setCollisionBitmask(0x03);
+	body->setDynamic(false);
+
     auto groundNode = Node::create();
     groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
     groundNode->setTag(EDGE_TAG);
-    groundNode->setPhysicsBody(body);
+	groundNode->setPhysicsBody(body);
     scene->addChild(groundNode);
     
-    auto layer = Stage::create();
-
+	auto layer = Stage::create();
     scene->addChild(layer);
     
     return scene;
@@ -269,12 +279,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                 schedule(schedule_selector(Stage::block_scheduler));
                 break;
             }
-            case EventKeyboard::KeyCode::KEY_V:
-            {
-                status->decreaseHP(status->getMAX_HP()/10);
-                status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
-                break;
-            }
             case EventKeyboard::KeyCode::KEY_ESCAPE:
             {
                 if (Game_Pause == 0)
@@ -284,7 +288,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                     //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
                     //this->addChild(pScene, 2000, 2000);
                 }
-                else if (Game_Pause == 1 )
+                else if (Game_Pause == 1)
                 {
                    CCDirector::sharedDirector()->resume();
                    Game_Pause = 0;
@@ -312,27 +316,8 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 
 bool Stage::onContactBegin(PhysicsContact& contact)
 {
-    //auto jump=character->getActionByTag(JUMP_TAG);
-    character->stopActionByTag(JUMP_TAG);
-    switch (character->getActionState()) {
-        case Attacking:
-            //building->attack();
-            break;
-        case Blocking:
-            //character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-            //building->getPhysicsBody()->setVelocity(Vec2(0,0));
-            break;
-        case None:
-		{
-			if (character->getState() == sGround && character->getPositionOfTop() < building->getPositionOfBottom())
-			{
-				status->decreaseHP(status->getMAX_HP() / 3);
-				status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
-			}
-			//character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-			break;
-		}
-    }
+	status->decreaseHP(status->getMAX_HP() / 3);
+	status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
 	return true;
 }
 

@@ -9,24 +9,6 @@
 #include "Character.h"
 
 float Character::ATTACK_FRAME = 0.1f;
-/*
-캐릭터 및 빌딩 비트마스크 처리
-(순서는 category,contact,collision)
-1. 캐릭터가 땅에 있을 때
-0001    0011
-0001    0001
-0001    0001
-
-2. 캐릭터가 점프했을 때
-0001
-0001
-0010
-
-3. 빌딩
-0011
-0001
-0001
-*/
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
@@ -36,8 +18,8 @@ bool Character::init() {
     auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
     
     body->setRotationEnable(false);
-	body->setCategoryBitmask(0x02);
-	body->setContactTestBitmask(0x02);
+	body->setCategoryBitmask(0x03);
+	body->setContactTestBitmask(0x04);
 	body->setCollisionBitmask(0x01);
 
 	setPhysicsBody(body);
@@ -64,12 +46,10 @@ void Character::doAttackAction() {
     auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
     auto animate = Animate::create(animation);
     
-    
     auto pCallback = CallFunc::create(CC_CALLBACK_0(Character::stopAttackAction, this));
     auto pSequence = Sequence::create(animate, pCallback, nullptr);
     pSequence->setTag(ATTACK_TAG);
     runAction(pSequence);
-        
 }
 
 float Character::getPositionOfTop() {

@@ -27,8 +27,8 @@ private:
 	static Vec2 posCombo;
     
     int levelBuilding;
-    string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
-	
+	static string fileBuilding[10];
+
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int EDGE_TAG = 0;
