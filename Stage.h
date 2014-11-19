@@ -27,12 +27,12 @@ private:
 	static Vec2 posCombo;
     
     int levelBuilding;
-    static string fileBuilding[10];
+    string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
 	
 protected:
     static const int GROUND_HEIGHT = 50;
-    static const int GROUND_TAG = 0;
-    static const int EDGE_TAG=1;
+    static const int EDGE_TAG = 0;
+    static const int JUMP_TAG=22;
     
     Menu* menu;
 	MenuItemImage* closeItem;
@@ -40,7 +40,6 @@ protected:
 	LabelBMFont *Title;
 	CCLabelTTF *Score;
 	CCLabelTTF *Combo;
-	CCLabelTTF *Label_Combo;
  
     Status* status;
     Character* character;

@@ -33,15 +33,17 @@ float Character::ATTACK_FRAME = 0.1f;
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
-    
+    state = sGround;
+    action = None;
     
     auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
-    body->setRotationEnable(false);
-	setPhysicsBody(body);
     
-    setState(sGround);
-    action = None;
-	
+    body->setRotationEnable(false);
+	body->setCategoryBitmask(0x02);
+	body->setContactTestBitmask(0x02);
+	body->setCollisionBitmask(0x01);
+
+	setPhysicsBody(body);
     return true;
 }
 void Character::stopAttackAction()
@@ -92,15 +94,5 @@ void Character::setState(State _state){
     }
 }
 ActionState Character::getActionState(){ return action; }
-void Character::setActionState(ActionState _action){
-    action = _action;
-    /*if(action==Attacking) {
-        getPhysicsBody()->setCategoryBitmask(0x02);
-        getPhysicsBody()->setContactTestBitmask(0x08);
-        getPhysicsBody()->setCollisionBitmask(0x01);
-    }
-    else {
-        setState(getState());
-    }*/
-}
+void Character::setActionState(ActionState _action){ action = _action; }
 

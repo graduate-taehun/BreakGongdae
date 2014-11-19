@@ -16,8 +16,6 @@ Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
 Vec2 Stage::posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
 Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 Vec2 Stage::posCombo = Vec2(visibleSize.width / 8, visibleSize.height * 17 / 20);
-string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
-
 /*
 	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
 	1. 캐릭터가 땅에 있을 때
@@ -51,7 +49,7 @@ Scene* Stage::createScene()
     scene->getPhysicsWorld()->setGravity(gravity);
     scene->getPhysicsWorld()->setSubsteps(3);
     
-    auto body = PhysicsBody::createBox(Size(visibleSize.width,GROUND_HEIGHT),PhysicsMaterial(0.0f,0.0f,0.0f));
+    auto body = PhysicsBody::createBox(Size(visibleSize.width*2,GROUND_HEIGHT),PhysicsMaterial(0.0f,0.0f,0.0f));
     body->setDynamic(false);
     body->setCategoryBitmask(0x09);
     body->setContactTestBitmask(0x03);
@@ -59,17 +57,9 @@ Scene* Stage::createScene()
     
     auto groundNode = Node::create();
     groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
-    groundNode->setTag(GROUND_TAG);
+    groundNode->setTag(EDGE_TAG);
     groundNode->setPhysicsBody(body);
     scene->addChild(groundNode);
-    
-    body=PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10));
-    auto edgeBox = Node::create();
-    edgeBox->setPosition(Point(visibleSize.width/2, visibleSize.height*5));
-    edgeBox->setContentSize(Size(visibleSize.width,visibleSize.height*10));
-    edgeBox->setTag(EDGE_TAG);
-    edgeBox->setPhysicsBody(body);
-    scene->addChild(edgeBox);
     
     auto layer = Stage::create();
 
@@ -85,7 +75,7 @@ bool Stage::init()
         return false;
     }
     
-    levelBuilding=-1;
+    levelBuilding=0;
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
     posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
@@ -122,7 +112,10 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
     
-    setNextBuilding();
+    building = Building::createWithNumbsersAndImage(10, "block.png");
+    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+2000);
+    //building->getPhysicsBody()->setVelocity(Vec2(0,-300));
+    addChild(building);
 
 	status = Status::create();
 	status->setPosition(posStatus);
@@ -163,13 +156,16 @@ void Stage::jump_scheduler(float time) {
 		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, character->getPosition().y - visibleSize.height/2 + closeItem->getContentSize().height / 2));
 
 		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
-        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
+        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
     }
-    else if(character->getPositionOfTop()-character->getContentSize().height<=GROUND_HEIGHT+5) {
+    else if(character->getPosition().y<=GROUND_HEIGHT+character->getContentSize().height/2+1) {
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
         character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
+		character->getPhysicsBody()->setCategoryBitmask(0x02);
+		character->getPhysicsBody()->setContactTestBitmask(0x08);
+		character->getPhysicsBody()->setCollisionBitmask(0x01);
 		character->setState(sGround);
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
@@ -184,9 +180,17 @@ void Stage::jump_scheduler(float time) {
         //building->getPhysicsBody()->setGravityEnable(false);
         //building->setPositionOfBottom(GROUND_HEIGHT+2000);
 		this->setPosition(this->getPosition().x,0);
-        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,GROUND_HEIGHT/2);
+        this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
+
+/*void Stage::attack_scheduler(float time) {
+    if(character->getActionState()==None) {
+        unschedule(schedule_selector(Stage::attack_scheduler));
+        return;
+    }
+    
+}*/
 
 void Stage::block_scheduler(float time) {
     if(time>=3.0f) {
@@ -203,13 +207,14 @@ void Stage::block_scheduler(float time) {
 			Combo->setString(status->getcoinCombo());
 		}//땅에서 막기를 사용하면 콤보가 끊어진다. 나중에 죽었을때도 콤보가 끊어지도록 수정해야함
 
+		//auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
+        //building->runAction(jump);
         building->getPhysicsBody()->setVelocity(Vec2(0,10));
         if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
 }
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
-	
 	if(Game_Pause==0) {
         switch (keyCode){
             case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
@@ -227,10 +232,15 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             case EventKeyboard::KeyCode::KEY_UP_ARROW:
             {
                 if (character->getState() == sGround) {
-					
+					character->getPhysicsBody()->setCategoryBitmask(0x01);
+					character->getPhysicsBody()->setContactTestBitmask(0x04);
+					character->getPhysicsBody()->setCollisionBitmask(0x03);
 					character->setState(sAir);
-
-                    character->getPhysicsBody()->setVelocity(Vec2(0,1500));
+                    /*auto jump = JumpTo::create(3, Vec2(character->getPosition().x,building->getPositionOfTop()/3), building->getPositionOfTop(), 1);
+                    //auto jump = JumpTo::create(2, Vec2(character->getPosition().x,1000), 1000, 1);
+                    jump->setTag(JUMP_TAG);
+                    character->runAction(jump);*/
+                    character->getPhysicsBody()->setVelocity(Vec2(0,2000));
                     
                     //점프동작
                     if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
@@ -242,17 +252,10 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             // 부수기
             case EventKeyboard::KeyCode::KEY_Z:
             {
-
-				Label_Combo = CCLabelTTF::create("0 Combo", "futura-48.fnt", 25);
-				Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
-				Label_Combo->setColor(ccc3(0, 0, 0));
-				addChild(Label_Combo);
                 character->doAttackAction();
-                if(   (0<=building->getPositionOfBottom()-character->getPositionOfTop()
-                       && building->getPositionOfBottom()-character->getPositionOfTop()<100)
-                   || (0<=character->getPositionOfTop()-building->getPositionOfBottom()
-                       && character->getPositionOfTop()-building->getPositionOfBottom()<character->getContentSize().height/3)
-                   || abs(building->getPositionOfBottom()-GROUND_HEIGHT)<=5) {
+                if((0<=character->getPositionOfTop()-building->getPositionOfBottom()
+                   && character->getPositionOfTop()-building->getPositionOfBottom()<100)
+                   || character->getPositionOfTop()>building->getPositionOfBottom()) {
                     if(building->attack()) {
                         setNextBuilding();
                         break;
@@ -263,11 +266,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 					Score->setString(status->getcoinScore());
 					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
 					Combo->setString(status->getcoinCombo());
-					Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
-					Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
-					Label_Combo->getPhysicsBody()->setVelocity(character->getPhysicsBody()->getVelocity());
-					sprintf(status->getcoinCombo(), "%d Combo!", status->getCombo());
-					Label_Combo->setString(status->getcoinCombo());
                 }
                 break;
             }
@@ -276,6 +274,12 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             {
                 character->setActionState(Blocking);
                 schedule(schedule_selector(Stage::block_scheduler));
+                break;
+            }
+            case EventKeyboard::KeyCode::KEY_V:
+            {
+                status->decreaseHP(status->getMAX_HP()/10);
+                status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
                 break;
             }
             case EventKeyboard::KeyCode::KEY_ESCAPE:
@@ -337,7 +341,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 {
 	Game_Pause = p;
 }*/
-/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽
+/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽*/
 
 CCScene* PopLayer::scene()
 {
@@ -389,4 +393,4 @@ void PopLayer::doClose(CCObject* pSender)
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
-}*/
+}

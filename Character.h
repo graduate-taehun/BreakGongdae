@@ -29,7 +29,6 @@ public:
     virtual bool init();
     
     CREATE_FUNC(Character);
-    
     State getState();
     void setState(State _state);
     ActionState getActionState();
