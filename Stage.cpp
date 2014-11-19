@@ -15,14 +15,31 @@ Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
 Vec2 Stage::posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
 Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+Vec2 Stage::posCombo = Vec2(visibleSize.width / 8, visibleSize.height * 17 / 20);
+/*
+	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
+	1. 캐릭터가 땅에 있을 때
+	0010
+	0010
+	0001
 
+	2. 캐릭터가 점프했을 때
+	0001
+	0100
+	0011
+
+	3. 빌딩
+	0010
+	0010
+	0001
+*/
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
     posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
     posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
     posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
-    
+	posCombo = Vec2(visibleSize.width / 8, visibleSize.height * 17 / 20);
     //origin=Director::getInstance()->getVisibleOrigin();
     
     Vect gravity = Vect(0.0f, -400.0f);
@@ -98,6 +115,7 @@ bool Stage::init()
 
 	status = Status::create();
 	status->setPosition(posStatus);
+	status->setCombo(0);
 	addChild(status);
 
 	Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
@@ -107,7 +125,12 @@ bool Stage::init()
 	Score = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
 	Score->setPosition(posScore);
 	Score->setColor(ccc3(0, 0, 0));
-	addChild(Score, 12);
+	addChild(Score);
+
+	Combo = CCLabelTTF::create("combo : 0", "futura-48.fnt", 28);
+	Combo->setPosition(posCombo);
+	Combo->setColor(ccc3(0, 0, 0));
+	addChild(Combo);
    
     return true;
 }
@@ -122,6 +145,7 @@ void Stage::jump_scheduler(float time) {
 		status->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
 		Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
 		Score->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
+		Combo->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 7 / 20);
 		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, character->getPosition().y - visibleSize.height/2 + closeItem->getContentSize().height / 2));
 
 		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
@@ -143,6 +167,7 @@ void Stage::jump_scheduler(float time) {
 		status->setPosition(posStatus);
 		Title->setPosition(posTitle);
 		Score->setPosition(posScore);
+		Combo->setPosition(posCombo);
 		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
         //building->getPhysicsBody()->setGravityEnable(false);
@@ -151,7 +176,6 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
-
 
 /*void Stage::attack_scheduler(float time) {
     if(character->getActionState()==None) {
@@ -169,7 +193,14 @@ void Stage::block_scheduler(float time) {
         //float charactervel=character->getPhysicsBody()->getVelocity().y;
         character->stopActionByTag(Character::ATTACK_TAG);
         character->getPhysicsBody()->setVelocity(Vec2(0,-500+building->getPhysicsBody()->getVelocity().y));
-        //auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
+		if (character->getState() == sGround)
+		{
+			status->setCombo(0);
+			sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
+			Combo->setString(status->getcoinCombo());
+		}//땅에서 막기를 사용하면 콤보가 끊어진다. 나중에 죽었을때도 콤보가 끊어지도록 수정해야함
+
+		//auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
         //building->runAction(jump);
         building->getPhysicsBody()->setVelocity(Vec2(0,10));
         if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
@@ -222,9 +253,12 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                         setNextBuilding();
                         break;
                     }
-                    status->increaseScore(1);
-                    sprintf(status->getcoinScore(), "score : %d", status->getScore());
-                    Score->setString(status->getcoinScore());
+					status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
+					status->setCombo(status->getCombo() + 1);//하나 부실때마다 콤보 1씩 증가하게
+					sprintf(status->getcoinScore(), "score : %d", status->getScore());
+					Score->setString(status->getcoinScore());
+					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
+					Combo->setString(status->getcoinCombo());
                 }
                 break;
             }
@@ -289,8 +323,15 @@ bool Stage::onContactBegin(PhysicsContact& contact)
             //building->getPhysicsBody()->setVelocity(Vec2(0,0));
             break;
         case None:
-            //character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-            break;
+		{
+			if (character->getState() == sGround && character->getPositionOfTop() < building->getPositionOfBottom())
+			{
+				status->decreaseHP(status->getMAX_HP() / 3);
+				status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
+			}
+			//character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
+			break;
+		}
     }
 	return true;
 }
@@ -364,5 +405,4 @@ void PopLayer::doClose(CCObject* pSender)
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
-
 }
