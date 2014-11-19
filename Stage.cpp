@@ -208,7 +208,8 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             case EventKeyboard::KeyCode::KEY_Z:
             {
                 character->doAttackAction();
-                if(character->getPositionOfTop()-building->getPositionOfBottom()<100
+                if((0<=character->getPositionOfTop()-building->getPositionOfBottom()
+                   && character->getPositionOfTop()-building->getPositionOfBottom()<100)
                    || character->getPositionOfTop()>building->getPositionOfBottom()) {
                     if(building->attack()) {
                         //new Building

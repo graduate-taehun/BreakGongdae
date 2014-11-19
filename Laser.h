@@ -12,12 +12,14 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-class LaserWarning : public Layer {
+class LaserWarning : public LayerColor {
 private:
     Sprite *Laser;
-    virtual bool initRandomlyWithVisibleSize(float* threePosition);
+    virtual bool initRandomlyWithVisibleSize(float* threePosition, Size visibleSize);
+    
+    
 public:
-    static LaserWarning* createWithVisibleSize(float* threePosition);
+    static LaserWarning* createWithVisibleSize(float* threePosition, Size visibleSize);
 };
 
 #endif /* defined(__BreakGongDae__Laser__) */

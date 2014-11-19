@@ -7,19 +7,23 @@
 //
 
 #include "Laser.h"
+#include <cmath>
 
-bool LaserWarning::initRandomlyWithVisibleSize(float* threePosition) {
-    if(!Layer::init())
+bool LaserWarning::initRandomlyWithVisibleSize(float* threePosition, Size visibleSize) {
+    if(!LayerColor::initWithColor(Color4B::RED))
         return false;
-    //1,2,3 중에 랜덤
-    
+    srand(time(NULL));
+    int position =rand()%3;
+    setPosition(Vec2(threePosition[position],visibleSize.height/2));
+    setOpacity(128);
+    setContentSize(Size(visibleSize.width/3,visibleSize.height));
     return true;
 }
 
-LaserWarning* LaserWarning::createWithVisibleSize(float* threePosition)
+LaserWarning* LaserWarning::createWithVisibleSize(float* threePosition, Size visibleSize)
 {
     LaserWarning *pRet = new LaserWarning();
-    if (pRet && pRet->initRandomlyWithVisibleSize(threePosition))
+    if (pRet && pRet->initRandomlyWithVisibleSize(threePosition, visibleSize))
     {
         pRet->autorelease();
         return pRet;
