@@ -24,6 +24,9 @@ private:
     static Vec2 posScore;
     static Vec2 posTitle;
     static Vec2 posStatus;
+    
+    int levelBuilding;
+    string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
 	
 protected:
     static const int GROUND_HEIGHT = 50;
@@ -53,6 +56,7 @@ protected:
 	bool onContactBegin(PhysicsContact& contact);
 	bool Game_Pause;
     virtual bool init();
+    virtual void setNextBuilding();
 public:
 	static cocos2d::Scene* createScene();
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone

@@ -53,6 +53,8 @@ bool Stage::init()
     {
         return false;
     }
+    
+    levelBuilding=0;
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
     posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
@@ -109,6 +111,11 @@ bool Stage::init()
    
     return true;
 }
+
+void Stage::setNextBuilding() {
+    //building=Building::createWithNumbsersAndImage(<#int numbers#>, <#string filename#>)
+}
+
 void Stage::jump_scheduler(float time) {
     if(character->getPosition().y >=visibleSize.height/2) {
         //배경을 내림
@@ -212,8 +219,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                    && character->getPositionOfTop()-building->getPositionOfBottom()<100)
                    || character->getPositionOfTop()>building->getPositionOfBottom()) {
                     if(building->attack()) {
-                        //new Building
-                        //unschedule(schedule_selector(Stage::attack_scheduler));
+                        setNextBuilding();
                         break;
                     }
                     status->increaseScore(1);
