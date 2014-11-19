@@ -15,13 +15,14 @@ Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
 Vec2 Stage::posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
 Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
-
+Vec2 Stage::posCombo = Vec2(visibleSize.width  / 8, visibleSize.height * 17 / 20);
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
     posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
     posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
     posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+	posCombo = Vec2(visibleSize.width / 8, visibleSize.height * 17 / 20);
     
     //origin=Director::getInstance()->getVisibleOrigin();
     
@@ -97,15 +98,21 @@ bool Stage::init()
 	status = Status::create();
 	status->setPosition(posStatus);
 	addChild(status);
+	status->setCombo(0);
 
 	Title = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
 	Title->setPosition(posTitle);
 	addChild(Title);
 
-	Score = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
+	Score = CCLabelTTF::create("score : 0", "futura-48.fnt", 28);
 	Score->setPosition(posScore);
 	Score->setColor(ccc3(0, 0, 0));
 	addChild(Score, 12);
+
+	Combo = CCLabelTTF::create("combo : 0", "futura-48.fnt", 28);
+	Combo->setPosition(posCombo);
+	Combo->setColor(ccc3(0, 0, 0));
+	addChild(Combo, 10);
    
     return true;
 }
@@ -115,6 +122,7 @@ void Stage::jump_scheduler(float time) {
 		status->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 9 / 20);
 		Title->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
 		Score->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
+		Combo->setPosition(visibleSize.width/8, character->getPosition().y + visibleSize.height * 7 / 20);
 		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, character->getPosition().y - visibleSize.height/2 + closeItem->getContentSize().height / 2));
 
 		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
@@ -136,6 +144,7 @@ void Stage::jump_scheduler(float time) {
 		status->setPosition(posStatus);
 		Title->setPosition(posTitle);
 		Score->setPosition(posScore);
+		Combo->setPosition(posCombo);
 		closeItem->setPosition(Vec2(visibleSize.width - closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2));
 
         //building->getPhysicsBody()->setGravityEnable(false);
@@ -162,6 +171,12 @@ void Stage::block_scheduler(float time) {
         //float charactervel=character->getPhysicsBody()->getVelocity().y;
         character->stopActionByTag(Character::ATTACK_TAG);
         character->getPhysicsBody()->setVelocity(Vec2(0,-500+building->getPhysicsBody()->getVelocity().y));
+		if (character->getState() == sGround)
+		{
+			status->setCombo(0);
+			sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
+			Combo->setString(status->getcoinCombo());
+		}//땅에서 막기를 사용하면 콤보가 끊어진다. 나중에 죽었을때도 콤보가 끊어지도록 수정해야함
         //auto jump = JumpBy::create(1, Vec2(0,30), 30, 1);
         //building->runAction(jump);
         building->getPhysicsBody()->setVelocity(Vec2(0,10));
@@ -216,9 +231,12 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                         //unschedule(schedule_selector(Stage::attack_scheduler));
                         break;
                     }
-                    status->increaseScore(1);
+                    status->increaseScore(1+status->getCombo()*10);//콤보당 10점씩 추가
+					status->setCombo(status->getCombo() + 1);//하나 부실때마다 콤보 1씩 증가하게
                     sprintf(status->getcoinScore(), "score : %d", status->getScore());
-                    Score->setString(status->getcoinScore());
+					Score->setString(status->getcoinScore());
+					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
+					Combo->setString(status->getcoinCombo());
                 }
                 break;
             }
@@ -306,7 +324,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 {
 	Game_Pause = p;
 }*/
-/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽*/
+/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽
 
 CCScene* PopLayer::scene()
 {
@@ -359,4 +377,4 @@ void PopLayer::doClose(CCObject* pSender)
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
 
-}
+}*/
