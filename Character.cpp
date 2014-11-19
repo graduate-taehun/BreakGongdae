@@ -70,10 +70,6 @@ void Character::doAttackAction() {
     pSequence->setTag(ATTACK_TAG);
     runAction(pSequence);
         
-    //}
-        /*this->getPhysicsBody()->setCategoryBitmask(0x08);// 0010
-         this->getPhysicsBody()->setContactTestBitmask(0x04); // 1000
-         this->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
 }
 
 float Character::getPositionOfTop() {

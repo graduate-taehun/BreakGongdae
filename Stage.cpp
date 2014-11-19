@@ -123,7 +123,7 @@ bool Stage::init()
 	Score = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
 	Score->setPosition(posScore);
 	Score->setColor(ccc3(0, 0, 0));
-	addChild(Score, 12);
+	addChild(Score);
 
 	Combo = CCLabelTTF::create("combo : 0", "futura-48.fnt", 28);
 	Combo->setPosition(posCombo);
@@ -169,7 +169,6 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(EDGE_TAG)->setPosition(this->getScene()->getChildByTag(EDGE_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
-
 
 /*void Stage::attack_scheduler(float time) {
     if(character->getActionState()==None) {
@@ -319,13 +318,13 @@ bool Stage::onContactBegin(PhysicsContact& contact)
             break;
         case None:
 		{
-					 if (character->getState() == sGround && character->getPositionOfTop() < building->getPositionOfBottom())
-					 {
-						 status->decreaseHP(status->getMAX_HP() / 3);
-						 status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
-					 }
-					 //character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-					 break;
+			if (character->getState() == sGround && character->getPositionOfTop() < building->getPositionOfBottom())
+			{
+				status->decreaseHP(status->getMAX_HP() / 3);
+				status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
+			}
+			//character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
+			break;
 		}
     }
 	return true;
@@ -400,5 +399,4 @@ void PopLayer::doClose(CCObject* pSender)
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
-
 }
