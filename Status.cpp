@@ -25,7 +25,6 @@ int Status::getMAX_HP(){ return MAX_HP; }
 void Status::decreaseHP(int i){ currentHP -= i; }
 int Status::getScore(){ return score; }
 char* Status::getcoinScore(){ return coinScore; }
-void Status::increaseScore(int i){ score += i; }
 int Status::getCombo(){ return Combo; }
 void Status::setCombo(int C){ Combo = C; }
-char* Status::getcoinCombo(){ return coinCombo; }
+char* Status::getcoinCombo(){ return coinCombo; }void Status::increaseScore(int i){ score += i; }

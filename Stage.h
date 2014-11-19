@@ -24,6 +24,7 @@ private:
     static Vec2 posScore;
     static Vec2 posTitle;
     static Vec2 posStatus;
+	static Vec2 posCombo;
     
     int levelBuilding;
     string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
