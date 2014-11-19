@@ -53,6 +53,10 @@ Scene* Stage::createScene()
     
     auto body = PhysicsBody::createBox(Size(visibleSize.width,GROUND_HEIGHT),PhysicsMaterial(0.0f,0.0f,0.0f));
     body->setDynamic(false);
+    body->setCategoryBitmask(0x09);
+    body->setContactTestBitmask(0x03);
+    body->setCollisionBitmask(0x03);
+    
     auto groundNode = Node::create();
     groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
     groundNode->setTag(GROUND_TAG);
@@ -144,7 +148,7 @@ bool Stage::init()
 
 void Stage::setNextBuilding() {
     levelBuilding++;
-    building = Building::createWithNumbsersAndImage(10, "block.png");
+    building = Building::create(10, "block.png",levelBuilding);
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+2000);
     addChild(building);
 }
@@ -311,27 +315,8 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 
 bool Stage::onContactBegin(PhysicsContact& contact)
 {
-    //auto jump=character->getActionByTag(JUMP_TAG);
-
-    switch (character->getActionState()) {
-        case Attacking:
-            //building->attack();
-            break;
-        case Blocking:
-            //character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-            //building->getPhysicsBody()->setVelocity(Vec2(0,0));
-            break;
-        case None:
-		{
-			if (character->getState() == sGround && character->getPositionOfTop() < building->getPositionOfBottom())
-			{
-				status->decreaseHP(status->getMAX_HP() / 3);
-				status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
-			}
-			//character->getPhysicsBody()->setVelocity(building->getPhysicsBody()->getVelocity());
-			break;
-		}
-    }
+    status->decreaseHP(status->getMAX_HP() / 3);
+    status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
 	return true;
 }
 

@@ -29,11 +29,11 @@ class Building : public Layer {
 private:
     queue<Block *>* blocks;
     PhysicsMaterial material;
-    virtual bool initWithNumbersAndImage(int numbers, string filename);
+    virtual bool init(int numbers, string filename, int level);
 public:
     ~Building();
     
-    static Building* createWithNumbsersAndImage(int numbers, string filename);
+    static Building* create(int numbers, string filename, int level);
     void setPositionOfBottom(float bottom);
     float getPositionOfTop();
     float getPositionOfBottom();

@@ -10,21 +10,25 @@
 
 float Character::ATTACK_FRAME = 0.1f;
 /*
-	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
-	1. 캐릭터가 땅에 있을 때
-	0010
-	0010
-	0001
+ 1. 캐릭터가 땅에 있을 때
+ 0011
+ 0100
+ 0001
  
-	2. 캐릭터가 점프했을 때
-	0001
-	0100
-	0011
+ 2. 캐릭터가 점프했을 때
+ 0001
+ 0100
+ 0011
  
-	3. 빌딩
-	0010
-	0010
-	0001
+ 3. 빌딩
+ 0011
+ 1000
+ 0001
+ 
+ 4. 바닥
+ 1001
+ 0011
+ 0011
  */
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
@@ -77,8 +81,8 @@ State Character::getState(){ return state; }
 void Character::setState(State _state){
     state = _state;
     if(state==sGround) {
-        getPhysicsBody()->setCategoryBitmask(0x02);
-        getPhysicsBody()->setContactTestBitmask(0x08);
+        getPhysicsBody()->setCategoryBitmask(0x03);
+        getPhysicsBody()->setContactTestBitmask(0x04);
         getPhysicsBody()->setCollisionBitmask(0x01);
     }
     else {

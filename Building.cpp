@@ -7,6 +7,7 @@
 //
 
 #include "Building.h"
+#include <cmath>
 
 Block* Block::createWithDurability(int _durability) {
     Block *pRet = new Block();
@@ -32,7 +33,7 @@ int Block::getDurability() {
     return durability;
 }
 
-bool Building::initWithNumbersAndImage(int numbers, string filename) {
+bool Building::init(int numbers, string filename, int level) {
     if(!Layer::init()) return false;
     
     //초기화
@@ -44,6 +45,10 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
     auto body = PhysicsBody::createBox(getContentSize(),material);
     body->setRotationEnable(false);
     body->removeAllShapes();
+    
+    //level
+    srand(time(NULL));
+    //rand()%numbers;
     
     //block들 생성
     for(int i=0; i<numbers; i++) {
@@ -61,8 +66,8 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
         addChild(block);
     }
     
-    body->setCategoryBitmask(0x02);
-    body->setContactTestBitmask(0x02);
+    body->setCategoryBitmask(0x03);
+    body->setContactTestBitmask(0x08);
     body->setCollisionBitmask(0x01);
     body->setVelocityLimit(500);
     //body->setGravityEnable(false);
@@ -125,10 +130,10 @@ float Building::getPositionOfBottom() {
     return getPosition().y-getContentSize().height/2;
 }
 
-Building* Building::createWithNumbsersAndImage(int numbers, string filename)
+Building* Building::create(int numbers, string filename, int level)
 {
     Building *pRet = new Building();
-    if (pRet && pRet->initWithNumbersAndImage(numbers,filename))
+    if (pRet && pRet->init(numbers,filename,level))
     {
         pRet->autorelease();
         return pRet;
