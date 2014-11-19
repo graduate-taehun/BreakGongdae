@@ -61,8 +61,8 @@ bool Building::initWithNumbersAndImage(int numbers, string filename) {
         addChild(block);
     }
     
-    body->setCategoryBitmask(0x06);
-    body->setContactTestBitmask(0x03);
+    body->setCategoryBitmask(0x02);
+    body->setContactTestBitmask(0x08);
     body->setCollisionBitmask(0x01);
     body->setVelocityLimit(500);
     //body->setGravityEnable(false);

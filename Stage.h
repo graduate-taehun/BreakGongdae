@@ -24,8 +24,7 @@ private:
     static Vec2 posScore;
     static Vec2 posTitle;
     static Vec2 posStatus;
-	static Vec2 posCombo;
-
+	
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int EDGE_TAG = 0;
@@ -36,7 +35,6 @@ protected:
     
 	LabelBMFont *Title;
 	CCLabelTTF *Score;
-	CCLabelTTF *Combo;
  
     Status* status;
     Character* character;
