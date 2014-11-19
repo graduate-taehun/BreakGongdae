@@ -205,6 +205,7 @@ void Stage::block_scheduler(float time) {
 }
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
+	
 	if(Game_Pause==0) {
         switch (keyCode){
             case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
@@ -237,6 +238,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             // 부수기
             case EventKeyboard::KeyCode::KEY_Z:
             {
+
+				Label_Combo = CCLabelTTF::create("0 Combo", "futura-48.fnt", 25);
+				Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
+				Label_Combo->setColor(ccc3(0, 0, 0));
+				addChild(Label_Combo);
                 character->doAttackAction();
                 if(   (0<=building->getPositionOfBottom()-character->getPositionOfTop()
                        && building->getPositionOfBottom()-character->getPositionOfTop()<100)
@@ -253,6 +259,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 					Score->setString(status->getcoinScore());
 					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
 					Combo->setString(status->getcoinCombo());
+					Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
+					Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
+					Label_Combo->getPhysicsBody()->setVelocity(character->getPhysicsBody()->getVelocity());
+					sprintf(status->getcoinCombo(), "%d Combo!", status->getCombo());
+					Label_Combo->setString(status->getcoinCombo());
                 }
                 break;
             }
@@ -341,7 +352,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 {
 	Game_Pause = p;
 }*/
-/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽*/
+/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽
 
 CCScene* PopLayer::scene()
 {
@@ -393,4 +404,4 @@ void PopLayer::doClose(CCObject* pSender)
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
-}
+}*/

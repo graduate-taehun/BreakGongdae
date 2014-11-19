@@ -40,6 +40,7 @@ protected:
 	LabelBMFont *Title;
 	CCLabelTTF *Score;
 	CCLabelTTF *Combo;
+	CCLabelTTF *Label_Combo;
  
     Status* status;
     Character* character;
