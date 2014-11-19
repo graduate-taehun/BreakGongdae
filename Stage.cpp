@@ -208,6 +208,7 @@ void Stage::block_scheduler(float time) {
 }
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
+	
 	if(Game_Pause==0) {
         switch (keyCode){
             case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
@@ -245,6 +246,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             // 부수기
             case EventKeyboard::KeyCode::KEY_Z:
             {
+
+				Label_Combo = CCLabelTTF::create("0 Combo", "futura-48.fnt", 25);
+				Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
+				Label_Combo->setColor(ccc3(0, 0, 0));
+				addChild(Label_Combo);
                 character->doAttackAction();
                 if((0<=character->getPositionOfTop()-building->getPositionOfBottom()
                    && character->getPositionOfTop()-building->getPositionOfBottom()<100)
@@ -259,6 +265,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 					Score->setString(status->getcoinScore());
 					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
 					Combo->setString(status->getcoinCombo());
+					Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
+					Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
+					Label_Combo->getPhysicsBody()->setVelocity(character->getPhysicsBody()->getVelocity());
+					sprintf(status->getcoinCombo(), "%d Combo!", status->getCombo());
+					Label_Combo->setString(status->getcoinCombo());
                 }
                 break;
             }

@@ -27,7 +27,7 @@ private:
 	static Vec2 posCombo;
     
     int levelBuilding;
-    string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
+    //string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
 	
 protected:
     static const int GROUND_HEIGHT = 50;
@@ -40,6 +40,7 @@ protected:
 	LabelBMFont *Title;
 	CCLabelTTF *Score;
 	CCLabelTTF *Combo;
+	CCLabelTTF *Label_Combo;
  
     Status* status;
     Character* character;
