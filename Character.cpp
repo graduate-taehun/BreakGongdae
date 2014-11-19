@@ -37,7 +37,7 @@ bool Character::init() {
     
     body->setRotationEnable(false);
 	body->setCategoryBitmask(0x02);
-	body->setContactTestBitmask(0x08);
+	body->setContactTestBitmask(0x02);
 	body->setCollisionBitmask(0x01);
 
 	setPhysicsBody(body);

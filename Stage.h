@@ -24,6 +24,7 @@ private:
     static Vec2 posScore;
     static Vec2 posTitle;
     static Vec2 posStatus;
+	static Vec2 posCombo;
 	
 protected:
     static const int GROUND_HEIGHT = 50;
@@ -35,6 +36,7 @@ protected:
     
 	LabelBMFont *Title;
 	CCLabelTTF *Score;
+	CCLabelTTF *Combo;
  
     Status* status;
     Character* character;
@@ -55,7 +57,6 @@ protected:
     virtual bool init();
 public:
 	static cocos2d::Scene* createScene();
-    // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     
 	//void setGamePause(bool p);
     CREATE_FUNC(Stage);
@@ -76,7 +77,6 @@ public:
 	CCLayerColor* popUpLayer;
 
 	void doClose(CCObject* pSender);
-
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */
