@@ -14,8 +14,8 @@ bool Status::init() {
 
 	width = this->getContentSize().width;
 	score = 0;
-	currentHP = 100;
-	MAX_HP = 100;
+	currentHP = 30;
+	MAX_HP = 30;
 
     return true;
 }
@@ -26,3 +26,6 @@ void Status::decreaseHP(int i){ currentHP -= i; }
 int Status::getScore(){ return score; }
 char* Status::getcoinScore(){ return coinScore; }
 void Status::increaseScore(int i){ score += i; }
+int Status::getCombo(){ return Combo; }
+void Status::setCombo(int C){ Combo = C; }
+char* Status::getcoinCombo(){ return coinCombo; }

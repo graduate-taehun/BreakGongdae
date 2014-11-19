@@ -19,18 +19,23 @@ private:
 	int currentHP;
 	int MAX_HP;
 	int score;
+	int Combo;
 	char coinScore[100];
+	char coinCombo[100];
 
 public:
     virtual bool init();
     CREATE_FUNC(Status);
 
+	int getCombo();
 	int getWidth();
 	int getHP();
 	int getMAX_HP();
+	void setCombo(int C);
 	void decreaseHP(int _HP);
 	int getScore();
 	char* getcoinScore();
+	char* getcoinCombo();
 	void increaseScore(int i);
 };
 
