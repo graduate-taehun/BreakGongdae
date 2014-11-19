@@ -24,7 +24,7 @@ private:
     void stopAttackAction();
     
 public:
-    static float ATTACK_FRAME;
+     static float ATTACK_FRAME;
     static const int ATTACK_TAG = 21;
     virtual bool init();
     

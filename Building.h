@@ -21,6 +21,7 @@ public:
     int getDurability();
     void attack();
     static Block* createWithDurability(int _durability);
+    
 };
 
 using namespace std;
