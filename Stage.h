@@ -27,12 +27,12 @@ private:
 	static Vec2 posCombo;
     
     int levelBuilding;
-    string fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
+    static string fileBuilding[10];
 	
 protected:
     static const int GROUND_HEIGHT = 50;
-    static const int EDGE_TAG = 0;
-    static const int JUMP_TAG=22;
+    static const int GROUND_TAG = 0;
+    static const int EDGE_TAG=1;
     
     Menu* menu;
 	MenuItemImage* closeItem;

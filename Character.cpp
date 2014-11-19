@@ -10,37 +10,34 @@
 
 float Character::ATTACK_FRAME = 0.1f;
 /*
-캐릭터 및 빌딩 비트마스크 처리
-(순서는 category,contact,collision)
-1. 캐릭터가 땅에 있을 때
-0001    0011
-0001    0001
-0001    0001
-
-2. 캐릭터가 점프했을 때
-0001
-0001
-0010
-
-3. 빌딩
-0011
-0001
-0001
-*/
+	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
+	1. 캐릭터가 땅에 있을 때
+	0010
+	0010
+	0001
+ 
+	2. 캐릭터가 점프했을 때
+	0001
+	0100
+	0011
+ 
+	3. 빌딩
+	0010
+	0010
+	0001
+ */
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
-    state = sGround;
-    action = None;
+    
     
     auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
-    
     body->setRotationEnable(false);
-	body->setCategoryBitmask(0x02);
-	body->setContactTestBitmask(0x02);
-	body->setCollisionBitmask(0x01);
-
 	setPhysicsBody(body);
+    
+    setState(sGround);
+    action = None;
+	
     return true;
 }
 void Character::stopAttackAction()
@@ -77,7 +74,29 @@ float Character::getPositionOfTop() {
 }
 
 State Character::getState(){ return state; }
-void Character::setState(State _state){ state = _state; }
+void Character::setState(State _state){
+    state = _state;
+    if(state==sGround) {
+        getPhysicsBody()->setCategoryBitmask(0x02);
+        getPhysicsBody()->setContactTestBitmask(0x08);
+        getPhysicsBody()->setCollisionBitmask(0x01);
+    }
+    else {
+        getPhysicsBody()->setCategoryBitmask(0x01);
+        getPhysicsBody()->setContactTestBitmask(0x04);
+        getPhysicsBody()->setCollisionBitmask(0x03);
+    }
+}
 ActionState Character::getActionState(){ return action; }
-void Character::setActionState(ActionState _action){ action = _action; }
+void Character::setActionState(ActionState _action){
+    action = _action;
+    /*if(action==Attacking) {
+        getPhysicsBody()->setCategoryBitmask(0x02);
+        getPhysicsBody()->setContactTestBitmask(0x08);
+        getPhysicsBody()->setCollisionBitmask(0x01);
+    }
+    else {
+        setState(getState());
+    }*/
+}
 
