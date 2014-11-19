@@ -112,10 +112,7 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
     
-    building = Building::createWithNumbsersAndImage(10, "block.png");
-    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+2000);
-    //building->getPhysicsBody()->setVelocity(Vec2(0,-300));
-    addChild(building);
+    setNextBuilding();
 
 	status = Status::create();
 	status->setPosition(posStatus);
