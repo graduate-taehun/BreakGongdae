@@ -364,7 +364,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 {
 	Game_Pause = p;
 }*/
-/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽*/
+/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽
 
 CCScene* PopLayer::scene()
 {
@@ -416,4 +416,4 @@ void PopLayer::doClose(CCObject* pSender)
 	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
 	//팝업창 제거
 	this->removeFromParentAndCleanup(true);
-}
+}*/
