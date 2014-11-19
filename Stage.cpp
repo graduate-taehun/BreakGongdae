@@ -125,8 +125,10 @@ void Stage::jump_scheduler(float time) {
         character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
-        character->setState(sGround);
+		character->getPhysicsBody()->setCategoryBitmask(0x02);
+		character->getPhysicsBody()->setContactTestBitmask(0x08);
 		character->getPhysicsBody()->setCollisionBitmask(0x01);
+		character->setState(sGround);
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
     else {
@@ -185,8 +187,10 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             case EventKeyboard::KeyCode::KEY_UP_ARROW:
             {
                 if (character->getState() == sGround) {
-                    character->setState(sAir);
-                    character->getPhysicsBody()->setCollisionBitmask(0x02);
+					character->getPhysicsBody()->setCategoryBitmask(0x01);
+					character->getPhysicsBody()->setContactTestBitmask(0x04);
+					character->getPhysicsBody()->setCollisionBitmask(0x03);
+					character->setState(sAir);
                     /*auto jump = JumpTo::create(3, Vec2(character->getPosition().x,building->getPositionOfTop()/3), building->getPositionOfTop(), 1);
                     //auto jump = JumpTo::create(2, Vec2(character->getPosition().x,1000), 1000, 1);
                     jump->setTag(JUMP_TAG);

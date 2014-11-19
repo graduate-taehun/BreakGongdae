@@ -36,14 +36,13 @@ bool Character::init() {
     auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
     
     body->setRotationEnable(false);
-    
-    body->setCategoryBitmask(0x01);
-    body->setContactTestBitmask(0x01);
-    body->setCollisionBitmask(0x01);
-    setPhysicsBody(body);
+	body->setCategoryBitmask(0x02);
+	body->setContactTestBitmask(0x08);
+	body->setCollisionBitmask(0x01);
+
+	setPhysicsBody(body);
     return true;
 }
-
 void Character::stopAttackAction()
 {
     setActionState(None);
