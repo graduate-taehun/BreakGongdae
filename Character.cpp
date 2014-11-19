@@ -76,6 +76,10 @@ void Character::doAttackAction() {
          this->getPhysicsBody()->setCollisionBitmask(0x06);	// 0001*/
 }
 
+float Character::getPositionOfTop() {
+    return getPosition().y+getContentSize().height/2;
+}
+
 State Character::getState(){ return state; }
 void Character::setState(State _state){ state = _state; }
 ActionState Character::getActionState(){ return action; }

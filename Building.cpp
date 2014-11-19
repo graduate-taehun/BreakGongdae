@@ -120,6 +120,11 @@ float Building::getPositionOfTop() {
     return getPosition().y+getContentSize().height/2;
 }
 
+
+float Building::getPositionOfBottom() {
+    return getPosition().y-getContentSize().height/2;
+}
+
 Building* Building::createWithNumbsersAndImage(int numbers, string filename)
 {
     Building *pRet = new Building();

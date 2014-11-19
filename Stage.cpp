@@ -158,7 +158,7 @@ void Stage::block_scheduler(float time) {
     if(time>=3.0f) {
         unschedule(schedule_selector(Stage::block_scheduler));
     }
-    if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<10) {
+    if(abs(character->getPositionOfTop()-building->getPositionOfBottom())<10) {
         //float charactervel=character->getPhysicsBody()->getVelocity().y;
         character->stopActionByTag(Character::ATTACK_TAG);
         character->getPhysicsBody()->setVelocity(Vec2(0,-500+building->getPhysicsBody()->getVelocity().y));
@@ -195,10 +195,10 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                     //auto jump = JumpTo::create(2, Vec2(character->getPosition().x,1000), 1000, 1);
                     jump->setTag(JUMP_TAG);
                     character->runAction(jump);*/
-                    character->getPhysicsBody()->setVelocity(Vec2(0,1000));
+                    character->getPhysicsBody()->setVelocity(Vec2(0,2000));
                     
                     //점프동작
-                    //if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
+                    if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
                         schedule(schedule_selector(Stage::jump_scheduler));
                     break;
                 }
@@ -208,7 +208,8 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             case EventKeyboard::KeyCode::KEY_Z:
             {
                 character->doAttackAction();
-                if(abs(character->getPosition().y+character->getContentSize().height/2+building->getContentSize().height/2-building->getPosition().y)<100) {
+                if(character->getPositionOfTop()-building->getPositionOfBottom()<100
+                   || character->getPositionOfTop()>building->getPositionOfBottom()) {
                     if(building->attack()) {
                         //new Building
                         //unschedule(schedule_selector(Stage::attack_scheduler));

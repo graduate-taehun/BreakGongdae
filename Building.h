@@ -15,12 +15,13 @@ USING_NS_CC;
 
 class Block : public Sprite {
     int durability;
+    virtual bool init(int _durability);
 public:
     //Block(int _durability=10) : durability(_durability) {}
     int getDurability();
     void attack();
-    virtual bool init(int _durability);
     static Block* createWithDurability(int _durability);
+    
 };
 
 using namespace std;
@@ -28,12 +29,14 @@ class Building : public Layer {
 private:
     queue<Block *>* blocks;
     PhysicsMaterial material;
+    virtual bool initWithNumbersAndImage(int numbers, string filename);
 public:
     ~Building();
-    virtual bool initWithNumbersAndImage(int numbers, string filename);
+    
     static Building* createWithNumbsersAndImage(int numbers, string filename);
     void setPositionOfBottom(float bottom);
     float getPositionOfTop();
+    float getPositionOfBottom();
     bool attack(); //다 없어지면 true 리턴
     void destroyAll();
 };

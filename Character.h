@@ -33,6 +33,8 @@ public:
     void setState(State _state);
     ActionState getActionState();
     void setActionState(ActionState _action);
+    float getPositionOfTop();
+    
     void doAttackAction();
 };
 

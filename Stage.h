@@ -52,11 +52,11 @@ protected:
 	//void skill_blocking();
 	bool onContactBegin(PhysicsContact& contact);
 	bool Game_Pause;
-
+    virtual bool init();
 public:
 	static cocos2d::Scene* createScene();
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
-    virtual bool init();
+    
 	//void setGamePause(bool p);
     CREATE_FUNC(Stage);
 };
