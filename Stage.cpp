@@ -42,6 +42,8 @@ string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormito
 */
 Scene* Stage::createScene()
 {
+
+	srand(time(NULL));
     visibleSize=Director::getInstance()->getVisibleSize();
     posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 19 / 20);
     posScore=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
@@ -266,10 +268,22 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 					Score->setString(status->getcoinScore());
 					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
 					Combo->setString(status->getcoinCombo());
+<<<<<<< HEAD
 			
 					Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
+=======
+					if (rand() % 2 == 0)
+					{
+						Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
+						Label_Combo->getPhysicsBody()->setVelocity(Vec2(100,30));
+					}
+					else
+					{
+						Label_Combo->setPosition(character->getPosition().x - 80, character->getPosition().y + 80);
+						Label_Combo->getPhysicsBody()->setVelocity(Vec2(-100, 30));
+					}
+>>>>>>> origin/master
 					Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
-					Label_Combo->getPhysicsBody()->setVelocity(character->getPhysicsBody()->getVelocity());
 					sprintf(status->getcoinCombo(), "%d Combo!", status->getCombo());
 					Label_Combo->setString(status->getcoinCombo());
                 }
