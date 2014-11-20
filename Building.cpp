@@ -68,7 +68,7 @@ bool Building::init(int numbers, string filename, int level) {
     
     body->setCategoryBitmask(0x03);
     body->setContactTestBitmask(0x08);
-    body->setCollisionBitmask(0x01);
+    body->setCollisionBitmask(0x03);
     body->setVelocityLimit(500);
     //body->setGravityEnable(false);
     setPhysicsBody(body);
@@ -113,7 +113,11 @@ bool Building::attack() {
         }
         //크기 재설정
         setContentSize(Size(getContentSize().width,blocks->back()->getContentSize().height*blocks->size()));
-    }
+		getPhysicsBody()->setCategoryBitmask(0x03);
+		getPhysicsBody()->setContactTestBitmask(0x08);
+		getPhysicsBody()->setCollisionBitmask(0x03);
+
+	}
     return false;
 }
 

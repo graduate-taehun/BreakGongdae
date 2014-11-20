@@ -21,7 +21,7 @@ string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormito
 /*
 	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
 	1. 캐릭터가 땅에 있을 때
-	0010
+	0100
 	0010
 	0001
 
@@ -31,9 +31,14 @@ string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormito
 	0011
 
 	3. 빌딩
-	0010
-	0010
-	0001
+	0011
+	1000
+	0011
+
+	4. 바닥
+	1001
+	0011
+	0101
 */
 Scene* Stage::createScene()
 {
@@ -55,7 +60,7 @@ Scene* Stage::createScene()
     body->setDynamic(false);
     body->setCategoryBitmask(0x09);
     body->setContactTestBitmask(0x03);
-    body->setCollisionBitmask(0x03);
+    body->setCollisionBitmask(0x05);
     
     auto groundNode = Node::create();
     groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
@@ -72,7 +77,6 @@ Scene* Stage::createScene()
     scene->addChild(edgeBox);
     
     auto layer = Stage::create();
-
     scene->addChild(layer);
     
     return scene;
@@ -226,11 +230,9 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             }
             case EventKeyboard::KeyCode::KEY_UP_ARROW:
             {
-                if (character->getState() == sGround) {
-					
+				if (character->getState() == sGround){
 					character->setState(sAir);
-
-                    character->getPhysicsBody()->setVelocity(Vec2(0,1500));
+					character->getPhysicsBody()->setVelocity(Vec2(0,1500));
                     
                     //점프동작
                     if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
@@ -242,13 +244,14 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             // 부수기
             case EventKeyboard::KeyCode::KEY_Z:
             {
-
 				Label_Combo = CCLabelTTF::create("0 Combo", "futura-48.fnt", 25);
 				Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
 				Label_Combo->setColor(ccc3(0, 0, 0));
 				addChild(Label_Combo);
-                character->doAttackAction();
-                if(   (0<=building->getPositionOfBottom()-character->getPositionOfTop()
+                
+				character->doAttackAction();
+            
+				if(   (0<=building->getPositionOfBottom()-character->getPositionOfTop()
                        && building->getPositionOfBottom()-character->getPositionOfTop()<100)
                    || (0<=character->getPositionOfTop()-building->getPositionOfBottom()
                        && character->getPositionOfTop()-building->getPositionOfBottom()<character->getContentSize().height/3)
@@ -263,6 +266,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 					Score->setString(status->getcoinScore());
 					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
 					Combo->setString(status->getcoinCombo());
+			
 					Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
 					Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
 					Label_Combo->getPhysicsBody()->setVelocity(character->getPhysicsBody()->getVelocity());
@@ -315,6 +319,11 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 
 bool Stage::onContactBegin(PhysicsContact& contact)
 {
+	character->getState() == sGround ? character->setState(sGround) : character->setState(sAir);
+	building->getPhysicsBody()->setCategoryBitmask(0x03);
+	building->getPhysicsBody()->setContactTestBitmask(0x08);
+	building->getPhysicsBody()->setCollisionBitmask(0x03);
+
     status->decreaseHP(status->getMAX_HP() / 3);
     status->setTextureRect(Rect(0, 0, status->getWidth() * status->getHP() / status->getMAX_HP(), status->getContentSize().height));
 	return true;
@@ -336,57 +345,4 @@ void Stage::menuCloseCallback(Ref* pSender)
 /*void Stage::setGamePause(bool p)
 {
 	Game_Pause = p;
-}*/
-/* 아랫부분은 팝업레이어구현해놓은 부분인데 아직 미완성이라 주석처리함 by 재엽
-
-CCScene* PopLayer::scene()
-{
-	CCScene *scene = CCScene::create();
-	PopLayer *layer = PopLayer::create();
-	scene->addChild(layer);
-
-	return scene;
-}
-
-bool PopLayer::init()
-{
-	if (!CCLayerColor::initWithColor(ccc4(0, 0, 0, 0)))  //투명하게
-	{
-		return false;
-	}
-	
-	CCString* popParam = CCString::create("0");
-	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
-
-	winSize = CCDirector::sharedDirector()->getWinSize();
-
-	//메뉴추가
-	CCMenuItemFont* pMenuItem = CCMenuItemFont::create("Resume", this, menu_selector(PopLayer::doClose));
-	pMenuItem->setColor(ccc3(0, 0, 0));
-	CCMenu* pMenu2 = CCMenu::create(pMenuItem, NULL);
-	pMenu2->setPosition(ccp(450,300));
-	this->addChild(pMenu2, 10);
-
-	//backLayer추가
-	backLayer = CCLayerColor::create(ccc4(0, 0, 0, 50), winSize.width, winSize.height);
-	backLayer->setAnchorPoint(ccp(0, 0));
-	backLayer->setPosition(ccp(0, 0));
-	this->addChild(backLayer);
-
-	//popUpLayer추가
-	popUpLayer = CCLayerColor::create(ccc4(255, 0, 0, 255), 250, 150);
-	popUpLayer->setAnchorPoint(ccp(0, 0));
-	popUpLayer->setPosition(ccp((winSize.width - popUpLayer->getContentSize().width) / 2,
-		(winSize.height - popUpLayer->getContentSize().height) / 2 ));
-	this->addChild(popUpLayer);
-
-	return true;
-}
-
-void PopLayer::doClose(CCObject* pSender)
-{
-	CCString* popParam = CCString::create("1");
-	CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
-	//팝업창 제거
-	this->removeFromParentAndCleanup(true);
 }*/

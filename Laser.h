@@ -17,7 +17,6 @@ private:
     Sprite *Laser;
     virtual bool initRandomlyWithVisibleSize(float* threePosition, Size visibleSize);
     
-    
 public:
     static LaserWarning* createWithVisibleSize(float* threePosition, Size visibleSize);
 };

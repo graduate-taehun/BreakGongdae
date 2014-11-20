@@ -10,30 +10,30 @@
 
 float Character::ATTACK_FRAME = 0.1f;
 /*
- 1. 캐릭터가 땅에 있을 때
- 0011
- 0100
- 0001
- 
- 2. 캐릭터가 점프했을 때
- 0001
- 0100
- 0011
- 
- 3. 빌딩
- 0011
- 1000
- 0001
- 
- 4. 바닥
- 1001
- 0011
- 0011
- */
+	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
+	1. 캐릭터가 땅에 있을 때
+	0011
+	0100
+	0001
+
+	2. 캐릭터가 점프했을 때
+	0001
+	0100
+	0011
+
+	3. 빌딩
+	0011
+	1000
+	0100
+
+	4. 바닥
+	1001
+	0011
+	0011
+*/
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
-    
     
     auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
     body->setRotationEnable(false);
@@ -64,43 +64,26 @@ void Character::doAttackAction() {
     animFrames.pushBack(frame);
     auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
     auto animate = Animate::create(animation);
-    
-    
+        
     auto pCallback = CallFunc::create(CC_CALLBACK_0(Character::stopAttackAction, this));
     auto pSequence = Sequence::create(animate, pCallback, nullptr);
     pSequence->setTag(ATTACK_TAG);
     runAction(pSequence);
-        
 }
-
-float Character::getPositionOfTop() {
-    return getPosition().y+getContentSize().height/2;
-}
-
-State Character::getState(){ return state; }
 void Character::setState(State _state){
-    state = _state;
-    if(state==sGround) {
-        getPhysicsBody()->setCategoryBitmask(0x03);
-        getPhysicsBody()->setContactTestBitmask(0x04);
-        getPhysicsBody()->setCollisionBitmask(0x01);
-    }
-    else {
-        getPhysicsBody()->setCategoryBitmask(0x01);
-        getPhysicsBody()->setContactTestBitmask(0x04);
-        getPhysicsBody()->setCollisionBitmask(0x03);
-    }
+	state = _state;
+	if (state == sGround) {
+		getPhysicsBody()->setCategoryBitmask(0x04);
+		getPhysicsBody()->setContactTestBitmask(0x02);
+		getPhysicsBody()->setCollisionBitmask(0x01);
+	}
+	else {
+		getPhysicsBody()->setCategoryBitmask(0x01);
+		getPhysicsBody()->setContactTestBitmask(0x04);
+		getPhysicsBody()->setCollisionBitmask(0x03);
+	}
 }
+float Character::getPositionOfTop() { return getPosition().y + getContentSize().height / 2; }
+State Character::getState(){ return state; }
 ActionState Character::getActionState(){ return action; }
-void Character::setActionState(ActionState _action){
-    action = _action;
-    /*if(action==Attacking) {
-        getPhysicsBody()->setCategoryBitmask(0x02);
-        getPhysicsBody()->setContactTestBitmask(0x08);
-        getPhysicsBody()->setCollisionBitmask(0x01);
-    }
-    else {
-        setState(getState());
-    }*/
-}
-
+void Character::setActionState(ActionState _action){ action = _action; }
