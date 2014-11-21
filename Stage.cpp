@@ -268,10 +268,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 					Score->setString(status->getcoinScore());
 					sprintf(status->getcoinCombo(), "combo : %d", status->getCombo());
 					Combo->setString(status->getcoinCombo());
-<<<<<<< HEAD
-			
-					Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
-=======
 					if (rand() % 2 == 0)
 					{
 						Label_Combo->setPosition(character->getPosition().x + 80, character->getPosition().y + 80);
@@ -282,7 +278,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 						Label_Combo->setPosition(character->getPosition().x - 80, character->getPosition().y + 80);
 						Label_Combo->getPhysicsBody()->setVelocity(Vec2(-100, 30));
 					}
->>>>>>> origin/master
 					Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
 					sprintf(status->getcoinCombo(), "%d Combo!", status->getCombo());
 					Label_Combo->setString(status->getcoinCombo());
