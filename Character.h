@@ -10,6 +10,7 @@
 #define __BreakGongDae__Character__
 
 #include "cocos2d.h"
+#include "BalanceSetting.h"
 
 USING_NS_CC;
 
@@ -24,7 +25,7 @@ private:
     void stopAttackAction();
     
 public:
-     static float ATTACK_FRAME;
+    static float ATTACK_FRAME;
     static const int ATTACK_TAG = 21;
     virtual bool init();
     

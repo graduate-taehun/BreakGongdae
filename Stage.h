@@ -21,10 +21,9 @@ private:
     void stopAttack();
     void menuCloseCallback(Ref* pSender);
     
-    static Vec2 posScore;
     static Vec2 posTitle;
     static Vec2 posStatus;
-	static Vec2 posCombo;
+    Vec2 posClose;
     
     int levelBuilding;
     static string fileBuilding[10];
@@ -34,13 +33,10 @@ protected:
     static const int GROUND_TAG = 0;
     static const int EDGE_TAG=1;
     
-    Menu* menu;
-	MenuItemImage* closeItem;
+    Menu* menuClose;
+	MenuItemImage* btnClose;
     
-	LabelBMFont *Title;
-	CCLabelTTF *Score;
-	CCLabelTTF *Combo;
-	CCLabelTTF *Label_Combo;
+    LabelBMFont *lbTitle;
  
     Status* status;
     Character* character;

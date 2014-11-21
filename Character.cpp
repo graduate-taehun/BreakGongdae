@@ -35,7 +35,8 @@ bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
     
-    auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(1.0f,0.0f,0.0f));
+    auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(10.0f,0.0f,0.0f));
+    //body->setMass(100);
     body->setRotationEnable(false);
 	setPhysicsBody(body);
     
@@ -70,6 +71,7 @@ void Character::doAttackAction() {
     pSequence->setTag(ATTACK_TAG);
     runAction(pSequence);
 }
+
 void Character::setState(State _state){
 	state = _state;
 	if (state == sGround) {

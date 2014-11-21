@@ -10,6 +10,7 @@
 #define __BreakGongDae__Building__
 
 #include "cocos2d.h"
+#include "BalanceSetting.h"
 #include <queue>
 USING_NS_CC;
 

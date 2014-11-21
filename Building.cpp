@@ -9,6 +9,12 @@
 #include "Building.h"
 #include <cmath>
 
+bool Block::init(int _durability) {
+    if(!Sprite::init()) return false;
+    durability=_durability;
+    return true;
+}
+
 Block* Block::createWithDurability(int _durability) {
     Block *pRet = new Block();
     if (pRet && pRet->init(_durability)) {
@@ -23,12 +29,6 @@ Block* Block::createWithDurability(int _durability) {
     }
 }
 
-bool Block::init(int _durability) {
-    if(!Sprite::init()) return false;
-    durability=_durability;
-    return true;
-}
-
 int Block::getDurability() {
     return durability;
 }
@@ -37,7 +37,7 @@ bool Building::init(int numbers, string filename, int level) {
     if(!Layer::init()) return false;
     
     //초기화
-    material=PhysicsMaterial(1000000000.0f,0.0f,0.0f);
+    material=PhysicsMaterial(10000000.0f,0.0f,0.0f);
     removeAllChildren();
     //delete blocks;
     
@@ -65,15 +65,31 @@ bool Building::init(int numbers, string filename, int level) {
         blocks->push(block);
         addChild(block);
     }
+    //body->setMass(1);
+    body->setVelocityLimit(BUILDING_VEL_LIMIT);
     
     body->setCategoryBitmask(0x03);
     body->setContactTestBitmask(0x08);
     body->setCollisionBitmask(0x03);
-    body->setVelocityLimit(500);
-    //body->setGravityEnable(false);
     setPhysicsBody(body);
 
     return true;
+}
+
+Building* Building::create(int numbers, string filename, int level)
+{
+    Building *pRet = new Building();
+    if (pRet && pRet->init(numbers,filename,level))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
 }
 
 Building::~Building() {
@@ -87,6 +103,9 @@ void Block::attack() {
 bool Building::attack() {
     auto bottom=blocks->front();
     bottom->attack();
+    //크기를 줄여야하므로(가운데를 기준으로 줄어듬) 위치를 block의 반만큼 올려야함
+    setPosition(Vec2(getPosition().x,getPosition().y+blocks->back()->getContentSize().height/2));
+    
     if(bottom->getDurability()<=0) {
         //제거
         getPhysicsBody()->removeShape(blocks->size()-1);
@@ -96,8 +115,7 @@ bool Building::attack() {
         
         if(blocks->size()==0) return true;
 
-        //크기를 줄여야하므로(가운데를 기준으로 줄어듬) 위치를 block의 반만큼 올려야함
-        setPosition(Vec2(getPosition().x,getPosition().y+blocks->back()->getContentSize().height/2));
+        
         
         //일단 Shape 모두 제거
         getPhysicsBody()->removeAllShapes();
@@ -132,20 +150,4 @@ float Building::getPositionOfTop() {
 
 float Building::getPositionOfBottom() {
     return getPosition().y-getContentSize().height/2;
-}
-
-Building* Building::create(int numbers, string filename, int level)
-{
-    Building *pRet = new Building();
-    if (pRet && pRet->init(numbers,filename,level))
-    {
-        pRet->autorelease();
-        return pRet;
-    }
-    else
-    {
-        delete pRet;
-        pRet = NULL;
-        return NULL;
-    }
 }

@@ -10,19 +10,22 @@
 #define __BreakGongDae__Status__
 
 #include "cocos2d.h"
+#include <string>
 USING_NS_CC;
 
-class Status : public Sprite
-{
+class Status : public Layer {
 private:
-	float width;
 	int currentHP;
 	int MAX_HP;
 	int Combo;
 	int score;
-	char coinScore[100];
-	char coinCombo[100];
-
+	//char coinScore[100];
+	//char coinCombo[100];
+    
+    Sprite *bar_HP;
+    CCLabelTTF *lbScore;
+    CCLabelTTF *lbCombo;
+    
 public:
     virtual bool init();
     CREATE_FUNC(Status);
@@ -31,8 +34,9 @@ public:
 	int getWidth();
 	int getHP();
 	int getMAX_HP();
-	void setCombo(int C);
-	void decreaseHP(int _HP);
+	void resetCombo();
+    void increaseCombo(int i, const Vec2& posCharacter);
+	void decreaseHP();
 	int getScore();
 	char* getcoinScore();
 	char* getcoinCombo();
