@@ -12,8 +12,6 @@
 #include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
-Vec2 Stage::posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
-Vec2 Stage::posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
 
 string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
 
@@ -44,8 +42,6 @@ Scene* Stage::createScene()
 
 	srand(time(NULL));
     visibleSize=Director::getInstance()->getVisibleSize();
-    posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
-    posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
     
     //origin=Director::getInstance()->getVisibleOrigin();
     
@@ -78,6 +74,7 @@ Scene* Stage::createScene()
     
     auto layer = Stage::create();
     layer->setContentSize(Size(visibleSize.width,visibleSize.height*10));
+    layer->setTag(2);
     scene->addChild(layer);
     
     return scene;
@@ -94,14 +91,16 @@ bool Stage::init()
     levelBuilding=-1;
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
+    posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
+    posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
     posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
     posCharacter[1]=Stage::visibleSize.width / 2;
     posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
     cntofPosCharacter = 1;
     
 	Game_Pause = 0;
-	btnClose = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
     posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
+	btnClose = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
 	btnClose->setPosition(posClose);
 
 	menuClose = Menu::create(btnClose, NULL);

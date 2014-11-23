@@ -10,13 +10,14 @@
 #define __BreakGongDae__Status__
 
 #include "cocos2d.h"
+#include "BalanceSetting.h"
 #include <string>
 USING_NS_CC;
 
 class Status : public Layer {
 private:
 	int currentHP;
-	int MAX_HP;
+	static const int MAX_HP=30;
 	int Combo;
 	int score;
 	//char coinScore[100];
@@ -26,8 +27,8 @@ private:
     CCLabelTTF *lbScore;
     CCLabelTTF *lbCombo;
     
-public:
     virtual bool init();
+public:
     CREATE_FUNC(Status);
 
 	int getCombo();
@@ -41,6 +42,17 @@ public:
 	char* getcoinScore();
 	char* getcoinCombo();
 	void increaseScore(int i);
+};
+
+class BlockingGauge : public Sprite {
+private:
+    int gauge;
+    static const int MAX_GAUGE=100;
+    virtual bool init();
+public:
+    CREATE_FUNC(BlockingGauge)
+    bool blockingIsPossible();
+    void decreaseGauge(bool onGround);
 };
 
 #endif /* defined(__BreakGongDae__Status__) */

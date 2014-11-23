@@ -15,8 +15,10 @@
 class Stage2 : public Stage {
 private:
     LaserWarning *laserwarning;
+    virtual bool init();
 public:
-    
+    Scene* createScene();
+    CREATE_FUNC(Stage2)
 };
 
 #endif /* defined(__BreakGongDae__Stage2__) */

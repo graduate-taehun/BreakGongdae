@@ -21,17 +21,25 @@ private:
     void stopAttack();
     void menuCloseCallback(Ref* pSender);
     
-    static Vec2 posTitle;
-    static Vec2 posStatus;
+    Vec2 posTitle;
+    Vec2 posStatus;
     Vec2 posClose;
     
     int levelBuilding;
     static string fileBuilding[10];
-	
+    
+    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+    
+    void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
+    void block_scheduler(float time);
+    void gauge_up_scheduler(float time);
+    
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int GROUND_TAG = 0;
     static const int EDGE_TAG=1;
+    static const int THIS_TAG=2;
     
     Menu* menuClose;
 	MenuItemImage* btnClose;
@@ -44,14 +52,6 @@ protected:
    
     static Size visibleSize;
     
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-    
-    void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
-    //void attack_scheduler(float time);
-    void block_scheduler(float time);
-    
-	//void skill_blocking();
 	bool onContactBegin(PhysicsContact& contact);
 	bool Game_Pause;
     virtual bool init();

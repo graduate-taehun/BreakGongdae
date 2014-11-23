@@ -38,8 +38,7 @@ bool Status::init() {
     setContentSize(Size(bar_HP->getContentSize().width,bar_HP->getContentSize().height*3));
 
 	score = 0;
-	currentHP = 30;
-	MAX_HP = 30;
+    currentHP = MAX_HP;
     Combo=0;
 
     return true;
@@ -82,3 +81,18 @@ int Status::getMAX_HP(){ return MAX_HP; }
 int Status::getScore(){ return score; }
 //char* Status::getcoinScore(){ return coinScore; }
 int Status::getCombo(){ return Combo; }
+
+bool BlockingGauge::init() {
+    if(!Sprite::init()) return false;
+    
+    gauge=100;
+    return true;
+}
+
+bool BlockingGauge::blockingIsPossible() {
+    if(gauge>=MIN_COST_BLOCKING) return true;
+    return false;
+}
+void BlockingGauge::decreaseGauge(bool onGround) {
+    if(onGround) gauge=0;
+}
