@@ -12,7 +12,11 @@ bool Status::init() {
     if(!Layer::init())
         return false;
     
-    
+    score = 0;
+    currentHP = MAX_HP;
+    Combo=0;
+    currentGauge=100;
+    targetGauge=100;
     
     bar_HP = Sprite::create("status_hp.png");
     float x=-bar_HP->getContentSize().width/2;
@@ -37,9 +41,13 @@ bool Status::init() {
     
     setContentSize(Size(bar_HP->getContentSize().width,bar_HP->getContentSize().height*3));
 
-	score = 0;
-    currentHP = MAX_HP;
-    Combo=0;
+    bar_gauge=Sprite::create("status_hp.png");
+    bar_gauge->setPosition(Vec2(0,bar_gauge->getContentSize().height/2));
+    bar_gauge->setAnchorPoint(Vec2(0,0.5));
+    setContentSize(bar_gauge->getContentSize());
+    addChild(bar_gauge);
+    
+    schedule(schedule_selector(Status::gauge_scheduler));
 
     return true;
 }
@@ -79,20 +87,19 @@ void Status::increaseScore(int i) {
 int Status::getHP(){ return currentHP; }
 int Status::getMAX_HP(){ return MAX_HP; }
 int Status::getScore(){ return score; }
-//char* Status::getcoinScore(){ return coinScore; }
 int Status::getCombo(){ return Combo; }
 
-bool BlockingGauge::init() {
-    if(!Sprite::init()) return false;
-    
-    gauge=100;
-    return true;
+void Status::gauge_scheduler(float time) {
+    if(currentGauge>targetGauge) currentGauge--;
+    else if(currentGauge<targetGauge) currentGauge++;
+    bar_gauge->setTextureRect(Rect(0, 0, getContentSize().width * currentGauge /MAX_GAUGE, bar_gauge->getContentSize().height));
 }
 
-bool BlockingGauge::blockingIsPossible() {
-    if(gauge>=MIN_COST_BLOCKING) return true;
+bool Status::blockingIsPossible() {
+    if(currentGauge>=MIN_COST_BLOCKING) return true;
     return false;
 }
-void BlockingGauge::decreaseGauge(bool onGround) {
-    if(onGround) gauge=0;
+void Status::decreaseGauge(bool onGround) {
+    if(onGround || currentGauge-COST_BLOCKING<0) targetGauge=0;
+    else targetGauge=currentGauge-COST_BLOCKING;
 }

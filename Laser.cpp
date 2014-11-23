@@ -16,6 +16,7 @@ bool LaserWarning::initRandomlyWithVisibleSize(float* threePosition, Size visibl
     int position =rand()%3;
     setPosition(Vec2(threePosition[position],visibleSize.height/2));
     setOpacity(128);
+    
     setContentSize(Size(visibleSize.width/3,visibleSize.height));
     return true;
 }

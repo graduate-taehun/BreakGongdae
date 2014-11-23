@@ -20,9 +20,14 @@ private:
 	static const int MAX_HP=30;
 	int Combo;
 	int score;
-	//char coinScore[100];
-	//char coinCombo[100];
     
+    int currentGauge;
+    int targetGauge;
+    static const int MAX_GAUGE=100;
+    
+    void gauge_scheduler(float time);
+    
+    Sprite* bar_gauge;
     Sprite *bar_HP;
     CCLabelTTF *lbScore;
     CCLabelTTF *lbCombo;
@@ -42,18 +47,7 @@ public:
 	char* getcoinScore();
 	char* getcoinCombo();
 	void increaseScore(int i);
-};
-
-class BlockingGauge : public Sprite {
-private:
-    int gauge;
-    static const int MAX_GAUGE=100;
-    virtual bool init();
-    
-public:
-    CREATE_FUNC(BlockingGauge)
     bool blockingIsPossible();
     void decreaseGauge(bool onGround);
 };
-
 #endif /* defined(__BreakGongDae__Status__) */

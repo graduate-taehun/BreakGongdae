@@ -24,6 +24,7 @@ private:
     Vec2 posTitle;
     Vec2 posStatus;
     Vec2 posClose;
+    Vec2 posGauge;
     
     int levelBuilding;
     static string fileBuilding[10];
@@ -47,6 +48,7 @@ protected:
     LabelBMFont *lbTitle;
  
     Status* status;
+    BlockingGauge* gaugeBlocking;
     Character* character;
     Building* building;
    
@@ -61,23 +63,6 @@ public:
     
 	//void setGamePause(bool p);
     CREATE_FUNC(Stage);
-};
-
-class PopLayer : public cocos2d::CCLayerColor
-{
-public:
-	virtual bool init();
-
-	static cocos2d::CCScene* scene();
-
-	CREATE_FUNC(PopLayer);
-
-	cocos2d::CCSize winSize;
-
-	CCLayerColor* backLayer;
-	CCLayerColor* popUpLayer;
-
-	void doClose(CCObject* pSender);
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */

@@ -132,6 +132,11 @@ bool Stage::init()
     status=Status::create();
     status->setPosition(posStatus);
     addChild(status);
+    
+    gaugeBlocking=BlockingGauge::create();
+    posGauge=Vec2(visibleSize.width*19/20-gaugeBlocking->getContentSize().width,visibleSize.height *1 / 20);
+    gaugeBlocking->setPosition(posGauge);
+    addChild(gaugeBlocking);
 
     lbTitle = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
     //Title->setPosition(posTitle);
