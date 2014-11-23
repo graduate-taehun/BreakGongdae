@@ -99,8 +99,8 @@ bool Stage::init()
     cntofPosCharacter = 1;
     
 	Game_Pause = 0;
-    posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
 	btnClose = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
+    posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
 	btnClose->setPosition(posClose);
 
 	menuClose = Menu::create(btnClose, NULL);

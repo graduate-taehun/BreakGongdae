@@ -49,6 +49,7 @@ private:
     int gauge;
     static const int MAX_GAUGE=100;
     virtual bool init();
+    
 public:
     CREATE_FUNC(BlockingGauge)
     bool blockingIsPossible();
