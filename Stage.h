@@ -44,7 +44,6 @@ protected:
     
     Menu* menuClose;
 	MenuItemImage* btnClose;
-    
     LabelBMFont *lbTitle;
  
     Status* status;
@@ -59,6 +58,7 @@ protected:
     virtual bool init();
     virtual void setNextBuilding();
 public:
+	Status* status;
 	static cocos2d::Scene* createScene();
     
 	//void setGamePause(bool p);
