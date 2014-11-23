@@ -294,6 +294,10 @@ bool Stage::onContactBegin(PhysicsContact& contact)
 
     status->decreaseHP();
     status->resetCombo();
+
+	if (status->getHP() == 0)
+		Director::getInstance()->replaceScene(EndScene::createScene());
+
 	return true;
 }
 
