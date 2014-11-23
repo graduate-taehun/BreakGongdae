@@ -8,6 +8,7 @@
 
 #include "Menu&Score.h"
 #include "Stage.h"
+#include "Stage2.h"
 
 Scene* MenuStage::createScene()
 {

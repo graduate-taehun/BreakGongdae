@@ -14,10 +14,13 @@
 
 class Stage2 : public Stage {
 private:
-    LaserWarning *laserwarning;
+	LaserWarning *laserwarning;
+	LaserWarning *laser;
     virtual bool init();
+	void laser_scheduler(float time);
+
 public:
-    Scene* createScene();
+	static cocos2d::Scene* createScene();
     CREATE_FUNC(Stage2)
 };
 

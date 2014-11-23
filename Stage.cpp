@@ -17,7 +17,7 @@ string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormito
 
 /*
 	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
-	1. 캐릭터가 땅에 있을 때
+	1. 캐릭터가 땅에 있을 때	
 	0100
 	0010
 	0001

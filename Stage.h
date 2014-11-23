@@ -16,7 +16,6 @@
 class Stage : public LayerColor
 {
 private:
-    float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
     int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
     void stopAttack();
     void menuCloseCallback(Ref* pSender);
@@ -40,7 +39,8 @@ protected:
     static const int GROUND_TAG = 0;
     static const int EDGE_TAG=1;
     static const int THIS_TAG=2;
-    
+
+	float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
     Menu* menuClose;
 	MenuItemImage* btnClose;
     LabelBMFont *lbTitle;
