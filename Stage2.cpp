@@ -10,8 +10,8 @@
 
 Scene* Stage2::createScene()
 {
-    auto scene=Stage::createScene();
-    scene->removeChildByTag(Stage::THIS_TAG);
+    auto scene=Stage1::createScene();
+    scene->removeChildByTag(Stage1::THIS_TAG);
     
     auto layer = Stage2::create();
     layer->setContentSize(Size(visibleSize.width,visibleSize.height*10));
@@ -21,7 +21,7 @@ Scene* Stage2::createScene()
 }
 
 bool Stage2::init() {
-    if(!Stage::init()) return false;
+    if(!Stage1::init()) return false;
 	laser = LaserWarning::createWithVisibleSize(posCharacter,visibleSize);
 	addChild(laser);
 	if (!isScheduled(schedule_selector(Stage2::laser_scheduler)))
@@ -34,12 +34,12 @@ bool Stage2::init() {
 	//removeChild(Stage::character);
 	//laser->setOpacity(laser->getOpacity() - 100);
     return true;
-void Stage2::laser_scheduler(float time)
-{
+}
+
+void Stage2::laser_scheduler(float time) {
 	laser->setOpacity(laser->getOpacity()-1);
-	if (laser->getOpacity() < 50)
-	{
+	if (laser->getOpacity() < 50) {
 		unschedule(schedule_selector(Stage2::laser_scheduler));
 		removeChild(laser);
 	}
-}}
+}

@@ -7,7 +7,6 @@
 //
 
 #include "Menu&Score.h"
-#include "Stage.h"
 #include "Stage2.h"
 
 Scene* MenuStage::createScene()
@@ -33,7 +32,7 @@ bool MenuStage::init()
     return true;
 }
 void MenuStage::menuCallbackforStage(Ref* pSender){
-    Director::getInstance()->replaceScene(Stage::createScene());
+    Director::getInstance()->replaceScene(Stage1::createScene());
 }
 void MenuStage::menuCallbackforScoreBoard(Ref* pSender){
     Director::getInstance()->replaceScene(ScoreBoard::createScene());

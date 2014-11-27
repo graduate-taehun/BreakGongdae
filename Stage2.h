@@ -9,10 +9,10 @@
 #ifndef __BreakGongDae__Stage2__
 #define __BreakGongDae__Stage2__
 
-#include "Stage.h"
+#include "Stage1.h"
 #include "Laser.h"
 
-class Stage2 : public Stage {
+class Stage2 : public Stage1 {
 private:
 	LaserWarning *laserwarning;
 	LaserWarning *laser;

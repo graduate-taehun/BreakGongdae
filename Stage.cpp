@@ -7,14 +7,10 @@
 //ㅁㄴㅇㄹ
 
 #include "Stage.h"
-#include "Menu&Score.h"
 #include <cstdlib>
 #include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
-
-string Stage::fileBuilding[10]={"Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png"};
-
 /*
 	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
 	1. 캐릭터가 땅에 있을 때	
@@ -68,7 +64,7 @@ Scene* Stage::createScene()
     auto edgeBox = Node::create();
     edgeBox->setPosition(Point(visibleSize.width/2, visibleSize.height*5));
     edgeBox->setContentSize(Size(visibleSize.width,visibleSize.height*10));
-    edgeBox->setTag(EDGE_TAG);
+    //edgeBox->setTag(EDGE_TAG);
     edgeBox->setPhysicsBody(body);
     scene->addChild(edgeBox);
     
@@ -88,7 +84,6 @@ bool Stage::init()
     }
     CCDirector::sharedDirector()->resume();
     
-    levelBuilding=-1;
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
     posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
@@ -145,13 +140,6 @@ bool Stage::init()
     return true;
 }
 
-void Stage::setNextBuilding() {
-    levelBuilding++;
-    building = Building::create(10, "block.png",levelBuilding);
-    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+BUILDING_START_HEIGHT);
-    addChild(building);
-}
-
 void Stage::jump_scheduler(float time) {
     if(character->getPosition().y >=visibleSize.height/2) {
         //배경을 내림
@@ -181,133 +169,47 @@ void Stage::jump_scheduler(float time) {
     }
 }
 
-void Stage::block_scheduler(float time) {
-    status->setBlockingGaugeMode(true);
-    if(status->blockingIsPossible() && abs(character->getPositionOfTop()-building->getPositionOfBottom())<10) {
-        character->stopActionByTag(Character::ATTACK_TAG);
-        
-        if(character->getState()==sAir) {
-            status->decreaseGauge(false);
-            character->getPhysicsBody()->setVelocity(Vec2(0,-CHARACTER_VEL_AFTER_BLOCKING+building->getPhysicsBody()->getVelocity().y));
-        }
-        if (character->getState() == sGround) {
-            status->decreaseGauge(true);
-			status->resetCombo();
-        }
-		//땅에서 막기를 사용하면 콤보가 끊어진다. 나중에 죽었을때도 콤보가 끊어지도록 수정해야함
 
-        building->getPhysicsBody()->setVelocity(Vec2(0,BUILDING_VEL_AFTER_BLOCKING));
-        //if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
-    }
-}
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	
-	if(Game_Pause==0) {
-        switch (keyCode){
-            case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-            {
-                if(cntofPosCharacter!=0)
-                    character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
-                break;
-            }
-            case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-            {
-                if(cntofPosCharacter!=2)
-                    character->setPosition(posCharacter[++cntofPosCharacter],character->getPosition().y);
-                break;
-            }
-            case EventKeyboard::KeyCode::KEY_UP_ARROW:
-            {
-				if (character->getState() == sGround){
-					character->setState(sAir);
-					character->getPhysicsBody()->setVelocity(Vec2(0,CHARACTER_JUMP_VEL));
-                    
-                    //점프동작
-                    if (!isScheduled(schedule_selector(Stage::jump_scheduler)))
-                        schedule(schedule_selector(Stage::jump_scheduler));
-                    break;
-                }
-                break;
-            }
-            // 부수기
-            case EventKeyboard::KeyCode::KEY_Z:
-            {
-                
-                
-				character->doAttackAction();
-            
-				if(   (0<=building->getPositionOfBottom()-character->getPositionOfTop()
-                       && building->getPositionOfBottom()-character->getPositionOfTop()<ATTACK_RANGE)
-                   || (0<=character->getPositionOfTop()-building->getPositionOfBottom()
-                       && character->getPositionOfTop()-building->getPositionOfBottom()<character->getContentSize().height/3)
-                   || abs(building->getPositionOfBottom()-GROUND_HEIGHT)<=5) {
-                    if(building->attack()) {
-                        setNextBuilding();
-                        break;
-                    }
-					status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
-					status->increaseCombo(1, character->getPosition());//하나 부실때마다 콤보 1씩 증가하게
-                }
-                break;
-            }
-            // 막기
-            case EventKeyboard::KeyCode::KEY_X:
-            {
-                character->setActionState(Blocking);
-                schedule(schedule_selector(Stage::block_scheduler));
-                break;
-            }
-            case EventKeyboard::KeyCode::KEY_ESCAPE:
-            {
-                if (Game_Pause == 0)
-                {
-                    CCDirector::sharedDirector()->pause();
-                    Game_Pause = 1;
-                    //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
-                    //this->addChild(pScene, 2000, 2000);
-                }
-                else if (Game_Pause == 1 )
-                {
-                   CCDirector::sharedDirector()->resume();
-                   Game_Pause = 0;
-                   //CCString* popParam = CCString::create("1");
-                   //CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
-
-                   //팝업창 제거
-                }
-            }
-            default:
-                break;
+    if(Game_Pause==1) return;
+    
+    switch (keyCode){
+        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+        {
+            if(cntofPosCharacter!=0)
+                character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
+            break;
         }
+        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+        {
+            if(cntofPosCharacter!=2)
+                character->setPosition(posCharacter[++cntofPosCharacter],character->getPosition().y);
+            break;
+        }
+        case EventKeyboard::KeyCode::KEY_ESCAPE:
+        {
+            if (Game_Pause == 0)
+            {
+                CCDirector::sharedDirector()->pause();
+                Game_Pause = 1;
+                //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
+                //this->addChild(pScene, 2000, 2000);
+            }
+            else if (Game_Pause == 1 )
+            {
+               CCDirector::sharedDirector()->resume();
+               Game_Pause = 0;
+               //CCString* popParam = CCString::create("1");
+               //CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
+
+               //팝업창 제거
+            }
+        }
+        default:
+            break;
     }
-}
-
-void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event)
-{
-	switch (keyCode){
-        case EventKeyboard::KeyCode::KEY_X: {
-            character->setActionState(None);
-            
-            status->setBlockingGaugeMode(false);
-            unschedule(schedule_selector(Stage::block_scheduler));
-        }
-	}
-}
-
-bool Stage::onContactBegin(PhysicsContact& contact)
-{
-	building->getPhysicsBody()->setCategoryBitmask(0x03);
-	building->getPhysicsBody()->setContactTestBitmask(0x08);
-	building->getPhysicsBody()->setCollisionBitmask(0x03);
-
-    status->decreaseHP();
-    status->resetCombo();
-
-	if (status->getHP() == 0)
-		Director::getInstance()->replaceScene(EndScene::createScene());
-
-	return true;
 }
 
 void Stage::menuCloseCallback(Ref* pSender)
