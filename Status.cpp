@@ -103,10 +103,11 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 	auto frag1 = Sprite::create("fragment_1.png");
 	
 	auto frag2 = Sprite::create("fragment_2.png");
-	
+	/*
 	auto frag3 = Sprite::create("fragment_3.png");
 	
 	auto frag4 = Sprite::create("fragment_4.png");
+	*/
 	if (rand_block == 0)
 	{
 		if (check % 2 == 1)
