@@ -34,7 +34,6 @@ bool Stage2::init() {
 	//removeChild(Stage::character);
 	//laser->setOpacity(laser->getOpacity() - 100);
     return true;
-}
 void Stage2::laser_scheduler(float time)
 {
 	laser->setOpacity(laser->getOpacity()-1);
@@ -43,4 +42,4 @@ void Stage2::laser_scheduler(float time)
 		unschedule(schedule_selector(Stage2::laser_scheduler));
 		removeChild(laser);
 	}
-}
+}}
