@@ -133,10 +133,10 @@ bool Stage::init()
     status->setPosition(posStatus);
     addChild(status);
     
-    gaugeBlocking=BlockingGauge::create();
+    /*gaugeBlocking=BlockingGauge::create();
     posGauge=Vec2(visibleSize.width*19/20-gaugeBlocking->getContentSize().width,visibleSize.height *1 / 20);
     gaugeBlocking->setPosition(posGauge);
-    addChild(gaugeBlocking);
+    addChild(gaugeBlocking);*/
 
     lbTitle = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
     //Title->setPosition(posTitle);
@@ -182,16 +182,18 @@ void Stage::jump_scheduler(float time) {
 }
 
 void Stage::block_scheduler(float time) {
-    if(time>=BLOCKING_TIME_LIMIT) {
-        unschedule(schedule_selector(Stage::block_scheduler));
-    }
-    if(abs(character->getPositionOfTop()-building->getPositionOfBottom())<10) {
-        //float charactervel=character->getPhysicsBody()->getVelocity().y;
+    status->setBlockingGaugeMode(true);
+    if(status->blockingIsPossible() && abs(character->getPositionOfTop()-building->getPositionOfBottom())<10) {
         character->stopActionByTag(Character::ATTACK_TAG);
-        if(character->getState()==sAir)
+        
+        if(character->getState()==sAir) {
+            status->decreaseGauge(false);
             character->getPhysicsBody()->setVelocity(Vec2(0,-CHARACTER_VEL_AFTER_BLOCKING+building->getPhysicsBody()->getVelocity().y));
-		if (character->getState() == sGround)
+        }
+        if (character->getState() == sGround) {
+            status->decreaseGauge(true);
 			status->resetCombo();
+        }
 		//땅에서 막기를 사용하면 콤보가 끊어진다. 나중에 죽었을때도 콤보가 끊어지도록 수정해야함
 
         building->getPhysicsBody()->setVelocity(Vec2(0,BUILDING_VEL_AFTER_BLOCKING));
@@ -286,6 +288,8 @@ void Stage::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Even
 	switch (keyCode){
         case EventKeyboard::KeyCode::KEY_X: {
             character->setActionState(None);
+            
+            status->setBlockingGaugeMode(false);
             unschedule(schedule_selector(Stage::block_scheduler));
         }
 	}

@@ -20,18 +20,24 @@ bool Status::init() {
     
     bar_HP = Sprite::create("status_hp.png");
     float x=-bar_HP->getContentSize().width/2;
-    bar_HP->setPosition(Vec2(x,bar_HP->getContentSize().height*3/2));
+    bar_HP->setPosition(Vec2(x,bar_HP->getContentSize().height*1.5));
     bar_HP->setAnchorPoint(Vec2(0,0.5));
     addChild(bar_HP);
     
+    bar_gauge=Sprite::create("status_hp.png");
+    bar_gauge->setPosition(Vec2(x,bar_gauge->getContentSize().height/2));
+    bar_gauge->setAnchorPoint(Vec2(0,0.5));
+    
+    addChild(bar_gauge);
+    
     lbScore = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
-    lbScore->setPosition(Vec2(x,0));
+    lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height/2));
     lbScore->setAnchorPoint(Vec2(0,0.5));
     lbScore->setColor(ccc3(0, 0, 0));
     addChild(lbScore);
     
     lbCombo = CCLabelTTF::create("combo : 0", "futura-48.fnt", 28);
-    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*3/2));
+    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*1.5));
     lbCombo->setAnchorPoint(Vec2(0,0.5));
     lbCombo->setColor(ccc3(0, 0, 0));
     addChild(lbCombo);
@@ -39,13 +45,12 @@ bool Status::init() {
     bar_HP->setContentSize(Size(lbCombo->getContentSize().width,bar_HP->getContentSize().height));
     bar_HP->setTextureRect(Rect(0, 0, lbCombo->getContentSize().width, bar_HP->getContentSize().height));
     
+    bar_gauge->setContentSize(bar_HP->getContentSize());
+    bar_gauge->setTextureRect(Rect(0, 0, lbCombo->getContentSize().width, bar_gauge->getContentSize().height));
+    
     setContentSize(Size(bar_HP->getContentSize().width,bar_HP->getContentSize().height*3));
-
-    bar_gauge=Sprite::create("status_hp.png");
-    bar_gauge->setPosition(Vec2(0,bar_gauge->getContentSize().height/2));
-    bar_gauge->setAnchorPoint(Vec2(0,0.5));
-    setContentSize(bar_gauge->getContentSize());
-    addChild(bar_gauge);
+    
+    
     
     schedule(schedule_selector(Status::gauge_scheduler));
 
@@ -90,8 +95,9 @@ int Status::getScore(){ return score; }
 int Status::getCombo(){ return Combo; }
 
 void Status::gauge_scheduler(float time) {
-    if(currentGauge>targetGauge) currentGauge--;
-    else if(currentGauge<targetGauge) currentGauge++;
+    if(currentGauge>targetGauge) currentGauge-=0.5;
+    else if(currentGauge<targetGauge) currentGauge+=0.5;
+    //else targetGauge=MAX_GAUGE;
     bar_gauge->setTextureRect(Rect(0, 0, getContentSize().width * currentGauge /MAX_GAUGE, bar_gauge->getContentSize().height));
 }
 
@@ -100,6 +106,11 @@ bool Status::blockingIsPossible() {
     return false;
 }
 void Status::decreaseGauge(bool onGround) {
-    if(onGround || currentGauge-COST_BLOCKING<0) targetGauge=0;
-    else targetGauge=currentGauge-COST_BLOCKING;
+    if(onGround || currentGauge-COST_BLOCKING<0) currentGauge=0;
+    else currentGauge-=COST_BLOCKING;
+    bar_gauge->setTextureRect(Rect(0, 0, getContentSize().width * currentGauge /MAX_GAUGE, bar_gauge->getContentSize().height));
+}
+void Status::setBlockingGaugeMode(bool decrease) {
+    if(decrease && blockingIsPossible()) targetGauge=0;
+    else targetGauge=MAX_GAUGE;
 }

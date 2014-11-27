@@ -21,8 +21,8 @@ private:
 	int Combo;
 	int score;
     
-    int currentGauge;
-    int targetGauge;
+    float currentGauge;
+    float targetGauge;
     static const int MAX_GAUGE=100;
     
     void gauge_scheduler(float time);
@@ -49,5 +49,6 @@ public:
 	void increaseScore(int i);
     bool blockingIsPossible();
     void decreaseGauge(bool onGround);
+    void setBlockingGaugeMode(bool decrease);
 };
 #endif /* defined(__BreakGongDae__Status__) */

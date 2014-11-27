@@ -45,9 +45,8 @@ protected:
     Menu* menuClose;
 	MenuItemImage* btnClose;
     LabelBMFont *lbTitle;
- 
+    
     Status* status;
-    BlockingGauge* gaugeBlocking;
     Character* character;
     Building* building;
    
@@ -58,11 +57,10 @@ protected:
     virtual bool init();
     virtual void setNextBuilding();
 public:
-	Status* status;
 	static cocos2d::Scene* createScene();
     
 	//void setGamePause(bool p);
-    CREATE_FUNC(Stage);
+    CREATE_FUNC(Stage)
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */
