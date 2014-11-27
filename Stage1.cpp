@@ -32,7 +32,7 @@ bool Stage1::init() {
 void Stage1::setNextBuilding() {
     building = Building::create(10, "block.png",wholeNumberOfBuilding);
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+BUILDING_START_HEIGHT);
-    addChild(building);
+    addChild(building,2);
 }
 
 bool Stage1::onContactBegin(PhysicsContact& contact) {
