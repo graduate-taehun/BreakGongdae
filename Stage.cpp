@@ -7,7 +7,6 @@
 //ㅁㄴㅇㄹ
 
 #include "Stage.h"
-#include <cstdlib>
 #include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
@@ -35,8 +34,6 @@ Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 */
 Scene* Stage::createScene()
 {
-
-	srand(time(NULL));
     visibleSize=Director::getInstance()->getVisibleSize();
     
     //origin=Director::getInstance()->getVisibleOrigin();

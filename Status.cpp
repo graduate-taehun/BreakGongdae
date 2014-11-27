@@ -7,6 +7,7 @@
 //
 
 #include "Status.h"
+#include <cstdlib>
 
 bool Status::init() {
     if(!Layer::init())

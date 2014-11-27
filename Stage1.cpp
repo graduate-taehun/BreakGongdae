@@ -25,6 +25,7 @@ bool Stage1::init() {
     if(!Stage::init()) return false;
     //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
     //fileBuilding[10]={};
+    
     return true;
 }
 
