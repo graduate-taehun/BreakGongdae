@@ -34,6 +34,8 @@ private:
     
     virtual bool init();
 public:
+    Status() {}
+    Status(const Status & st);
     CREATE_FUNC(Status);
 
 	int getCombo();

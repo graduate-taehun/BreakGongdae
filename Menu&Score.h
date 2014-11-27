@@ -10,40 +10,45 @@
 #define __BreakGongDae__Menu_Score__
 
 #include "cocos2d.h"
+#include "Status.h"
 USING_NS_CC;
 
 class ScoreBoard : public cocos2d::Layer
 {
+private:
+    virtual bool init();
 public:
     static cocos2d::Scene* createScene();
     
-	virtual bool init();
     void menuCloseCallback(cocos2d::Ref* pSender);
     
-    CREATE_FUNC(ScoreBoard);
+    CREATE_FUNC(ScoreBoard)
 };
 
 class MenuStage : public Layer
 {
+private:
+    virtual bool init();
 public:
-    static Scene* createScene(); 
+    static Scene* createScene();
     
-	void menuCallbackforStage(Ref* pSender);
+    void menuCallbackforStage(Ref* pSender);
     void menuCallbackforScoreBoard(Ref* pSender);
     void menuCallbackforExit(Ref* pSender);
-
-    virtual bool init();
-    CREATE_FUNC(MenuStage);
+    
+    CREATE_FUNC(MenuStage)
 };
 
 class EndScene : public cocos2d::Layer
 {
+private:
+    virtual bool initWithScore(const Status& status);
+    static EndScene* createWithScore(const Status& status);
+    
 public:
-	static cocos2d::Scene* createScene();
-	virtual bool init();
-	void menuCloseCallback(cocos2d::Ref* pSender);
-
-	CREATE_FUNC(EndScene);
+    static cocos2d::Scene* createSceneWithScore(Status status);
+    
+    void menuCloseCallback(cocos2d::Ref* pSender);
 };
 
 #endif /* defined(__BreakGongDae__Menu_Score__) */

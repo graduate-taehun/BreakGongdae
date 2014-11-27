@@ -44,7 +44,7 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
     status->resetCombo();
     
     if (status->getHP() == 0)
-        Director::getInstance()->replaceScene(EndScene::createScene());
+        Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
     
     return true;
 }

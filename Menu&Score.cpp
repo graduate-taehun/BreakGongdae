@@ -86,14 +86,31 @@ void ScoreBoard::menuCloseCallback(Ref* pSender)
     exit(0);
 #endif
 }
-Scene* EndScene::createScene(){
+Scene* EndScene::createSceneWithScore(Status status) {
 	auto scene = Scene::create();
-	auto layer = EndScene::create();
+	auto layer = EndScene::createWithScore(status);
 	scene->addChild(layer);
 	return scene;
 }
 
-bool EndScene::init(){
+EndScene* EndScene::createWithScore(const Status& status)
+{
+    EndScene *pRet = new EndScene();
+    
+    if (pRet && pRet->initWithScore(status))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool EndScene::initWithScore(const Status& status) {
 	if (!Layer::init())
 		return false;
 

@@ -57,6 +57,20 @@ bool Status::init() {
     return true;
 }
 
+Status::Status(const Status & st) {
+    Layer::init();
+    
+    score = st.score;
+    currentHP = st.currentHP;
+    Combo=st.Combo;
+    currentGauge=st.currentGauge;
+    targetGauge=st.targetGauge;
+    bar_HP=nullptr;
+    bar_gauge=nullptr;
+    lbScore=nullptr;
+    lbCombo=nullptr;
+}
+
 using namespace std;
 
 void Status::decreaseHP() {
