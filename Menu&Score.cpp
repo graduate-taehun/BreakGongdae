@@ -21,11 +21,31 @@ bool MenuStage::init()
     if (!Layer::init())
         return false;
     
-    auto item_1 = MenuItemFont::create("Start", CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));
-    auto item_2 = MenuItemFont::create("Score", CC_CALLBACK_1(MenuStage::menuCallbackforScoreBoard, this));
-    auto item_3 = MenuItemFont::create("exit", CC_CALLBACK_1(MenuStage::menuCallbackforExit, this));
-    
-    auto menu = Menu::create(item_1, item_2, item_3, NULL);
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+
+	auto background = Sprite::create("start.png");
+	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(background);
+
+	auto lbTitle = LabelBMFont::create("BreakGongDae", "bitmapFontChinese.fnt");
+	lbTitle->setScale(2, 3);
+	lbTitle->setPosition(visibleSize.width / 2, visibleSize.height * 5 / 6);
+	addChild(lbTitle);
+
+	auto item1 = LabelBMFont::create("START", "bitmapFontTest3.fnt");
+	auto item_1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));
+	item_1->setScale(2, 2);
+
+	auto item2 = LabelBMFont::create("SCORE", "bitmapFontTest3.fnt");
+	auto item_2 = MenuItemLabel::create(item2, CC_CALLBACK_1(MenuStage::menuCallbackforScoreBoard, this));
+	item_2->setScale(2, 2);
+
+	auto item3 = LabelBMFont::create("EXIT", "bitmapFontTest3.fnt");
+	auto item_3 = MenuItemLabel::create(item3, CC_CALLBACK_1(MenuStage::menuCallbackforExit, this));
+	item_3->setScale(2, 2);
+
+	auto menu = Menu::create(item_1, item_2, item_3, NULL);
     menu->alignItemsVertically();
     this->addChild(menu);
     
@@ -48,7 +68,6 @@ Scene* ScoreBoard::createScene()
     scene->addChild(layer);
     return scene;
 }
-
 bool ScoreBoard::init()
 {
     if (!Layer::init())
@@ -58,7 +77,6 @@ bool ScoreBoard::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
-    
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
     
     auto menu = Menu::create(closeItem, NULL);
@@ -136,4 +154,3 @@ void EndScene::menuCloseCallback(Ref* pSender)
 	exit(0);
 #endif
 }
-
