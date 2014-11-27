@@ -10,7 +10,7 @@
 #include <cmath>
 
 bool LaserWarning::initRandomlyWithVisibleSize(float* threePosition, Size visibleSize) {
-    if(!LayerColor::initWithColor(Color4B::RED))
+	if (!LayerColor::initWithColor(Color4B::RED))
         return false;
     srand(time(NULL));
     int position =rand()%3;
@@ -24,6 +24,7 @@ bool LaserWarning::initRandomlyWithVisibleSize(float* threePosition, Size visibl
 LaserWarning* LaserWarning::createWithVisibleSize(float* threePosition, Size visibleSize)
 {
     LaserWarning *pRet = new LaserWarning();
+	
     if (pRet && pRet->initRandomlyWithVisibleSize(threePosition, visibleSize))
     {
         pRet->autorelease();
