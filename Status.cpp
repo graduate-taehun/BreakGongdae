@@ -137,7 +137,7 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 		frag2->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
 		frag2->getPhysicsBody()->setCollisionBitmask(0x00);
 		getParent()->addChild(frag2, 3);
-	}
+	}/*
 	else if (rand_block == 2)
 	{
 		if (check % 2 == 1)
@@ -152,7 +152,7 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 		frag3->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
 		frag3->getPhysicsBody()->setCollisionBitmask(0x00);
 		getParent()->addChild(frag3, 3);
-	}/*
+	}
 	else if (rand_block == 3)
 	{
 		if (check % 2 == 1)
