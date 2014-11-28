@@ -25,7 +25,8 @@ bool Stage1::init() {
     if(!Stage::init()) return false;
     //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
     //fileBuilding[10]={};
-    
+    building=nullptr;
+    setNextBuilding();
     return true;
 }
 
@@ -103,6 +104,18 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             schedule(schedule_selector(Stage1::block_scheduler));
             break;
         }
+        case EventKeyboard::KeyCode::KEY_C:
+        {
+            blade = Sprite::create("Blade.png");
+            auto material = PhysicsMaterial(0.1f, 1.0f, 0.5f);
+            auto body = PhysicsBody::createBox(blade->getContentSize(), material);
+            blade->setPhysicsBody(body);
+            blade->setPosition(visibleSize.width / 2, character->getPosition().y);
+            blade->getPhysicsBody()->setCollisionBitmask(0x00);
+            addChild(blade);
+            if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
+                schedule(schedule_selector(Stage1::blade_scheduler));
+        }
         default: Stage::onKeyPressed(keyCode, event);
     }
 }
@@ -136,4 +149,44 @@ void Stage1::block_scheduler(float time) {
         building->getPhysicsBody()->setVelocity(Vec2(0,BUILDING_VEL_AFTER_BLOCKING));
         //if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
+}
+
+void Stage1::blade_scheduler(float time)
+{
+    //
+    if (blade->getPosition().y >= visibleSize.height / 2) {
+        //배경을 내림
+        status->setPosition(visibleSize.width / 8, blade->getPosition().y + visibleSize.height * 8 / 20);
+        lbTitle->setPosition(visibleSize.width * 3 / 4, blade->getPosition().y + visibleSize.height * 9 / 20);
+        btnClose->setPosition(Vec2(visibleSize.width - btnClose->getContentSize().width / 2, blade->getPosition().y - visibleSize.height / 2 + btnClose->getContentSize().height / 2));
+        
+        this->setPosition(Vec2(this->getPosition().x, -blade->getPosition().y + visibleSize.height / 2));
+        //this->getScene()->getChildByTag(GROUND_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x, GROUND_HEIGHT / 2 + (visibleSize.height / 2 - character->getPosition().y)));
+    }
+    else if (blade->getPosition().y - blade->getContentSize().height <= GROUND_HEIGHT + 10) {
+        blade->getPhysicsBody()->setVelocity(Vec2(0., 0.));
+        blade->setPosition(Vec2(blade->getPosition().x, GROUND_HEIGHT + blade->getContentSize().height / 2));
+        
+    }
+    else {
+        //배경 안움직임
+        //status->setPosition(posStatus);
+        //lbTitle->setPosition(posTitle);
+        //btnClose->setPosition(posClose);
+        
+        this->setPosition(this->getPosition().x, 0);
+        //this->getScene()->getChildByTag(GROUND_TAG)->setPosition(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x, GROUND_HEIGHT / 2);
+    }
+    
+    //
+    Vec2 Pos;
+    Pos = blade->getPosition();
+    if (building->attack())
+    {
+        setNextBuilding();
+        unschedule(schedule_selector(Stage1::blade_scheduler));
+        removeChild(blade);
+    }
+    status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
+    status->increaseCombo(1, Pos + Vec2(0, 400));
 }

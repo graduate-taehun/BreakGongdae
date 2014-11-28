@@ -38,9 +38,7 @@ protected:
     
     virtual bool init();
    
-    int wholeNumberOfBuilding;
-    queue<string> fileBuilding;
-    virtual void setNextBuilding() {}
+    
     
     bool Game_Pause;
     static Size visibleSize;
@@ -52,14 +50,13 @@ protected:
     
     Status* status;
     Character* character;
-    Building* building;
-	Sprite* blade;
+    
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {}
     virtual bool onContactBegin(PhysicsContact& contact) {return true;}
     
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
-	void blade_scheduler(float time);
+	
     void gauge_up_scheduler(float time);
     
 public:

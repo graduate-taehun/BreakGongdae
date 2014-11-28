@@ -118,8 +118,6 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
     
-    setNextBuilding();
-    
     status=Status::create();
     status->setPosition(posStatus);
     addChild(status, MENU_Z_ORDER);
@@ -206,62 +204,13 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                //팝업창 제거
             }
         }
-		case EventKeyboard::KeyCode::KEY_C:
-		{
-			blade = Sprite::create("Blade.png");
-			auto material = PhysicsMaterial(0.1f, 1.0f, 0.5f);
-			auto body = PhysicsBody::createBox(blade->getContentSize(), material);
-			blade->setPhysicsBody(body);
-			blade->setPosition(visibleSize.width / 2, character->getPosition().y);
-			blade->getPhysicsBody()->setCollisionBitmask(0x00);
-			addChild(blade);
-			if (!isScheduled(schedule_selector(Stage::blade_scheduler)))
-				schedule(schedule_selector(Stage::blade_scheduler));
-		}
+		
         default:
             break;
     }
 }
 
-void Stage::blade_scheduler(float time)
-{
-	//
-	if (blade->getPosition().y >= visibleSize.height / 2) {
-		//배경을 내림
-		status->setPosition(visibleSize.width / 8, blade->getPosition().y + visibleSize.height * 8 / 20);
-		lbTitle->setPosition(visibleSize.width * 3 / 4, blade->getPosition().y + visibleSize.height * 9 / 20);
-		btnClose->setPosition(Vec2(visibleSize.width - btnClose->getContentSize().width / 2, blade->getPosition().y - visibleSize.height / 2 + btnClose->getContentSize().height / 2));
 
-		this->setPosition(Vec2(this->getPosition().x, -blade->getPosition().y + visibleSize.height / 2));
-		this->getScene()->getChildByTag(GROUND_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x, GROUND_HEIGHT / 2 + (visibleSize.height / 2 - character->getPosition().y)));
-	}
-	else if (blade->getPosition().y - blade->getContentSize().height <= GROUND_HEIGHT + 10) {
-		blade->getPhysicsBody()->setVelocity(Vec2(0., 0.));
-		blade->setPosition(Vec2(blade->getPosition().x, GROUND_HEIGHT + blade->getContentSize().height / 2));
-
-	}
-	else {
-		//배경 안움직임
-		status->setPosition(posStatus);
-		lbTitle->setPosition(posTitle);
-		btnClose->setPosition(posClose);
-
-		this->setPosition(this->getPosition().x, 0);
-		//this->getScene()->getChildByTag(GROUND_TAG)->setPosition(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x, GROUND_HEIGHT / 2);
-	}
-
-	//
-	Vec2 Pos;
-	Pos = blade->getPosition();
-	if (building->attack())
-	{
-		setNextBuilding();
-		unschedule(schedule_selector(Stage::blade_scheduler));
-		removeChild(blade);
-	}
-	status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
-	status->increaseCombo(1, Pos + Vec2(0, 400));
-}
 void Stage::menuCloseCallback(Ref* pSender)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
