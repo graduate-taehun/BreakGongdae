@@ -206,3 +206,8 @@ void Status::increaseBScore(int i) {
 int Status::getBScore() {
 	return B_Score;
 }
+
+void Status::setBScore(int i)
+{
+	B_Score = i;
+}
