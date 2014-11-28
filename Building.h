@@ -38,7 +38,7 @@ public:
     void setPositionOfBottom(float bottom);
     float getPositionOfTop();
     float getPositionOfBottom();
-    bool attack(); //다 없어지면 true 리턴
+    bool attack(bool isBlade); //다 없어지면 true 리턴
     void destroyAll();
 };
 

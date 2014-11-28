@@ -135,32 +135,38 @@ bool Stage::init()
     return true;
 }
 
-void Stage::jump_scheduler(float time) {
-    if(character->getPosition().y >=visibleSize.height/2) {
-        //배경을 내림
-		status->setPosition(visibleSize.width / 8, character->getPosition().y + visibleSize.height * 8 / 20);
-		lbTitle->setPosition(visibleSize.width * 3 / 4, character->getPosition().y+visibleSize.height * 9 / 20);
-		btnClose->setPosition(Vec2(visibleSize.width - btnClose->getContentSize().width / 2, character->getPosition().y - visibleSize.height/2 + btnClose->getContentSize().height / 2));
-
-		this->setPosition(Vec2(this->getPosition().x,-character->getPosition().y+visibleSize.height/2));
-        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,GROUND_HEIGHT/2+(visibleSize.height/2-character->getPosition().y)));
+void Stage::setViewPoint(float threshold) {
+    if(threshold>=visibleSize.height/2) {
+        status->setPosition(posStatus.x, threshold + posStatus.y-visibleSize.height/2);
+        lbTitle->setPosition(posTitle.x, threshold + posTitle.y-visibleSize.height/2);
+        btnClose->setPosition(posClose.x, threshold + posClose.y-visibleSize.height/2);
+        this->setPosition(Vec2(this->getPosition().x,-threshold+visibleSize.height/2));
+        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(
+                    Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,
+                         GROUND_HEIGHT/2+(visibleSize.height/2-threshold)               ));
     }
-    else if(character->getPositionOfTop()-character->getContentSize().height<=GROUND_HEIGHT+10) {
+    else {
+        //배경 안움직임
+        status->setPosition(posStatus);
+        lbTitle->setPosition(posTitle);
+        btnClose->setPosition(posClose);
+        
+        this->setPosition(this->getPosition().x,0);
+        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(
+                Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,
+                     GROUND_HEIGHT/2                                                ));
+    }
+}
+
+void Stage::jump_scheduler(float time) {
+    setViewPoint(character->getPosition().y);
+    if(character->getPositionOfTop()-character->getContentSize().height<=GROUND_HEIGHT+10) {
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
         character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
         
         //점프 중지
 		character->setState(sGround);
         unschedule(schedule_selector(Stage::jump_scheduler));
-    }
-    else {
-        //배경 안움직임
-		status->setPosition(posStatus);
-		lbTitle->setPosition(posTitle);
-		btnClose->setPosition(posClose);
-
-		this->setPosition(this->getPosition().x,0);
-        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
 

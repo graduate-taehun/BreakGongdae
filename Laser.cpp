@@ -38,9 +38,11 @@ void LaserWarning::warning_scheduler(float time) {
 void LaserWarning::laserlaunch_scheduler(float time) {
     setOpacity(255);
     schedule(schedule_selector(LaserWarning::laser_scheduler),TIME_SHOWING_LASER,1,TIME_SHOWING_LASER);
+    unschedule(schedule_selector(LaserWarning::laserlaunch_scheduler));
 }
 
 void LaserWarning::laser_scheduler(float time) {
     setOpacity(0);
     dynamic_cast<Stage2 *>(getParent())->shotbyLaser();
+    unschedule(schedule_selector(LaserWarning::laser_scheduler));
 }

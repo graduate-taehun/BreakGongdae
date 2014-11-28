@@ -99,13 +99,16 @@ void Block::attack() {
     durability--;
 }
 
-bool Building::attack() {
+bool Building::attack(bool isBlade) {
     auto bottom=blocks->front();
+    if(!isBlade)
     bottom->attack();
-    //크기를 줄여야하므로(가운데를 기준으로 줄어듬) 위치를 block의 반만큼 올려야함
-    setPosition(Vec2(getPosition().x,getPosition().y+blocks->back()->getContentSize().height/2));
     
-    if(bottom->getDurability()<=0) {
+    
+    if(bottom->getDurability()<=0 || isBlade) {
+        //크기를 줄여야하므로(가운데를 기준으로 줄어듬) 위치를 block의 반만큼 올려야함
+        setPosition(Vec2(getPosition().x,getPosition().y+blocks->back()->getContentSize().height/2));
+        
         //제거
         getPhysicsBody()->removeShape(blocks->size()-1);
         removeChild(bottom,true);
@@ -114,8 +117,6 @@ bool Building::attack() {
         
         if(blocks->size()==0) return true;
 
-        
-        
         //일단 Shape 모두 제거
         getPhysicsBody()->removeAllShapes();
         for(int i=0; i<getChildren().size(); i++) {
@@ -127,12 +128,12 @@ bool Building::attack() {
             auto shapebox = PhysicsShapeBox::create(getChildren().at(i)->getContentSize(),material,getChildren().at(i)->getPosition());
             shapebox->setTag(i);
             getPhysicsBody()->addShape(shapebox);
+            //크기 재설정
+            setContentSize(Size(getContentSize().width,blocks->back()->getContentSize().height*blocks->size()));
+            getPhysicsBody()->setCategoryBitmask(0x03);
+            getPhysicsBody()->setContactTestBitmask(0x08);
+            getPhysicsBody()->setCollisionBitmask(0x03);
         }
-        //크기 재설정
-        setContentSize(Size(getContentSize().width,blocks->back()->getContentSize().height*blocks->size()));
-		getPhysicsBody()->setCategoryBitmask(0x03);
-		getPhysicsBody()->setContactTestBitmask(0x08);
-		getPhysicsBody()->setCollisionBitmask(0x03);
 
 	}
     return false;

@@ -38,7 +38,7 @@ protected:
     
     virtual bool init();
    
-    
+    void setViewPoint(float threshold);
     
     bool Game_Pause;
     static Size visibleSize;
