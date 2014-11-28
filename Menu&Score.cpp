@@ -8,8 +8,11 @@
 
 #include "Menu&Score.h"
 #include "Stage2.h"
+#include <iostream>
+#include <fstream>
 #include <ctime>
 #include <cstdlib>
+using namespace std;
 
 Scene* MenuStage::createScene()
 {
@@ -85,13 +88,30 @@ bool ScoreBoard::init()
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
-    
-    auto label = LabelTTF::create("ScoreBoard", "Arial", 35);
-    for(int i=1; i<=10; i++) {
-        auto lbtemp=LabelTTF::create(to_string(i), "Arial", 24);
-        lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 50*(5-i)));
-        addChild(lbtemp);
-    }
+		
+	auto label = LabelTTF::create("ScoreBoard", "Arial", 50);
+	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
+	this->addChild(label);
+
+	// 파일 입력
+	// string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
+	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
+	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
+	ifstream in;
+	in.open(filePath.c_str());
+
+	int score;
+	int i = 0;
+	
+	while (!in.eof()){
+		in >> score;
+		auto lbtemp = LabelTTF::create(to_string(score), "Arial", 35);
+		lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 +100 - 50 * i++));
+		addChild(lbtemp);
+	}
+
+	in.close();
+	
     return true;
 }
 void ScoreBoard::menuCloseCallback(Ref* pSender)
@@ -107,31 +127,27 @@ void ScoreBoard::menuCloseCallback(Ref* pSender)
     exit(0);
 #endif
 }
+
 Scene* EndScene::createSceneWithScore(Status status) {
 	auto scene = Scene::create();
 	auto layer = EndScene::createWithScore(status);
 	scene->addChild(layer);
 	return scene;
 }
-
-EndScene* EndScene::createWithScore(const Status& status)
-{
+EndScene* EndScene::createWithScore(Status& status){
     EndScene *pRet = new EndScene();
     
-    if (pRet && pRet->initWithScore(status))
-    {
+    if (pRet && pRet->initWithScore(status)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
     }
 }
-
-bool EndScene::initWithScore(const Status& status) {
+bool EndScene::initWithScore(Status& status) {
 	if (!Layer::init())
 		return false;
 
@@ -141,28 +157,39 @@ bool EndScene::initWithScore(const Status& status) {
 	auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(EndScene::menuCloseCallback, this));
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
 
+	auto background = Sprite::create("end.png");
+	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(background);
+
 	auto menu = Menu::create(closeItem, NULL);
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
+	
+	auto score = LabelTTF::create("Score : " + to_string(status.getScore()), "Arial", 45);
+	score->setColor(ccc3(0, 0, 0));
+	score->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 240));
+	addChild(score);
 
-	auto label = LabelTTF::create("Score : ", "Arial", 35);
-	label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 250));
-	addChild(label);
+	auto combo = LabelTTF::create("MAX Combo : " + to_string(status.getMAX_COMBO()), "Arial", 45);
+	combo->setColor(ccc3(0, 0, 0));
+	combo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 180));
+	addChild(combo);
 
-//	auto temp = LabelTTF::create(to_string(Stage::status->getScore()), "Arial", 24);
-//	temp->setPosition(Vec2(origin.x + visibleSize.width / 2 + 50, origin.y + visibleSize.height / 2 + 50 * 5));
-//	addChild(temp);
+	// 파일 출력
+	// string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
+	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
+	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
+	ofstream out;
+	out.open(filePath.c_str());
 
-//	auto background = Sprite::create("end.jpg");
-//	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
-//	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
-//	addChild(background);
+	out << status.getScore() << endl;
+
+	out.close();
 
 	return true;
 }
-
-void EndScene::menuCloseCallback(Ref* pSender)
-{
+void EndScene::menuCloseCallback(Ref* pSender){	
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
 	return;

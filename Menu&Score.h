@@ -42,8 +42,8 @@ public:
 class EndScene : public cocos2d::Layer
 {
 private:
-    virtual bool initWithScore(const Status& status);
-    static EndScene* createWithScore(const Status& status);
+    virtual bool initWithScore(Status& status);
+    static EndScene* createWithScore(Status& status);
     
 public:
     static cocos2d::Scene* createSceneWithScore(Status status);
