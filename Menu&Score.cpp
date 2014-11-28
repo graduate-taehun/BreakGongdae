@@ -8,6 +8,8 @@
 
 #include "Menu&Score.h"
 #include "Stage2.h"
+#include <iostream>
+#include <fstream>
 
 Scene* MenuStage::createScene()
 {
@@ -82,13 +84,29 @@ bool ScoreBoard::init()
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
-    
-    auto label = LabelTTF::create("ScoreBoard", "Arial", 35);
-    for(int i=1; i<=10; i++) {
-        auto lbtemp=LabelTTF::create(to_string(i), "Arial", 24);
-        lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 50*(5-i)));
-        addChild(lbtemp);
-    }
+		
+	auto label = LabelTTF::create("ScoreBoard", "Arial", 50);
+	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
+	this->addChild(label);
+	
+	//std::string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
+	//in.open("Score.txt");
+	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
+	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
+	std::ifstream in;
+	in.open(filePath.c_str());
+
+	int score;
+	int i = 0;
+	
+	while (!in.eof()){
+		in >> score;
+		auto lbtemp = LabelTTF::create(to_string(score), "Arial", 35);
+		lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 +100 - 50 * i++));
+		addChild(lbtemp);
+	}
+	in.close();
+	
     return true;
 }
 void ScoreBoard::menuCloseCallback(Ref* pSender)
@@ -115,13 +133,11 @@ EndScene* EndScene::createWithScore(const Status& status)
 {
     EndScene *pRet = new EndScene();
     
-    if (pRet && pRet->initWithScore(status))
-    {
+    if (pRet && pRet->initWithScore(status)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
