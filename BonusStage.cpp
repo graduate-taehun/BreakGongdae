@@ -23,18 +23,64 @@ bool BonusStage::init() {
 	if (!Stage::init()) return false;
 	
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
-
+	int course_select[3];
+	int k, j;
+	int check;
+	k = 0;
+	while (k < 3)
+	{
+		check = 0;
+		course_select[k] = rand() % 3;
+		j = k;
+		while (j >0)
+		{
+			j--;
+			if (course_select[k] == course_select[j])
+				check = 1;
+		}
+		if (check == 0)
+			k++;
+	}
 	for (int i = 0; i < 3; i++){
-		auto course = Sprite::create("b.png");
-		course->setPosition(posCharacter[i], 1000);
-		auto body = PhysicsBody::createBox(course->getContentSize(), material);
-		body->setCategoryBitmask(0x03);
-		body->setContactTestBitmask(0x08);
-		body->setCollisionBitmask(0x03);
-		body->setRotationEnable(false);
-		body->setVelocityLimit(BUILDING_VEL_LIMIT);
-		course->setPhysicsBody(body);
-		this->addChild(course);
+		if (course_select[i] == 0)
+		{
+			auto course = Sprite::create("b.png");
+			course->setPosition(posCharacter[i], 1000);
+			auto body = PhysicsBody::createBox(course->getContentSize(), material);
+			body->setCategoryBitmask(0x03);
+			body->setContactTestBitmask(0x08);
+			body->setCollisionBitmask(0x03);
+			body->setRotationEnable(false);
+			body->setVelocityLimit(BUILDING_VEL_LIMIT);
+			course->setPhysicsBody(body);
+			this->addChild(course);
+		}
+		else if (course_select[i] == 1)
+		{
+			auto course = Sprite::create("c.png");//각각 다른사진을 넣어주면 될듯
+			course->setPosition(posCharacter[i], 1000);
+			auto body = PhysicsBody::createBox(course->getContentSize(), material);
+			body->setCategoryBitmask(0x03);
+			body->setContactTestBitmask(0x08);
+			body->setCollisionBitmask(0x03);
+			body->setRotationEnable(false);
+			body->setVelocityLimit(BUILDING_VEL_LIMIT);
+			course->setPhysicsBody(body);
+			this->addChild(course);
+		}
+		else
+		{
+			auto course = Sprite::create("d.png");
+			course->setPosition(posCharacter[i], 1000);
+			auto body = PhysicsBody::createBox(course->getContentSize(), material);
+			body->setCategoryBitmask(0x03);
+			body->setContactTestBitmask(0x08);
+			body->setCollisionBitmask(0x03);
+			body->setRotationEnable(false);
+			body->setVelocityLimit(BUILDING_VEL_LIMIT);
+			course->setPhysicsBody(body);
+			this->addChild(course);
+		}
 	}
 
 	return true;
