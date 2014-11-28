@@ -85,20 +85,18 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 		MAX_COMBO = combo;
 
 	lbCombo->setString(string("combo : ") + to_string(combo));
-	auto *Label_Combo = CCLabelTTF::create(to_string(combo) + " Combo!", "futura-48.fnt", 25);
+	auto *Label_Combo = CCLabelTTF::create(to_string(combo) + " Combo!", "Arial Rounded MT Bold", 30);
 	Label_Combo->setColor(ccc3(0, 0, 0));
 
-	bool leftorright2;
-	bool leftorright = rand() % 2;
+	bool leftorright2, leftorright = rand() % 2;
 	Label_Combo->setPosition(posCharacter.x + (leftorright ? 80 : -80), posCharacter.y + 80);
 	Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
 	Label_Combo->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
 	Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
 	getParent()->addChild(Label_Combo, 4);
 
+	int num = 0, check[3];
 	int block_n = rand() % 3;
-	int num = 0;
-	int check[3];
 	int block_select = rand() % 2;
 
 	auto frag1 = Sprite::create("fragment_1.png");
