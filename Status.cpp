@@ -82,6 +82,10 @@ Status::Status(const Status & st) {
     currentGauge=st.currentGauge;
     
     targetGauge=st.targetGauge;
+    
+    currentblade=st.currentblade;
+    
+    bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_HP->getContentSize().height));
 }
 void Status::decreaseHP() {
     currentHP -= MAX_HP/3;

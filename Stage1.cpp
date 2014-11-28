@@ -79,7 +79,10 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     }
     if(Game_Pause==1) return;
     if(isScheduled(schedule_selector(Stage1::blade_scheduler))
-       || isScheduled(schedule_selector(Stage1::blade_return_scheduler))) return;
+       || isScheduled(schedule_selector(Stage1::blade_return_scheduler))) {
+        Stage::onKeyPressed(keyCode, event);
+        return;
+    }
     switch (keyCode){
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         {

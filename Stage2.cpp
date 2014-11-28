@@ -41,7 +41,7 @@ Stage2* Stage2::create(Status* _status) {
 bool Stage2::init(Status *_status) {
     if(!Stage1::init(_status)) return false;
     schedule(schedule_selector(Stage2::makeLaser_scheduler),1,INT_MAX,1);
-
+    laserwarning=nullptr;
     return true;
 }
 
