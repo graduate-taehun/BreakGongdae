@@ -46,16 +46,43 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 		//status->setBonusScore(2, stage_num);
 		status->increaseBScore(2);//꿀과목을 넣으면 score배열에 1을 넣고 아니면 0을 넣는다. 나중에 전부 더해야할듯
 		status->increaseScore(status->getBScore());
+
+		auto *Label = CCLabelTTF::create( " Perfect!", "Arial Rounded MT Bold", 30);
+		Label->setColor(ccc3(0, 255, 0));
+
+		bool leftorright2, leftorright = rand() % 2;
+		Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPosition().y + 80);
+		Label->setPhysicsBody(PhysicsBody::createBox(Label->getContentSize()));
+		Label->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
+		Label->getPhysicsBody()->setCollisionBitmask(0x00);
+		getParent()->addChild(Label, 4);
 	}
 	else if (cntofPosCharacter == normalposcheck)
 	{
 		//status->setBonusScore(1, stage_num);
 		status->increaseBScore(1);//꿀과목을 넣으면 score배열에 1을 넣고 아니면 0을 넣는다. 나중에 전부 더해야할듯
 		status->increaseScore(status->getBScore());
+		auto *Label = CCLabelTTF::create(" SoSo~", "Arial Rounded MT Bold", 30);
+		Label->setColor(ccc3(0, 0, 255));
+
+		bool leftorright2, leftorright = rand() % 2;
+		Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPosition().y + 80);
+		Label->setPhysicsBody(PhysicsBody::createBox(Label->getContentSize()));
+		Label->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
+		Label->getPhysicsBody()->setCollisionBitmask(0x00);
+		getParent()->addChild(Label, 4);
 	}
 	else
 	{
-		//아무것도 안함 ㅎㅎ
+		auto *Label = CCLabelTTF::create("Uh....Bad", "Arial Rounded MT Bold", 30);
+		Label->setColor(ccc3(255, 0, 0));
+
+		bool leftorright2, leftorright = rand() % 2;
+		Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPosition().y + 80);
+		Label->setPhysicsBody(PhysicsBody::createBox(Label->getContentSize()));
+		Label->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
+		Label->getPhysicsBody()->setCollisionBitmask(0x00);
+		getParent()->addChild(Label, 4);
 	}
 	removeChild(course1);
 	removeChild(course2);
