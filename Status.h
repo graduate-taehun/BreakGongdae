@@ -16,10 +16,11 @@ USING_NS_CC;
 
 class Status : public Layer {
 private:
-	int currentHP;
-	static const int MAX_HP=30;
-	int Combo;
 	int score;
+	int combo;
+	int MAX_COMBO;
+	int currentHP;
+	static const int MAX_HP = 30;
     
     float currentGauge;
     float targetGauge;
@@ -38,18 +39,23 @@ public:
     Status(const Status & st);
     CREATE_FUNC(Status);
 
-	int getCombo();
 	int getWidth();
+
+	void resetCombo();
+	int getCombo();
+	int getMAX_COMBO();
+	char* getcoinCombo();
+	void increaseCombo(int i, const Vec2& posCharacter);
+
 	int getHP();
 	int getMAX_HP();
-	void resetCombo();
-    void increaseCombo(int i, const Vec2& posCharacter);
 	void decreaseHP();
+
 	int getScore();
 	char* getcoinScore();
-	char* getcoinCombo();
 	void increaseScore(int i);
-    bool blockingIsPossible();
+
+	bool blockingIsPossible();
     void decreaseGauge(bool onGround);
     void setBlockingGaugeMode(bool decrease);
 };

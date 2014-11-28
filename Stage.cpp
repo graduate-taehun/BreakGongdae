@@ -76,10 +76,9 @@ Scene* Stage::createScene()
 bool Stage::init()
 {
     if (!LayerColor::initWithColor(Color4B(255, 255, 255, 255)))
-    {
         return false;
-    }
-    CCDirector::sharedDirector()->resume();
+
+	CCDirector::sharedDirector()->resume();
     
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
@@ -165,8 +164,6 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(GROUND_TAG)->setPosition(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
-
-
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	
