@@ -13,7 +13,7 @@
 
 class BonusStage : public Stage {
 private:
-
+	int poscheck;
 protected:
 	virtual bool init();
 //	virtual void setNextBuilding();
@@ -23,6 +23,8 @@ protected:
 
 public:
 	static cocos2d::Scene* createScene();
+	bool onContactBegin(PhysicsContact& contact);
+	void block_scheduler(float time);
 	CREATE_FUNC(BonusStage)
 };
 

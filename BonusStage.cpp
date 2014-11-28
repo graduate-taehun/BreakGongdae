@@ -54,6 +54,7 @@ bool BonusStage::init() {
 			body->setVelocityLimit(BUILDING_VEL_LIMIT);
 			course->setPhysicsBody(body);
 			this->addChild(course);
+			poscheck = i;
 		}
 		else if (course_select[i] == 1)
 		{
@@ -61,7 +62,7 @@ bool BonusStage::init() {
 			course->setPosition(posCharacter[i], 1000);
 			auto body = PhysicsBody::createBox(course->getContentSize(), material);
 			body->setCategoryBitmask(0x03);
-			body->setContactTestBitmask(0x08);
+			body->setContactTestBitmask(0x00);
 			body->setCollisionBitmask(0x03);
 			body->setRotationEnable(false);
 			body->setVelocityLimit(BUILDING_VEL_LIMIT);
@@ -74,7 +75,7 @@ bool BonusStage::init() {
 			course->setPosition(posCharacter[i], 1000);
 			auto body = PhysicsBody::createBox(course->getContentSize(), material);
 			body->setCategoryBitmask(0x03);
-			body->setContactTestBitmask(0x08);
+			body->setContactTestBitmask(0x00);
 			body->setCollisionBitmask(0x03);
 			body->setRotationEnable(false);
 			body->setVelocityLimit(BUILDING_VEL_LIMIT);
@@ -83,6 +84,17 @@ bool BonusStage::init() {
 		}
 	}
 
+	return true;
+}
+bool BonusStage::onContactBegin(PhysicsContact& contact) {
+	if (!Stage::onContactBegin(contact)) return false;
+	/*
+	building->getPhysicsBody()->setCategoryBitmask(0x03);
+	building->getPhysicsBody()->setContactTestBitmask(0x08);
+	building->getPhysicsBody()->setCollisionBitmask(0x03);
+	*/
+	if (cntofPosCharacter == poscheck)
+		status->increaseScore(100);
 	return true;
 }
 /*
