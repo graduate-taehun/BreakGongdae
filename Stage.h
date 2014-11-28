@@ -56,6 +56,7 @@ protected:
     virtual bool onContactBegin(PhysicsContact& contact) {return true;}
     
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
+	void blade_scheduler(float time);
     void gauge_up_scheduler(float time);
     
 public:

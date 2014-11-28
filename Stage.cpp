@@ -50,7 +50,7 @@ Scene* Stage::createScene()
     body->setCategoryBitmask(0x09);
     body->setContactTestBitmask(0x03);
     body->setCollisionBitmask(0x05);
-    
+
     auto groundNode = Node::create();
     groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
     groundNode->setTag(GROUND_TAG);
@@ -125,6 +125,7 @@ bool Stage::init()
     status->setPosition(posStatus);
     addChild(status);
     
+
     /*gaugeBlocking=BlockingGauge::create();
     posGauge=Vec2(visibleSize.width*19/20-gaugeBlocking->getContentSize().width,visibleSize.height *1 / 20);
     gaugeBlocking->setPosition(posGauge);
@@ -169,7 +170,11 @@ void Stage::jump_scheduler(float time) {
 
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
-	
+	/*if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1)
+	{
+		CCDirector::sharedDirector()->resume();
+		Game_Pause = 0;
+	}*/
     if(Game_Pause==1) return;
     
     switch (keyCode){
@@ -204,11 +209,29 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                //팝업창 제거
             }
         }
+		case EventKeyboard::KeyCode::KEY_C:
+		{
+			auto blade = Sprite::create("Blade.png");
+			blade->setPosition(visibleSize.width / 2, character->getPosition().y);
+			addChild(blade);
+			if (!isScheduled(schedule_selector(Stage::blade_scheduler)))
+				schedule(schedule_selector(Stage::blade_scheduler));
+			
+		}
         default:
             break;
     }
 }
 
+void Stage::blade_scheduler(float time)
+{
+	
+	if (building->attack())
+	{
+		setNextBuilding();
+		unschedule(schedule_selector(Stage::blade_scheduler));
+	}
+}
 void Stage::menuCloseCallback(Ref* pSender)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)

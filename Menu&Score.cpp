@@ -8,13 +8,10 @@
 
 #include "Menu&Score.h"
 #include "Stage2.h"
-<<<<<<< HEAD
 #include <iostream>
 #include <fstream>
-=======
 #include <ctime>
 #include <cstdlib>
->>>>>>> origin/master
 
 Scene* MenuStage::createScene()
 {
