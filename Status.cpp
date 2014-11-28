@@ -84,6 +84,7 @@ void Status::resetCombo() {
 }
 
 void Status::increaseCombo(int i, const Vec2& posCharacter) {
+<<<<<<< HEAD
 
 	combo += i;
 	if (combo > MAX_COMBO)
@@ -128,6 +129,89 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 		frag2->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
 		frag2->getPhysicsBody()->setCollisionBitmask(0x00);
 		getParent()->addChild(frag2, 3);
+=======
+	Combo += i;
+	lbCombo->setString(string("combo : ") + to_string(Combo));
+	auto *Label_Combo = CCLabelTTF::create(to_string(Combo) + " Combo!", "futura-48.fnt", 35);
+	Label_Combo->setColor(ccc3(0, 0, 0));
+
+	bool leftorright2;
+	bool leftorright = rand() % 2;
+	Label_Combo->setPosition(posCharacter.x + (leftorright ? 80 : -80), posCharacter.y + 80);
+	Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
+	Label_Combo->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
+	Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
+	getParent()->addChild(Label_Combo,4);
+	int block_n = rand() % 3;
+	int num = 0;
+	int check[3];
+	int block_select = rand() % 2;
+
+	Sprite* frag;
+	//반복문 {
+	//    frag=Sprite::create
+	//	asdsad
+	//	addchild(frag);
+	//}
+	/*
+	auto frag3 = Sprite::create("fragment_3.png");
+
+	auto frag4 = Sprite::create("fragment_4.png");
+	*/
+	while (num <= block_n)
+	{
+		leftorright2 = rand() % 2;
+		check[num] = rand() % 100;
+		if (block_select == 0)
+		{
+			frag = Sprite::create("fragment_1.png");
+			if (check[num]%2== 1)
+			{
+				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
+			}
+			else
+			{
+				frag->setPosition(posCharacter.x - check[num] * 2, posCharacter.y + 80);
+			}
+			frag->setPhysicsBody(PhysicsBody::createBox(frag->getContentSize()));
+			frag->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
+			frag->getPhysicsBody()->setCollisionBitmask(0x00);
+			getParent()->addChild(frag, 3);
+		}
+		else if (block_select == 1)
+		{
+			frag = Sprite::create("fragment_2.png");
+			if (check[num] % 2 == 1)
+			{
+				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
+			}
+			else
+			{
+				frag->setPosition(posCharacter.x - check[num] * 2, posCharacter.y + 80);
+			}
+			frag->setPhysicsBody(PhysicsBody::createBox(frag->getContentSize()));
+			frag->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
+			frag->getPhysicsBody()->setCollisionBitmask(0x00);
+			getParent()->addChild(frag, 3);
+		}
+		num++;
+	}/*
+	 
+	else if (rand_block == 2)
+	{
+		if (check % 2 == 1)
+		{
+			frag3->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
+		}
+		else
+		{
+			frag3->setPosition(posCharacter.x - check * 2, posCharacter.y + 80);
+		}
+		frag3->setPhysicsBody(PhysicsBody::createBox(frag3->getContentSize()));
+		frag3->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
+		frag3->getPhysicsBody()->setCollisionBitmask(0x00);
+		getParent()->addChild(frag3, 3);
+>>>>>>> origin/master
 	}
 }
 void Status::increaseScore(int i) {
