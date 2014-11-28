@@ -20,16 +20,19 @@ private:
 	int combo;
 	int MAX_COMBO;
 	int currentHP;
+	int currentblade;
+	static const int MAX_BLADE = 30;
 	static const int MAX_HP = 30;
     
     float currentGauge;
     float targetGauge;
-    static const int MAX_GAUGE=100;
+    static const int MAX_GAUGE = 100;
     
     void gauge_scheduler(float time);
     
     Sprite* bar_gauge;
     Sprite *bar_HP;
+	Sprite* bar_blade;
     CCLabelTTF *lbScore;
     CCLabelTTF *lbCombo;
     
