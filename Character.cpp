@@ -9,28 +9,6 @@
 #include "Character.h"
 
 float Character::ATTACK_FRAME = 0.1f;
-/*
-	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
-	1. 캐릭터가 땅에 있을 때
-	0011
-	0100
-	0001
-
-	2. 캐릭터가 점프했을 때
-	0001
-	0100
-	0011
-
-	3. 빌딩
-	0011
-	1000
-	0100
-
-	4. 바닥
-	1001
-	0011
-	0011
-*/
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;
@@ -45,11 +23,9 @@ bool Character::init() {
 	
     return true;
 }
-void Character::stopAttackAction()
-{
+void Character::stopAttackAction(){
     setActionState(None);
 }
-
 void Character::doAttackAction() {
     stopActionByTag(ATTACK_TAG);
     //if (getActionState() == None) {
@@ -71,7 +47,6 @@ void Character::doAttackAction() {
     pSequence->setTag(ATTACK_TAG);
     runAction(pSequence);
 }
-
 void Character::setState(State _state){
 	state = _state;
 	if (state == sGround) {

@@ -31,3 +31,39 @@
 #define BLADE_VELOCITY 1000
 #define TIME_BLADE_STOP 0.5
 #endif
+
+/*
+	"American Typewriter"
+	"Arial"
+	"Arial Rounded MT Bold"
+	"Courier New"
+	"Georgia"
+	"Helvetica"
+	"Marker Felt"
+	"Times New Roman"
+	"Trebuchet MS"
+	"Verdana"
+	"Zapfino"
+*/
+/*
+	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
+	1. 캐릭터가 땅에 있을 때
+	0100
+	0010
+	0001
+
+	2. 캐릭터가 점프했을 때
+	0001
+	0100
+	0011
+
+	3. 빌딩
+	0011
+	1000
+	0011
+
+	4. 바닥
+	1001
+	0011
+	0101
+*/
