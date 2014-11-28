@@ -21,34 +21,28 @@ Scene* Stage2::createScene(Status* _status)
     
     return scene;
 }
-
-
 Stage2* Stage2::create(Status* _status) {
     Stage2 *pRet = new Stage2();
-    if (pRet && pRet->init(_status))
-    {
+    if (pRet && pRet->init(_status)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
     }
 }
-
 bool Stage2::init(Status *_status) {
     if(!Stage1::init(_status)) return false;
     schedule(schedule_selector(Stage2::makeLaser_scheduler),1,INT_MAX,1);
     laserwarning=nullptr;
-    return true;
+	lbTitle->setString("Stage2");
+	return true;
 }
-
 Stage2::~Stage2() {
     unschedule(schedule_selector(Stage2::makeLaser_scheduler));
 }
-
 void Stage2::makeLaser_scheduler(float time) {
     if(rand()%10<3 && laserwarning==nullptr) {
         laserposition=rand()%3;
@@ -62,11 +56,9 @@ void Stage2::makeLaser_scheduler(float time) {
         
     }
 }
-
 void Stage2::removeLaser_scheduler(float time) {
     laserwarning=nullptr;
 }
-
 void Stage2::shotbyLaser() {
     if(laserposition==cntofPosCharacter)
         decreaseCharacterHP();

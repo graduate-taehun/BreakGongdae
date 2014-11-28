@@ -50,7 +50,6 @@ Scene* Stage::createScene()
     
     return scene;
 }
-
 Stage* Stage::create() {
     Stage *pRet = new Stage();
     if (pRet && pRet->init(nullptr)){
@@ -63,7 +62,6 @@ Stage* Stage::create() {
         return NULL;
     }
 }
-
 bool Stage::init(Status* _status=nullptr)
 {
     if (!LayerColor::initWithColor(Color4B(255, 255, 255, 255)))
@@ -73,8 +71,8 @@ bool Stage::init(Status* _status=nullptr)
     
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
-    posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
-    posTitle=Vec2(visibleSize.width *3 / 4, visibleSize.height *19 / 20);
+    posStatus=Vec2(visibleSize.width/8, visibleSize.height*18/20);
+    posTitle=Vec2(visibleSize.width*7/8, visibleSize.height*19/20);
     posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
     posCharacter[1]=Stage::visibleSize.width / 2;
     posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
@@ -109,12 +107,11 @@ bool Stage::init(Status* _status=nullptr)
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
     
-    if(_status==nullptr) {
+    if(_status==nullptr)
         status=Status::create();
-    }
-    else {
+    else
         status=_status;
-    }
+    
     status->setPosition(posStatus);
     addChild(status, MENU_Z_ORDER);
 
@@ -123,13 +120,12 @@ bool Stage::init(Status* _status=nullptr)
     gaugeBlocking->setPosition(posGauge);
     addChild(gaugeBlocking);*/
 
-    lbTitle = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
-    //Title->setPosition(posTitle);
+    lbTitle = LabelBMFont::create("Stage", "futura-48.fnt");
+    lbTitle->setPosition(posTitle);
     addChild(lbTitle, MENU_Z_ORDER);
    
     return true;
 }
-
 void Stage::setViewPoint(float threshold) {
     if(threshold>=visibleSize.height/2) {
         status->setPosition(posStatus.x, threshold + posStatus.y-visibleSize.height/2);
@@ -152,7 +148,6 @@ void Stage::setViewPoint(float threshold) {
                      GROUND_HEIGHT/2                                                ));
     }
 }
-
 void Stage::jump_scheduler(float time) {
     setViewPoint(character->getPosition().y);
     if(character->getPositionOfTop()-character->getContentSize().height<=GROUND_HEIGHT+10) {
@@ -164,7 +159,6 @@ void Stage::jump_scheduler(float time) {
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
 }
-
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
 		CCDirector::sharedDirector()->resume();
@@ -191,14 +185,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                 //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
                 //this->addChild(pScene, 2000, 2000);
             }
-        }
-		
+        }		
         default:
             break;
     }
 }
-
-
 void Stage::menuCloseCallback(Ref* pSender)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)

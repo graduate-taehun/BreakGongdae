@@ -168,6 +168,7 @@ int Status::getCombo(){ return combo; }
 int Status::getBlade(){ return currentblade; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
 int Status::getMAX_BLADE(){ return MAX_BLADE; }
+void Status::setBlade(int b){ currentblade = b; }
 //char* Status::getcoinCombo(){ return coinCombo; }
 
 void Status::gauge_scheduler(float time) {

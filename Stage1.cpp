@@ -21,7 +21,6 @@ Scene* Stage1::createScene()
     
     return scene;
 }
-
 Stage1* Stage1::create() {
     Stage1 *pRet = new Stage1();
     if (pRet && pRet->init(nullptr)){
@@ -34,16 +33,15 @@ Stage1* Stage1::create() {
         return NULL;
     }
 }
-
 bool Stage1::init(Status* _status=nullptr) {
     if(!Stage::init(_status)) return false;
     //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
     //fileBuilding[10]={};
     building=nullptr;
-    setNextBuilding();
+	lbTitle->setString("Stage2");
+	setNextBuilding();
     return true;
 }
-
 void Stage1::setNextBuilding() {
     Vec2 posRemoved(0,0);
     if(building!=nullptr)
@@ -53,7 +51,6 @@ void Stage1::setNextBuilding() {
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved.y+BUILDING_START_HEIGHT);
     addChild(building,2);
 }
-
 void Stage1::decreaseCharacterHP() {
     status->decreaseHP();
     status->resetCombo();
@@ -115,7 +112,6 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                     setNextBuilding();
                     break;
                 }
-                
             }
             break;
         }
@@ -142,12 +138,13 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 
 				if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
 					schedule(schedule_selector(Stage1::blade_scheduler));
+			
+				status->setBlade(0);
 			}
         }
         default: Stage::onKeyPressed(keyCode, event);
     }
 }
-
 void Stage1::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {
     switch (keyCode){
         case EventKeyboard::KeyCode::KEY_X: {
@@ -178,7 +175,6 @@ void Stage1::block_scheduler(float time) {
         //if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
 }
-
 void Stage1::blade_return_scheduler(float time) {
     blade->setOpacity(0);
     blade->getPhysicsBody()->setVelocity(Vec2(0,-BLADE_VELOCITY*3));
@@ -186,20 +182,18 @@ void Stage1::blade_return_scheduler(float time) {
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
 }
-
 void Stage1::blade_scheduler(float time)
 {
-    if(isScheduled(schedule_selector(Stage1::jump_scheduler))) {
+    if(isScheduled(schedule_selector(Stage1::jump_scheduler)))
         unschedule(schedule_selector(Stage1::jump_scheduler));
-    }
-    static bool breaking=true;
+ 
+	static bool breaking=true;
     setViewPoint(blade->getPosition().y);
     if(breaking) {
         if(building->getPositionOfBottom()<=blade->getPosition().y) {
             status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
             status->increaseCombo(1, blade->getPosition() + Vec2(0, 400));
-            if (building->attack(true))
-            {
+            if (building->attack(true)){
                 breaking=false;
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);

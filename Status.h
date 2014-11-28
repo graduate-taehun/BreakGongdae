@@ -51,6 +51,7 @@ public:
 	void resetCombo();
 	int getCombo();
 	int getBlade();
+	void setBlade(int);
 	int getMAX_BLADE();
 	int getMAX_COMBO();
 	//char* getcoinCombo();
