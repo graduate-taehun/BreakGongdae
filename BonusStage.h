@@ -14,6 +14,8 @@
 class BonusStage : public Stage {
 private:
 	int poscheck;
+	int score[10];
+	int stage_num;
 protected:
 	virtual bool init();
 //	virtual void setNextBuilding();

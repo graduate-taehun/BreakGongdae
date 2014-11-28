@@ -26,6 +26,7 @@ bool BonusStage::init() {
 	int course_select[3];
 	int k, j;
 	int check;
+	stage_num = -1;
 	k = 0;
 	while (k < 3)
 	{
@@ -83,6 +84,7 @@ bool BonusStage::init() {
 			this->addChild(course);
 		}
 	}
+	stage_num++;
 
 	return true;
 }
@@ -94,7 +96,16 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	building->getPhysicsBody()->setCollisionBitmask(0x03);
 	*/
 	if (cntofPosCharacter == poscheck)
-		status->increaseScore(100);
+	{
+		if (score[stage_num] != 1)
+			status->increaseScore(100);
+		score[stage_num] = 1;//꿀과목을 넣으면 score배열에 1을 넣고 아니면 0을 넣는다. 나중에 전부 더해야할듯
+	}
+	else
+	{
+		score[stage_num] = 0;
+	}
+	removeChild(this);
 	return true;
 }
 /*
