@@ -40,7 +40,6 @@ void Stage2::makeLaser_scheduler(float time) {
         laserwarning->ignoreAnchorPointForPosition(false);
         laserwarning->setAnchorPoint(Vec2(0.5,0));
         laserwarning->setContentSize(Size(getContentSize().width/3,getContentSize().height));
-        
         laserwarning->setPosition(Vec2(posCharacter[laserposition],0));
         
         addChild(laserwarning,256);
