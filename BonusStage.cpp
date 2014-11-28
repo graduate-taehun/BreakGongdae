@@ -7,7 +7,12 @@
 //
 //
 #include "BonusStage.h"
+<<<<<<< HEAD
 //status ?�기??�?
+=======
+#include "Stage2.h"
+//status ?�기??�?
+>>>>>>> origin/master
 //Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 Scene* BonusStage::createScene(Status* _status)
 {
@@ -38,9 +43,9 @@ BonusStage* BonusStage::create(Status *_status) {
 
 bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
-	
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
 	//status->blockingIsPossible.
+	status->setBScore(0);
 	stage_num = 0;
 	makesubject();
 	
@@ -57,10 +62,17 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	*/
 	if (cntofPosCharacter == honeyposcheck)
 	{
+<<<<<<< HEAD
 		//if (status->getBonusScore(stage_num) != 1)//¿Ã?�Œ∫?�¿∫ ¿·Ω??»Æ¿ŒøÎ¿?�∑Œ ?�÷æÓ≥ı¿?�∞?�∂Ûº??¡¶¿??�œ∑·µ«?��?ªË¡¶«ÿæﬂµ�?
 		//	status->increaseScore(stage_num);//¿Ã?�Œ∫?�¿∫ ¿·Ω??»Æ¿ŒøÎ¿?�∑Œ ?�÷æÓ≥ı¿?�∞?�∂Ûº??¡¶¿??�œ∑·µ«?��?ªË¡¶«ÿæﬂµ�?
 		//status->setBonusScore(2, stage_num);
 		status->increaseBScore(2);//?�‹∞??�Ò¿�??�÷¿∏?��?score?Ëø?�ø�?1¿ª ?�÷∞Ì æ?�¥œ∏È 0¿ª ?�÷¥�?��? ?�™¡ﬂø�?¿¸?��?¥ı«ÿæﬂ«“µ�?
+=======
+		//if (status->getBonusScore(stage_num) != 1)//¿Ã?�Œ∫?�¿∫ ¿·Ω??»Æ¿ŒøÎ¿?�∑Œ ?�÷æÓ≥ı¿?�∞?�∂Ûº??¡¶¿??�œ∑·µ«?��?ªË¡¶«ÿæﬂµ�?
+		//	status->increaseScore(stage_num);//¿Ã?�Œ∫?�¿∫ ¿·Ω??»Æ¿ŒøÎ¿?�∑Œ ?�÷æÓ≥ı¿?�∞?�∂Ûº??¡¶¿??�œ∑·µ«?��?ªË¡¶«ÿæﬂµ�?
+		//status->setBonusScore(2, stage_num);
+		status->increaseBScore(2);//?�‹∞??�Ò¿�??�÷¿∏?��?score?Ëø?�ø�?1¿ª ?�÷∞Ì æ?�¥œ∏È 0¿ª ?�÷¥�?��? ?�™¡ﬂø�?¿¸?��?¥ı«ÿæﬂ«“µ�?
+>>>>>>> origin/master
 		status->increaseScore(status->getBScore());
 
 		auto *Label = CCLabelTTF::create( " Perfect!", "Arial Rounded MT Bold", 30);
@@ -76,7 +88,11 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	else if (cntofPosCharacter == normalposcheck)
 	{
 		//status->setBonusScore(1, stage_num);
+<<<<<<< HEAD
 		status->increaseBScore(1);//?�‹∞??�Ò¿�??�÷¿∏?��?score?Ëø?�ø�?1¿ª ?�÷∞Ì æ?�¥œ∏È 0¿ª ?�÷¥�?��? ?�™¡ﬂø�?¿¸?��?¥ı«ÿæﬂ«“µ�?
+=======
+		status->increaseBScore(1);//?�‹∞??�Ò¿�??�÷¿∏?��?score?Ëø?�ø�?1¿ª ?�÷∞Ì æ?�¥œ∏È 0¿ª ?�÷¥�?��? ?�™¡ﬂø�?¿¸?��?¥ı«ÿæﬂ«“µ�?
+>>>>>>> origin/master
 		status->increaseScore(status->getBScore());
 		auto *Label = CCLabelTTF::create(" SoSo~", "Arial Rounded MT Bold", 30);
 		Label->setColor(ccc3(0, 0, 255));
@@ -108,6 +124,8 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 		stage_num++;
 		makesubject();
 	}
+	else if (stage_num==3)
+		Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 	return true;
 }
 /*
@@ -137,7 +155,11 @@ void BonusStage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 	switch (keyCode){
 		/*
+<<<<<<< HEAD
 		// ?�Œºˆ±�?
+=======
+		// ?�Œºˆ±�?
+>>>>>>> origin/master
 		case EventKeyboard::KeyCode::KEY_Z:
 		{
 			character->doAttackAction();
@@ -151,8 +173,13 @@ void BonusStage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 									setNextBuilding();
 									break;
 								}
+<<<<<<< HEAD
 								status->increaseScore(1 + status->getCombo() * 10);//?ﬁ∫?�¥�?10¡°æø ?�ﬂ?��?
 								status->increaseCombo(1, character->getPosition());//«œ?�™ ?�ŒΩ«∂ß?�∂¥Ÿ ?ﬁ∫??1æø ¡ı?�°«œ∞??
+=======
+								status->increaseScore(1 + status->getCombo() * 10);//?ﬁ∫?�¥�?10¡°æø ?�ﬂ?��?
+								status->increaseCombo(1, character->getPosition());//«œ?�™ ?�ŒΩ«∂ß?�∂¥Ÿ ?ﬁ∫??1æø ¡ı?�°«œ∞??
+>>>>>>> origin/master
 							}
 							break;
 		}
@@ -201,7 +228,11 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
+<<<<<<< HEAD
 				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+=======
+				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+>>>>>>> origin/master
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -249,7 +280,11 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
+<<<<<<< HEAD
 				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+=======
+				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+>>>>>>> origin/master
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -298,7 +333,11 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
+<<<<<<< HEAD
 				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+=======
+				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+>>>>>>> origin/master
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -347,7 +386,11 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
+<<<<<<< HEAD
 				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+=======
+				course2 = Sprite::create("c.png");//?�¢∞¢ ¥Ÿ?�•ªÁ¡�?��??�÷æÓ¡÷∏È µ?�µ�?
+>>>>>>> origin/master
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);

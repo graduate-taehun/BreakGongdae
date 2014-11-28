@@ -65,7 +65,7 @@ public:
 	int getScore();
 	//char* getcoinScore();
 	void increaseScore(int i);
-
+	void setBScore(int i);
 	bool blockingIsPossible();
     void decreaseGauge(bool onGround);
     void setBlockingGaugeMode(bool decrease);
