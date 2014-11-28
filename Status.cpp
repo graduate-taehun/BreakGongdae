@@ -166,3 +166,21 @@ void Status::setBlockingGaugeMode(bool decrease) {
     if(decrease && blockingIsPossible()) targetGauge=0;
     else targetGauge=MAX_GAUGE;
 }
+/*
+void Status::setBonusScore(int s, int i)
+{
+	bonus_score[i] = s;
+}
+int Status::getBonusScore(int i)
+{
+	return bonus_score[i];
+}*/
+
+void Status::increaseBScore(int i)
+{
+	B_Score = B_Score + i;
+}
+int Status::getBScore()
+{
+	return B_Score;
+}

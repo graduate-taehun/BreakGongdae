@@ -20,6 +20,8 @@ private:
 	int combo;
 	int MAX_COMBO;
 	int currentHP;
+	//int bonus_score[4];
+	int B_Score;
 	static const int MAX_HP = 30;
     
     float currentGauge;
@@ -35,18 +37,21 @@ private:
     
     virtual bool init();
 public:
-    Status() {}
+	Status() { B_Score = 0; }
     Status(const Status & st);
     CREATE_FUNC(Status);
 
 	int getWidth();
 
+	void increaseBScore(int i);
+	int getBScore();
 	void resetCombo();
 	int getCombo();
 	int getMAX_COMBO();
 	char* getcoinCombo();
 	void increaseCombo(int i, const Vec2& posCharacter);
-
+	//void setBonusScore(int s, int i);
+	//int getBonusScore(int i);
 	int getHP();
 	int getMAX_HP();
 	void decreaseHP();
