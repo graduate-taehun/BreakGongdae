@@ -103,40 +103,23 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 
 	auto frag1 = Sprite::create("fragment_1.png");
 	auto frag2 = Sprite::create("fragment_2.png");
-	/*
-	auto frag3 = Sprite::create("fragment_3.png");
-	
-	auto frag4 = Sprite::create("fragment_4.png");
-	*/
-	if (rand_block == 0)
-	{
-		if (check % 2 == 1)
-			frag1->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
-		else
-			frag1->setPosition(posCharacter.x - check * 2, posCharacter.y + 80);
 
-		frag1->setPhysicsBody(PhysicsBody::createBox(frag1->getContentSize()));
-		frag1->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
-		frag1->getPhysicsBody()->setCollisionBitmask(0x00);
-		getParent()->addChild(frag1, 3);
-	}
-	else if (rand_block == 1)
-	{
-		if (check % 2 == 1)
-			frag2->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
-		else
-			frag2->setPosition(posCharacter.x - check * 2, posCharacter.y + 80);
-
-		frag2->setPhysicsBody(PhysicsBody::createBox(frag2->getContentSize()));
-		frag2->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
-		frag2->getPhysicsBody()->setCollisionBitmask(0x00);
-		getParent()->addChild(frag2, 3);
-	}/*
-	else if (rand_block == 2)
-	{
-		if (check % 2 == 1)
-		{
-			frag3->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
+	Sprite* frag;
+	while (num <= block_n){
+		leftorright2 = rand() % 2;
+		check[num] = rand() % 100;
+		
+		if (block_select == 0){
+			frag = Sprite::create("fragment_1.png");
+			if (check[num] % 2 == 1)
+				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
+			else
+				frag->setPosition(posCharacter.x - check[num] * 2, posCharacter.y + 80);
+			
+			frag->setPhysicsBody(PhysicsBody::createBox(frag->getContentSize()));
+			frag->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
+			frag->getPhysicsBody()->setCollisionBitmask(0x00);
+			getParent()->addChild(frag, 3);
 		}
 		else if (block_select == 1){
 			frag = Sprite::create("fragment_2.png");
