@@ -7,7 +7,7 @@
 //
 
 #include "Stage1.h"
-
+#include "Stage2.h"
 Scene* Stage1::createScene()
 {
     auto scene=Stage::createScene();
@@ -59,7 +59,6 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     if(Game_Pause==1) return;
-    
     switch (keyCode){
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         {
@@ -85,6 +84,10 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                    && character->getPositionOfTop()-building->getPositionOfBottom()<character->getContentSize().height/3)
                || abs(building->getPositionOfBottom()-GROUND_HEIGHT)<=5) {
                 if(building->attack()) {
+					if (1)//이거 대신에 stage전환인자확인을 해줘야됨)
+					{
+						Director::getInstance()->replaceScene(Stage2::createScene());
+					}
                     setNextBuilding();
                     break;
                 }

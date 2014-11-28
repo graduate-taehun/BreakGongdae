@@ -10,7 +10,6 @@
 #define __BreakGongDae__Stage1__
 
 #include "Stage.h"
-
 class Stage1 : public Stage {
 private:
     
