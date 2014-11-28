@@ -10,13 +10,16 @@
 #define __BreakGongDae__Laser__
 
 #include "cocos2d.h"
+#include "BalanceSetting.h"
 USING_NS_CC;
 
 class LaserWarning : public LayerColor {
 private:
     Sprite *Laser;
     virtual bool initRandomlyWithVisibleSize(float* threePosition, Size visibleSize);
-    
+    void warning_scheduler(float time);
+    void laserlaunch_scheduler(float time);
+    void laser_scheduler(float time);
 public:
     static LaserWarning* createWithVisibleSize(float* threePosition, Size visibleSize);
 };

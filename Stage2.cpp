@@ -7,6 +7,7 @@
 //
 
 #include "Stage2.h"
+#include <climits>
 
 Scene* Stage2::createScene()
 {
@@ -22,10 +23,8 @@ Scene* Stage2::createScene()
 
 bool Stage2::init() {
     if(!Stage1::init()) return false;
-	laser = LaserWarning::createWithVisibleSize(posCharacter,visibleSize);
-	addChild(laser);
-	if (!isScheduled(schedule_selector(Stage2::laser_scheduler)))
-		schedule(schedule_selector(Stage2::laser_scheduler));
+    schedule(schedule_selector(Stage2::makeLaser_scheduler),1,INT_MAX,1);
+	
 	/*auto back = Sprite::create("laserlayer.png");
 	back->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	back->setPosition(visibleSize.width / 2, visibleSize.height*5);
@@ -36,10 +35,9 @@ bool Stage2::init() {
     return true;
 }
 
-void Stage2::laser_scheduler(float time) {
-	laser->setOpacity(laser->getOpacity()-1);
-	if (laser->getOpacity() < 50) {
-		unschedule(schedule_selector(Stage2::laser_scheduler));
-		removeChild(laser);
-	}
+void Stage2::makeLaser_scheduler(float time) {
+    if(rand()%10<2 && laserwarning==nullptr) {
+        laserwarning = LaserWarning::createWithVisibleSize(posCharacter,visibleSize);
+        addChild(laserwarning);
+    }
 }

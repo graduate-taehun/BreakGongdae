@@ -7,7 +7,7 @@
 //
 
 #include "Building.h"
-#include <cmath>
+#include <cstdlib>
 
 bool Block::init(int _durability) {
     if(!Sprite::init()) return false;
@@ -47,7 +47,6 @@ bool Building::init(int numbers, string filename, int level) {
     body->removeAllShapes();
     
     //level
-    srand(time(NULL));
     //rand()%numbers;
     
     //block들 생성

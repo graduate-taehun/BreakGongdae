@@ -14,6 +14,7 @@
 #include "Building.h"
 #include "Menu&Score.h"
 #include <queue>
+#include <cstdlib>
 
 class Stage : public LayerColor {
 private:

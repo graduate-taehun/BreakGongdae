@@ -8,11 +8,17 @@
 
 #include "Menu&Score.h"
 #include "Stage2.h"
+<<<<<<< HEAD
 #include <iostream>
 #include <fstream>
+=======
+#include <ctime>
+#include <cstdlib>
+>>>>>>> origin/master
 
 Scene* MenuStage::createScene()
 {
+    srand(time(NULL));
     auto scene = Scene::create();
     auto layer = MenuStage::create();
     scene->addChild(layer);

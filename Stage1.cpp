@@ -25,13 +25,14 @@ bool Stage1::init() {
     if(!Stage::init()) return false;
     //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
     //fileBuilding[10]={};
+    
     return true;
 }
 
 void Stage1::setNextBuilding() {
     building = Building::create(10, "block.png",wholeNumberOfBuilding);
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+BUILDING_START_HEIGHT);
-    addChild(building);
+    addChild(building,2);
 }
 
 bool Stage1::onContactBegin(PhysicsContact& contact) {
