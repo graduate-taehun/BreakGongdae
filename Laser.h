@@ -16,12 +16,13 @@ USING_NS_CC;
 class LaserWarning : public LayerColor {
 private:
     Sprite *Laser;
-    virtual bool initRandomlyWithVisibleSize(float* threePosition, Size visibleSize);
+    int position;
+    virtual bool init();
     void warning_scheduler(float time);
     void laserlaunch_scheduler(float time);
     void laser_scheduler(float time);
 public:
-    static LaserWarning* createWithVisibleSize(float* threePosition, Size visibleSize);
+    CREATE_FUNC(LaserWarning)
 };
 
 #endif /* defined(__BreakGongDae__Laser__) */

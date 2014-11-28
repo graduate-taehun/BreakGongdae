@@ -17,7 +17,11 @@ private:
 	LaserWarning *laserwarning;
     virtual bool init();
     void makeLaser_scheduler(float time);
+    void removeLaser_scheduler(float time);
+    int laserposition;
 public:
+    ~Stage2();
+    void shotbyLaser();
 	static cocos2d::Scene* createScene();
     CREATE_FUNC(Stage2)
 };

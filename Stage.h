@@ -18,7 +18,7 @@
 
 class Stage : public LayerColor {
 private:
-    int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
+    
     void menuCloseCallback(Ref* pSender);
     
     Vec2 posTitle;
@@ -32,6 +32,9 @@ private:
 protected:
     static const int GROUND_HEIGHT = 50;
     static const int THIS_TAG=2;
+    static const int MENU_Z_ORDER=255;
+    
+    int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
     
     virtual bool init();
    

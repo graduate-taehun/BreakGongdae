@@ -23,6 +23,8 @@ protected:
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     
+    void decreaseCharacterHP();
+    
     void block_scheduler(float time);
 public:
     static cocos2d::Scene* createScene();

@@ -97,7 +97,7 @@ bool Stage::init()
 
 	menuClose = Menu::create(btnClose, NULL);
 	menuClose->setPosition(Vec2::ZERO);
-	addChild(menuClose,1);
+	addChild(menuClose,MENU_Z_ORDER);
    
 	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
 	
@@ -123,7 +123,7 @@ bool Stage::init()
     
     status=Status::create();
     status->setPosition(posStatus);
-    addChild(status);
+    addChild(status, MENU_Z_ORDER);
     
     /*gaugeBlocking=BlockingGauge::create();
     posGauge=Vec2(visibleSize.width*19/20-gaugeBlocking->getContentSize().width,visibleSize.height *1 / 20);
@@ -132,7 +132,7 @@ bool Stage::init()
 
     lbTitle = LabelBMFont::create("BreakGongDae", "futura-48.fnt");
     //Title->setPosition(posTitle);
-    addChild(lbTitle);
+    addChild(lbTitle, MENU_Z_ORDER);
    
     return true;
 }
@@ -165,8 +165,6 @@ void Stage::jump_scheduler(float time) {
         this->getScene()->getChildByTag(GROUND_TAG)->setPosition(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,GROUND_HEIGHT/2);
     }
 }
-
-
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	

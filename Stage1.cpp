@@ -30,9 +30,21 @@ bool Stage1::init() {
 }
 
 void Stage1::setNextBuilding() {
+    Vec2 posRemoved(0,0);
+    if(building!=nullptr)
+        posRemoved=building->getPosition();
+    removeChild(building);
     building = Building::create(10, "block.png",wholeNumberOfBuilding);
-    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+BUILDING_START_HEIGHT);
+    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved.y+BUILDING_START_HEIGHT);
     addChild(building,2);
+}
+
+void Stage1::decreaseCharacterHP() {
+    status->decreaseHP();
+    status->resetCombo();
+    
+    if (status->getHP() == 0)
+        Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
 }
 
 bool Stage1::onContactBegin(PhysicsContact& contact) {
@@ -41,12 +53,7 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
     building->getPhysicsBody()->setContactTestBitmask(0x08);
     building->getPhysicsBody()->setCollisionBitmask(0x03);
     
-    status->decreaseHP();
-    status->resetCombo();
-    
-    if (status->getHP() == 0)
-        Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
-    
+    decreaseCharacterHP();
     return true;
 }
 
