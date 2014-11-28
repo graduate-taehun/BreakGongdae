@@ -94,7 +94,7 @@ void Status::resetCombo() {
 }
 void Status::increaseCombo(int i, const Vec2& posCharacter) {
 
-	if (currentblade<=MAX_BLADE)
+	if (currentblade<MAX_BLADE)
 		currentblade += i;
 	bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_HP->getContentSize().height));
 
@@ -161,7 +161,9 @@ int Status::getHP(){ return currentHP; }
 int Status::getMAX_HP(){ return MAX_HP; }
 int Status::getScore(){ return score; }
 int Status::getCombo(){ return combo; }
+int Status::getBlade(){ return currentblade; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
+int Status::getMAX_BLADE(){ return MAX_BLADE; }
 //char* Status::getcoinCombo(){ return coinCombo; }
 
 void Status::gauge_scheduler(float time) {

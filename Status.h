@@ -46,6 +46,8 @@ public:
 
 	void resetCombo();
 	int getCombo();
+	int getBlade();
+	int getMAX_BLADE();
 	int getMAX_COMBO();
 	//char* getcoinCombo();
 	void increaseCombo(int i, const Vec2& posCharacter);

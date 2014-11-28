@@ -23,13 +23,11 @@ Scene* Stage1::createScene()
 
 Stage1* Stage1::create() {
     Stage1 *pRet = new Stage1();
-    if (pRet && pRet->init(nullptr))
-    {
+    if (pRet && pRet->init(nullptr)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
@@ -117,7 +115,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
             }
             break;
         }
-            // 막기
+        // 막기
         case EventKeyboard::KeyCode::KEY_X:
         {
             character->setActionState(Blocking);
@@ -126,17 +124,21 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         }
         case EventKeyboard::KeyCode::KEY_C:
         {
-            blade = Sprite::create("Blade.png");
-            auto body = PhysicsBody::createBox(blade->getContentSize(), PhysicsMaterial(0.f, 0.5f, 0.5f));
-            body->setCollisionBitmask(0x00);
-            body->setGravityEnable(false);
-            body->setVelocity(Vec2(0,BLADE_VELOCITY));
-            blade->setPhysicsBody(body);
-            blade->setAnchorPoint(Vec2(0.5,1));
-            blade->setPosition(visibleSize.width / 2, character->getPositionOfTop());
-            addChild(blade,MENU_Z_ORDER-1);
-            if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
-                schedule(schedule_selector(Stage1::blade_scheduler));
+			if (status->getBlade() == status->getMAX_BLADE()){
+				blade = Sprite::create("Blade.png");
+
+				auto body = PhysicsBody::createBox(blade->getContentSize(), PhysicsMaterial(0.f, 0.5f, 0.5f));
+				body->setCollisionBitmask(0x00);
+				body->setGravityEnable(false);
+				body->setVelocity(Vec2(0, BLADE_VELOCITY));
+				blade->setPhysicsBody(body);
+				blade->setAnchorPoint(Vec2(0.5, 1));
+				blade->setPosition(visibleSize.width / 2, character->getPositionOfTop());
+				addChild(blade, MENU_Z_ORDER - 1);
+
+				if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
+					schedule(schedule_selector(Stage1::blade_scheduler));
+			}
         }
         default: Stage::onKeyPressed(keyCode, event);
     }

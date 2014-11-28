@@ -75,13 +75,11 @@ Scene* Stage::createScene()
 
 Stage* Stage::create() {
     Stage *pRet = new Stage();
-    if (pRet && pRet->init(nullptr))
-    {
+    if (pRet && pRet->init(nullptr)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;

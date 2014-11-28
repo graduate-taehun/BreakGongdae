@@ -22,13 +22,11 @@ Scene* BonusStage::createScene(Status* _status)
 
 BonusStage* BonusStage::create(Status* _status) {
     BonusStage *pRet = new BonusStage();
-    if (pRet && pRet->init(_status))
-    {
+    if (pRet && pRet->init(_status)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
@@ -44,13 +42,11 @@ bool BonusStage::init(Status* _status) {
 	int check;
 	stage_num = -1;
 	k = 0;
-	while (k < 3)
-	{
+	while (k < 3){
 		check = 0;
 		course_select[k] = rand() % 3;
 		j = k;
-		while (j >0)
-		{
+		while (j >0){
 			j--;
 			if (course_select[k] == course_select[j])
 				check = 1;
