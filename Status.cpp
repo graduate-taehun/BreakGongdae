@@ -57,18 +57,22 @@ bool Status::init() {
     return true;
 }
 Status::Status(const Status & st) {
-    Layer::init();
+    Status::init();
     
     score = st.score;
+    lbScore->setString(string("score : ") + to_string(score));
+    
     currentHP = st.currentHP;
+    bar_HP->setTextureRect(Rect(0, 0, getContentSize().width * currentHP /MAX_HP, bar_HP->getContentSize().height));
+    
     combo=st.combo;
-	MAX_COMBO = st.MAX_COMBO;
-	currentGauge=st.currentGauge;
+    lbCombo->setString(string("combo : ") + to_string(combo));
+	
+    MAX_COMBO = st.MAX_COMBO;
+	
+    currentGauge=st.currentGauge;
+    
     targetGauge=st.targetGauge;
-    bar_HP=nullptr;
-    bar_gauge=nullptr;
-    lbScore=nullptr;
-    lbCombo=nullptr;
 }
 void Status::decreaseHP() {
     currentHP -= MAX_HP/3;

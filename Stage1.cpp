@@ -21,14 +21,30 @@ Scene* Stage1::createScene()
     return scene;
 }
 
-bool Stage1::init() {
-    if(!Stage::init()) return false;
+Stage1* Stage1::create() {
+    Stage1 *pRet = new Stage1();
+    if (pRet && pRet->init(nullptr))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool Stage1::init(Status* _status=nullptr) {
+    if(!Stage::init(_status)) return false;
     //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
     //fileBuilding[10]={};
     building=nullptr;
     setNextBuilding();
     return true;
 }
+
 void Stage1::setNextBuilding() {
     Vec2 posRemoved(0,0);
     if(building!=nullptr)
@@ -38,6 +54,7 @@ void Stage1::setNextBuilding() {
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved.y+BUILDING_START_HEIGHT);
     addChild(building,2);
 }
+
 void Stage1::decreaseCharacterHP() {
     status->decreaseHP();
     status->resetCombo();
@@ -54,8 +71,15 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
     decreaseCharacterHP();
     return true;
 }
-void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
+void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
+    if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
+        CCDirector::sharedDirector()->resume();
+        Game_Pause = 0;
+        return;
+    }
     if(Game_Pause==1) return;
+    if(isScheduled(schedule_selector(Stage1::blade_scheduler))
+       || isScheduled(schedule_selector(Stage1::blade_return_scheduler))) return;
     switch (keyCode){
         case EventKeyboard::KeyCode::KEY_UP_ARROW:
         {
@@ -84,7 +108,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                 if(building->attack(false)) {
 					if (1)//이거 대신에 stage전환인자확인을 해줘야됨)
 					{
-						Director::getInstance()->replaceScene(Stage2::createScene());
+						Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 					}
                     setNextBuilding();
                     break;
@@ -152,12 +176,16 @@ void Stage1::block_scheduler(float time) {
 void Stage1::blade_return_scheduler(float time) {
     blade->setOpacity(0);
     blade->getPhysicsBody()->setVelocity(Vec2(0,-BLADE_VELOCITY*3));
+    schedule(schedule_selector(Stage1::jump_scheduler));
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
 }
 
 void Stage1::blade_scheduler(float time)
 {
+    if(isScheduled(schedule_selector(Stage1::jump_scheduler))) {
+        unschedule(schedule_selector(Stage1::jump_scheduler));
+    }
     static bool breaking=true;
     setViewPoint(blade->getPosition().y);
     if(breaking) {

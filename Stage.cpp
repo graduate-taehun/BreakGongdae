@@ -73,7 +73,22 @@ Scene* Stage::createScene()
     return scene;
 }
 
-bool Stage::init()
+Stage* Stage::create() {
+    Stage *pRet = new Stage();
+    if (pRet && pRet->init(nullptr))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool Stage::init(Status* _status=nullptr)
 {
     if (!LayerColor::initWithColor(Color4B(255, 255, 255, 255)))
         return false;
@@ -118,10 +133,14 @@ bool Stage::init()
     character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
 	addChild(character);
     
-    status=Status::create();
+    if(_status==nullptr) {
+        status=Status::create();
+    }
+    else {
+        status=_status;
+    }
     status->setPosition(posStatus);
     addChild(status, MENU_Z_ORDER);
-    
 
     /*gaugeBlocking=BlockingGauge::create();
     posGauge=Vec2(visibleSize.width*19/20-gaugeBlocking->getContentSize().width,visibleSize.height *1 / 20);
@@ -171,43 +190,30 @@ void Stage::jump_scheduler(float time) {
 }
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
-	/*if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1)
-	{
+	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
 		CCDirector::sharedDirector()->resume();
 		Game_Pause = 0;
-	}*/
+        return;
+	}
     if(Game_Pause==1) return;
     
     switch (keyCode){
-        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        {
+        case EventKeyboard::KeyCode::KEY_LEFT_ARROW: {
             if(cntofPosCharacter!=0)
                 character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
             break;
         }
-        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        {
+        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: {
             if(cntofPosCharacter!=2)
                 character->setPosition(posCharacter[++cntofPosCharacter],character->getPosition().y);
             break;
         }
-        case EventKeyboard::KeyCode::KEY_ESCAPE:
-        {
-            if (Game_Pause == 0)
-            {
+        case EventKeyboard::KeyCode::KEY_ESCAPE: {
+            if (Game_Pause == 0) {
                 CCDirector::sharedDirector()->pause();
                 Game_Pause = 1;
                 //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
                 //this->addChild(pScene, 2000, 2000);
-            }
-            else if (Game_Pause == 1 )
-            {
-               CCDirector::sharedDirector()->resume();
-               Game_Pause = 0;
-               //CCString* popParam = CCString::create("1");
-               //CCNotificationCenter::sharedNotificationCenter()->postNotification("notification", popParam);         //노티피케이션 보내기
-
-               //팝업창 제거
             }
         }
 		

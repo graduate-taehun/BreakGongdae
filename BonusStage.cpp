@@ -7,20 +7,36 @@
 //
 #include "BonusStage.h"
 
-Scene* BonusStage::createScene()
+Scene* BonusStage::createScene(Status* _status)
 {
 	auto scene = Stage::createScene();
 	scene->removeChildByTag(Stage::THIS_TAG);
 
-	auto layer = BonusStage::create();
+	auto layer = BonusStage::create(_status);
 	layer->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	layer->setTag(THIS_TAG);
 	scene->addChild(layer);
 
 	return scene;
 }
-bool BonusStage::init() {
-	if (!Stage::init()) return false;
+
+BonusStage* BonusStage::create(Status* _status) {
+    BonusStage *pRet = new BonusStage();
+    if (pRet && pRet->init(_status))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool BonusStage::init(Status* _status) {
+	if (!Stage::init(_status)) return false;
 	
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
 

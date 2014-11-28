@@ -44,7 +44,7 @@ public:
 	void resetCombo();
 	int getCombo();
 	int getMAX_COMBO();
-	char* getcoinCombo();
+	//char* getcoinCombo();
 	void increaseCombo(int i, const Vec2& posCharacter);
 
 	int getHP();
@@ -52,7 +52,7 @@ public:
 	void decreaseHP();
 
 	int getScore();
-	char* getcoinScore();
+	//char* getcoinScore();
 	void increaseScore(int i);
 
 	bool blockingIsPossible();

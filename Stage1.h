@@ -23,7 +23,7 @@ protected:
     Sprite* blade;
     
     
-    virtual bool init();
+    virtual bool init(Status* _status);
     int wholeNumberOfBuilding;
     queue<string> fileBuilding;
     virtual void setNextBuilding();
@@ -35,7 +35,7 @@ protected:
     void decreaseCharacterHP();
 public:
     static cocos2d::Scene* createScene();
-    CREATE_FUNC(Stage1)
+    static Stage1* create();
 };
 
 #endif /* defined(__BreakGongDae__Stage1__) */

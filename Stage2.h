@@ -15,15 +15,15 @@
 class Stage2 : public Stage1 {
 private:
 	LaserWarning *laserwarning;
-    virtual bool init();
+    virtual bool init(Status* _status);
     void makeLaser_scheduler(float time);
     void removeLaser_scheduler(float time);
     int laserposition;
 public:
     ~Stage2();
     void shotbyLaser();
-	static cocos2d::Scene* createScene();
-    CREATE_FUNC(Stage2)
+	static cocos2d::Scene* createScene(Status* _status);
+    static Stage2* create(Status* status);
 };
 
 #endif /* defined(__BreakGongDae__Stage2__) */

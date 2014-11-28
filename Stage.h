@@ -36,7 +36,7 @@ protected:
     
     int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
     
-    virtual bool init();
+    virtual bool init(Status* _status);
    
     void setViewPoint(float threshold);
     
@@ -62,7 +62,7 @@ protected:
 public:
 	static cocos2d::Scene* createScene();
 
-    CREATE_FUNC(Stage)
+    static Stage* create();
 };
 
 #endif /* defined(__BreakGongDae__Stage__) */
