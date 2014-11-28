@@ -3,25 +3,41 @@
 //  BonusStage.cpp
 //  BreakGongDae
 //
-//  Created by ÀÌ»ó¹Î on 2014. 11. 28..
+//  Created by Â¿ÃƒÂªÃ›Ï€Å’ on 2014. 11. 28..
 //
 //
 #include "BonusStage.h"
-
-Scene* BonusStage::createScene()
+//status ë„˜ê¸°ëŠ” ë²•
+//Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
+Scene* BonusStage::createScene(Status* _status)
 {
 	auto scene = Stage::createScene();
 	scene->removeChildByTag(Stage::THIS_TAG);
 
-	auto layer = BonusStage::create();
+	auto layer = BonusStage::create(_status);
 	layer->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	layer->setTag(THIS_TAG);
 	scene->addChild(layer);
 
 	return scene;
 }
-bool BonusStage::init() {
-	if (!Stage::init(nullptr)) return false;
+BonusStage* BonusStage::create(Status *_status) {
+    BonusStage *pRet = new BonusStage();
+    if (pRet && pRet->init(_status))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool BonusStage::init(Status* _status) {
+	if (!Stage::init(_status)) return false;
 	
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
 	//status->blockingIsPossible.
@@ -41,10 +57,10 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	*/
 	if (cntofPosCharacter == honeyposcheck)
 	{
-		//if (status->getBonusScore(stage_num) != 1)//ÀÌºÎºÐÀº Àá½Ã È®ÀÎ¿ëÀ¸·Î ³Ö¾î³õÀº°Å¶ó¼­ Á¦ÀÛ¿Ï·áµÇ¸é »èÁ¦ÇØ¾ßµÊ
-		//	status->increaseScore(stage_num);//ÀÌºÎºÐÀº Àá½Ã È®ÀÎ¿ëÀ¸·Î ³Ö¾î³õÀº°Å¶ó¼­ Á¦ÀÛ¿Ï·áµÇ¸é »èÁ¦ÇØ¾ßµÊ
+		//if (status->getBonusScore(stage_num) != 1)//Â¿Ãƒâˆ«Å’âˆ«â€“Â¿âˆ« Â¿Â·Î©âˆš Â»Ã†Â¿Å’Ã¸ÃŽÂ¿âˆâˆ‘Å’ â‰¥Ã·Ã¦Ã“â‰¥Ä±Â¿âˆ«âˆžâ‰ˆâˆ‚Ã›Âºâ‰  Â¡Â¶Â¿â‚¬Ã¸Å“âˆ‘Â·ÂµÂ«âˆÃˆ ÂªÃ‹Â¡Â¶Â«Ã¿Ã¦ï¬‚ÂµÂ 
+		//	status->increaseScore(stage_num);//Â¿Ãƒâˆ«Å’âˆ«â€“Â¿âˆ« Â¿Â·Î©âˆš Â»Ã†Â¿Å’Ã¸ÃŽÂ¿âˆâˆ‘Å’ â‰¥Ã·Ã¦Ã“â‰¥Ä±Â¿âˆ«âˆžâ‰ˆâˆ‚Ã›Âºâ‰  Â¡Â¶Â¿â‚¬Ã¸Å“âˆ‘Â·ÂµÂ«âˆÃˆ ÂªÃ‹Â¡Â¶Â«Ã¿Ã¦ï¬‚ÂµÂ 
 		//status->setBonusScore(2, stage_num);
-		status->increaseBScore(2);//²Ü°ú¸ñÀ» ³ÖÀ¸¸é score¹è¿­¿¡ 1À» ³Ö°í ¾Æ´Ï¸é 0À» ³Ö´Â´Ù. ³ªÁß¿¡ ÀüºÎ ´õÇØ¾ßÇÒµí
+		status->increaseBScore(2);//â‰¤â€¹âˆžË™âˆÃ’Â¿Âª â‰¥Ã·Â¿âˆâˆÃˆ scoreÏ€Ã‹Ã¸â‰ Ã¸Â° 1Â¿Âª â‰¥Ã·âˆžÃŒ Ã¦âˆ†Â¥Å“âˆÃˆ 0Â¿Âª â‰¥Ã·Â¥Â¬Â¥Å¸. â‰¥â„¢Â¡ï¬‚Ã¸Â° Â¿Â¸âˆ«Å’ Â¥Ä±Â«Ã¿Ã¦ï¬‚Â«â€œÂµÃŒ
 		status->increaseScore(status->getBScore());
 
 		auto *Label = CCLabelTTF::create( " Perfect!", "Arial Rounded MT Bold", 30);
@@ -60,7 +76,7 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	else if (cntofPosCharacter == normalposcheck)
 	{
 		//status->setBonusScore(1, stage_num);
-		status->increaseBScore(1);//²Ü°ú¸ñÀ» ³ÖÀ¸¸é score¹è¿­¿¡ 1À» ³Ö°í ¾Æ´Ï¸é 0À» ³Ö´Â´Ù. ³ªÁß¿¡ ÀüºÎ ´õÇØ¾ßÇÒµí
+		status->increaseBScore(1);//â‰¤â€¹âˆžË™âˆÃ’Â¿Âª â‰¥Ã·Â¿âˆâˆÃˆ scoreÏ€Ã‹Ã¸â‰ Ã¸Â° 1Â¿Âª â‰¥Ã·âˆžÃŒ Ã¦âˆ†Â¥Å“âˆÃˆ 0Â¿Âª â‰¥Ã·Â¥Â¬Â¥Å¸. â‰¥â„¢Â¡ï¬‚Ã¸Â° Â¿Â¸âˆ«Å’ Â¥Ä±Â«Ã¿Ã¦ï¬‚Â«â€œÂµÃŒ
 		status->increaseScore(status->getBScore());
 		auto *Label = CCLabelTTF::create(" SoSo~", "Arial Rounded MT Bold", 30);
 		Label->setColor(ccc3(0, 0, 255));
@@ -121,7 +137,7 @@ void BonusStage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 	switch (keyCode){
 		/*
-		// ºÎ¼ö±â
+		// âˆ«Å’ÂºË†Â±â€š
 		case EventKeyboard::KeyCode::KEY_Z:
 		{
 			character->doAttackAction();
@@ -135,8 +151,8 @@ void BonusStage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 									setNextBuilding();
 									break;
 								}
-								status->increaseScore(1 + status->getCombo() * 10);//ÄÞº¸´ç 10Á¡¾¿ Ãß°¡
-								status->increaseCombo(1, character->getPosition());//ÇÏ³ª ºÎ½Ç¶§¸¶´Ù ÄÞº¸ 1¾¿ Áõ°¡ÇÏ°Ô
+								status->increaseScore(1 + status->getCombo() * 10);//Æ’ï¬âˆ«âˆÂ¥Ã 10Â¡Â°Ã¦Ã¸ âˆšï¬‚âˆžÂ°
+								status->increaseCombo(1, character->getPosition());//Â«Å“â‰¥â„¢ âˆ«Å’Î©Â«âˆ‚ÃŸâˆâˆ‚Â¥Å¸ Æ’ï¬âˆ«âˆ 1Ã¦Ã¸ Â¡Ä±âˆžÂ°Â«Å“âˆžâ€˜
 							}
 							break;
 		}
@@ -185,7 +201,7 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
-				course2 = Sprite::create("c.png");//°¢°¢ ´Ù¸¥»çÁøÀ» ³Ö¾îÁÖ¸é µÉµí
+				course2 = Sprite::create("c.png");//âˆžÂ¢âˆžÂ¢ Â¥Å¸âˆâ€¢ÂªÃÂ¡Â¯Â¿Âª â‰¥Ã·Ã¦Ã“Â¡Ã·âˆÃˆ Âµâ€¦ÂµÃŒ
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -234,7 +250,7 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
-				course2 = Sprite::create("c.png");//°¢°¢ ´Ù¸¥»çÁøÀ» ³Ö¾îÁÖ¸é µÉµí
+				course2 = Sprite::create("c.png");//âˆžÂ¢âˆžÂ¢ Â¥Å¸âˆâ€¢ÂªÃÂ¡Â¯Â¿Âª â‰¥Ã·Ã¦Ã“Â¡Ã·âˆÃˆ Âµâ€¦ÂµÃŒ
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -283,7 +299,7 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
-				course2 = Sprite::create("c.png");//°¢°¢ ´Ù¸¥»çÁøÀ» ³Ö¾îÁÖ¸é µÉµí
+				course2 = Sprite::create("c.png");//âˆžÂ¢âˆžÂ¢ Â¥Å¸âˆâ€¢ÂªÃÂ¡Â¯Â¿Âª â‰¥Ã·Ã¦Ã“Â¡Ã·âˆÃˆ Âµâ€¦ÂµÃŒ
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -332,7 +348,7 @@ void BonusStage::makesubject()
 			}
 			else if (course_select[i] == 1)
 			{
-				course2 = Sprite::create("c.png");//°¢°¢ ´Ù¸¥»çÁøÀ» ³Ö¾îÁÖ¸é µÉµí
+				course2 = Sprite::create("c.png");//âˆžÂ¢âˆžÂ¢ Â¥Å¸âˆâ€¢ÂªÃÂ¡Â¯Â¿Âª â‰¥Ã·Ã¦Ã“Â¡Ã·âˆÃˆ Âµâ€¦ÂµÃŒ
 				course2->setPosition(posCharacter[i], 1000);
 				auto body = PhysicsBody::createBox(course2->getContentSize(), material);
 				body->setCategoryBitmask(0x03);
@@ -362,5 +378,5 @@ void BonusStage::makesubject()
 		}
 	}
 
-	//Ã¹¹øÂ°³¡
+	//âˆšÏ€Ï€Â¯Â¬âˆžâ‰¥Â°
 }

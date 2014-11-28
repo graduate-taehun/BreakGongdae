@@ -200,11 +200,9 @@ int Status::getBonusScore(int i)
 	return bonus_score[i];
 }*/
 
-void Status::increaseBScore(int i)
-{
+void Status::increaseBScore(int i) {
 	B_Score = B_Score + i;
 }
-int Status::getBScore()
-{
+int Status::getBScore() {
 	return B_Score;
 }

@@ -8,6 +8,7 @@
 
 #include "Stage1.h"
 #include "Stage2.h"
+#include "BonusStage.h"
 Scene* Stage1::createScene()
 {
     auto scene=Stage::createScene();
@@ -109,7 +110,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                 if(building->attack(false)) {
 					if (1)//이거 대신에 stage전환인자확인을 해줘야됨)
 					{
-						Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
+						Director::getInstance()->replaceScene(BonusStage::createScene(new Status(*status)));
 					}
                     setNextBuilding();
                     break;
