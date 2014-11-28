@@ -29,7 +29,6 @@ bool Stage1::init() {
     setNextBuilding();
     return true;
 }
-
 void Stage1::setNextBuilding() {
     Vec2 posRemoved(0,0);
     if(building!=nullptr)
@@ -39,7 +38,6 @@ void Stage1::setNextBuilding() {
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved.y+BUILDING_START_HEIGHT);
     addChild(building,2);
 }
-
 void Stage1::decreaseCharacterHP() {
     status->decreaseHP();
     status->resetCombo();
@@ -47,7 +45,6 @@ void Stage1::decreaseCharacterHP() {
     if (status->getHP() == 0)
         Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
 }
-
 bool Stage1::onContactBegin(PhysicsContact& contact) {
     if(!Stage::onContactBegin(contact)) return false;
     building->getPhysicsBody()->setCategoryBitmask(0x03);
@@ -57,7 +54,6 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
     decreaseCharacterHP();
     return true;
 }
-
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     if(Game_Pause==1) return;
     switch (keyCode){
@@ -67,14 +63,13 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
                 character->setState(sAir);
                 character->getPhysicsBody()->setVelocity(Vec2(0,CHARACTER_JUMP_VEL));
                 
-                //점프동작
                 if (!isScheduled(schedule_selector(Stage1::jump_scheduler)))
                     schedule(schedule_selector(Stage1::jump_scheduler));
                 break;
             }
             break;
         }
-            // 부수기
+		// 부수기
         case EventKeyboard::KeyCode::KEY_Z:
         {
             character->doAttackAction();
@@ -153,7 +148,6 @@ void Stage1::block_scheduler(float time) {
 
 void Stage1::blade_scheduler(float time)
 {
-    //
     if (blade->getPosition().y >= visibleSize.height / 2) {
         //배경을 내림
         status->setPosition(visibleSize.width / 8, blade->getPosition().y + visibleSize.height * 8 / 20);
