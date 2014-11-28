@@ -4,34 +4,12 @@
 //
 //  Created by 유정민 on 2014. 10. 24..
 //
-//ㅁㄴㅇㄹ
+//
 
 #include "Stage.h"
 #include <SimpleAudioEngine.h>
 
 Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
-/*
-	캐릭터 및 빌딩 비트마스크 처리 (순서는 category,contact,collision)
-	1. 캐릭터가 땅에 있을 때	
-	0100
-	0010
-	0001
-
-	2. 캐릭터가 점프했을 때
-	0001
-	0100
-	0011
-
-	3. 빌딩
-	0011
-	1000
-	0011
-
-	4. 바닥
-	1001
-	0011
-	0101
-*/
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();

@@ -25,8 +25,7 @@ private:
     Vec2 posStatus;
     Vec2 posClose;
     Vec2 posGauge;
-    
-    
+     
     static const int GROUND_TAG = 0;
     //static const int EDGE_TAG=1;
 protected:
