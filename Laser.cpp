@@ -13,7 +13,6 @@
 bool LaserWarning::init() {
 	if (!LayerColor::initWithColor(Color4B::RED))
         return false;
-    //shotbylaser=_shotbylaser;
     
     position =rand()%3;
     setOpacity(200);
