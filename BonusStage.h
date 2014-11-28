@@ -13,7 +13,9 @@
 
 class BonusStage : public Stage {
 private:
-
+	int poscheck;
+	int score[10];
+	int stage_num;
 protected:
 	virtual bool init(Status* _status);
 //	virtual void setNextBuilding();
@@ -24,6 +26,8 @@ protected:
 public:
 	static cocos2d::Scene* createScene(Status* _status);
     static BonusStage* create(Status* _status);
+	bool onContactBegin(PhysicsContact& contact);
+	void block_scheduler(float time);
 };
 
 #endif /* defined(__BreakGongDae__BonusStage__) */
