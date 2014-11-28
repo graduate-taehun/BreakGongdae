@@ -17,6 +17,7 @@ bool Status::init() {
 	combo = 0;
     score = 0;
 	MAX_COMBO = 0;
+	currentblade = 0;
 	currentHP = MAX_HP;
     currentGauge = 100;
     targetGauge = 100;
@@ -31,15 +32,20 @@ bool Status::init() {
     bar_gauge->setPosition(Vec2(x,bar_gauge->getContentSize().height/2));
     bar_gauge->setAnchorPoint(Vec2(0,0.5));
     addChild(bar_gauge);
-    
+	
+	bar_blade = Sprite::create("status_hp.png");
+	bar_blade->setPosition(Vec2(x, -bar_blade->getContentSize().height / 2));
+	bar_blade->setAnchorPoint(Vec2(0, 0.5));
+	addChild(bar_blade);
+	
     lbScore = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
-    lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height/2));
+    lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height*1.5));
     lbScore->setAnchorPoint(Vec2(0,0.5));
     lbScore->setColor(ccc3(0, 0, 0));
     addChild(lbScore);
     
     lbCombo = CCLabelTTF::create("combo : 0", "futura-48.fnt", 28);
-    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*1.5));
+    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*2.5));
     lbCombo->setAnchorPoint(Vec2(0,0.5));
     lbCombo->setColor(ccc3(0, 0, 0));
     addChild(lbCombo);
@@ -50,6 +56,9 @@ bool Status::init() {
     bar_gauge->setContentSize(bar_HP->getContentSize());
     bar_gauge->setTextureRect(Rect(0, 0, lbCombo->getContentSize().width, bar_gauge->getContentSize().height));
     
+	bar_blade->setContentSize(bar_blade->getContentSize());
+	bar_blade->setTextureRect(Rect(0, 0, 0, bar_blade->getContentSize().height));
+
     setContentSize(Size(bar_HP->getContentSize().width,bar_HP->getContentSize().height*3));
         
     schedule(schedule_selector(Status::gauge_scheduler));
@@ -57,18 +66,22 @@ bool Status::init() {
     return true;
 }
 Status::Status(const Status & st) {
-    Layer::init();
+    Status::init();
     
     score = st.score;
+    lbScore->setString(string("score : ") + to_string(score));
+    
     currentHP = st.currentHP;
+    bar_HP->setTextureRect(Rect(0, 0, getContentSize().width * currentHP /MAX_HP, bar_HP->getContentSize().height));
+    
     combo=st.combo;
-	MAX_COMBO = st.MAX_COMBO;
-	currentGauge=st.currentGauge;
+    lbCombo->setString(string("combo : ") + to_string(combo));
+	
+    MAX_COMBO = st.MAX_COMBO;
+	
+    currentGauge=st.currentGauge;
+    
     targetGauge=st.targetGauge;
-    bar_HP=nullptr;
-    bar_gauge=nullptr;
-    lbScore=nullptr;
-    lbCombo=nullptr;
 }
 void Status::decreaseHP() {
     currentHP -= MAX_HP/3;
@@ -80,6 +93,11 @@ void Status::resetCombo() {
     lbCombo->setString(string("combo : ") + to_string(combo));
 }
 void Status::increaseCombo(int i, const Vec2& posCharacter) {
+
+	if (currentblade<MAX_BLADE)
+		currentblade += i;
+	bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_HP->getContentSize().height));
+
 	combo += i;
 	if (combo > MAX_COMBO)
 		MAX_COMBO = combo;
@@ -143,7 +161,9 @@ int Status::getHP(){ return currentHP; }
 int Status::getMAX_HP(){ return MAX_HP; }
 int Status::getScore(){ return score; }
 int Status::getCombo(){ return combo; }
+int Status::getBlade(){ return currentblade; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
+int Status::getMAX_BLADE(){ return MAX_BLADE; }
 //char* Status::getcoinCombo(){ return coinCombo; }
 
 void Status::gauge_scheduler(float time) {

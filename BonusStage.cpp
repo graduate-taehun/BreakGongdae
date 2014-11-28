@@ -1,3 +1,4 @@
+
 //
 //  BonusStage.cpp
 //  BreakGongDae
@@ -20,7 +21,7 @@ Scene* BonusStage::createScene()
 	return scene;
 }
 bool BonusStage::init() {
-	if (!Stage::init()) return false;
+	if (!Stage::init(nullptr)) return false;
 	
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
 	//status->blockingIsPossible.

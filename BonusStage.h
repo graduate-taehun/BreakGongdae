@@ -1,3 +1,4 @@
+
 //
 //  BonusStage.h
 //  BreakGongDae
@@ -32,5 +33,4 @@ public:
 	void makesubject();
 	CREATE_FUNC(BonusStage)
 };
-
 #endif /* defined(__BreakGongDae__BonusStage__) */

@@ -9,12 +9,12 @@
 #include "Stage2.h"
 #include <climits>
 
-Scene* Stage2::createScene()
+Scene* Stage2::createScene(Status* _status)
 {
     auto scene=Stage1::createScene();
     scene->removeChildByTag(Stage1::THIS_TAG);
     
-    auto layer = Stage2::create();
+    auto layer = Stage2::create(_status);
     layer->setContentSize(Size(visibleSize.width,visibleSize.height*10));
     layer->setTag(THIS_TAG);
     scene->addChild(layer);
@@ -22,8 +22,24 @@ Scene* Stage2::createScene()
     return scene;
 }
 
-bool Stage2::init() {
-    if(!Stage1::init()) return false;
+
+Stage2* Stage2::create(Status* _status) {
+    Stage2 *pRet = new Stage2();
+    if (pRet && pRet->init(_status))
+    {
+        pRet->autorelease();
+        return pRet;
+    }
+    else
+    {
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+bool Stage2::init(Status *_status) {
+    if(!Stage1::init(_status)) return false;
     schedule(schedule_selector(Stage2::makeLaser_scheduler),1,INT_MAX,1);
 
     return true;

@@ -22,16 +22,19 @@ private:
 	int currentHP;
 	//int bonus_score[4];
 	int B_Score;
+	int currentblade;
+	static const int MAX_BLADE = 30;
 	static const int MAX_HP = 30;
     
     float currentGauge;
     float targetGauge;
-    static const int MAX_GAUGE=100;
+    static const int MAX_GAUGE = 100;
     
     void gauge_scheduler(float time);
     
     Sprite* bar_gauge;
     Sprite *bar_HP;
+	Sprite* bar_blade;
     CCLabelTTF *lbScore;
     CCLabelTTF *lbCombo;
     
@@ -47,8 +50,10 @@ public:
 	int getBScore();
 	void resetCombo();
 	int getCombo();
+	int getBlade();
+	int getMAX_BLADE();
 	int getMAX_COMBO();
-	char* getcoinCombo();
+	//char* getcoinCombo();
 	void increaseCombo(int i, const Vec2& posCharacter);
 	//void setBonusScore(int s, int i);
 	//int getBonusScore(int i);
@@ -57,7 +62,7 @@ public:
 	void decreaseHP();
 
 	int getScore();
-	char* getcoinScore();
+	//char* getcoinScore();
 	void increaseScore(int i);
 
 	bool blockingIsPossible();

@@ -12,18 +12,15 @@
 #include "Stage.h"
 class Stage1 : public Stage {
 private:
-    
     void blade_scheduler(float time);
-    void blade_return_scheduler(float time);
-    
+    void blade_return_scheduler(float time);    
     void block_scheduler(float time);
+
 protected:
-    
     Building* building;
     Sprite* blade;
     
-    
-    virtual bool init();
+    virtual bool init(Status* _status);
     int wholeNumberOfBuilding;
     queue<string> fileBuilding;
     virtual void setNextBuilding();
@@ -33,9 +30,10 @@ protected:
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     
     void decreaseCharacterHP();
+
 public:
     static cocos2d::Scene* createScene();
-    CREATE_FUNC(Stage1)
+    static Stage1* create();
 };
 
 #endif /* defined(__BreakGongDae__Stage1__) */

@@ -167,12 +167,12 @@ bool EndScene::initWithScore(Status& status) {
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu);
 	
-	auto score = LabelTTF::create("Score : " + to_string(status.getScore()), "Arial", 45);
+	auto score = LabelTTF::create("Score : " + to_string(status.getScore()), "Arial Rounded MT Bold", 45);
 	score->setColor(ccc3(0, 0, 0));
 	score->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 240));
 	addChild(score);
 
-	auto combo = LabelTTF::create("MAX Combo : " + to_string(status.getMAX_COMBO()), "Arial", 45);
+	auto combo = LabelTTF::create("MAX Combo : " + to_string(status.getMAX_COMBO()), "Arial Rounded MT Bold", 45);
 	combo->setColor(ccc3(0, 0, 0));
 	combo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 180));
 	addChild(combo);
