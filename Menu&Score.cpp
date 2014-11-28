@@ -7,20 +7,12 @@
 //
 
 #include "Menu&Score.h"
-<<<<<<< HEAD
 #include "Stage2.h"
 #include <iostream>
 #include <fstream>
 #include <ctime>
 #include <cstdlib>
 using namespace std;
-=======
-#include "Stage2.h"
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include <cstdlib>
->>>>>>> origin/master
 
 Scene* MenuStage::createScene()
 {

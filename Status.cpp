@@ -8,6 +8,7 @@
 
 #include "Status.h"
 #include <cstdlib>
+using namespace std;
 
 bool Status::init() {
     if(!Layer::init())
@@ -55,7 +56,6 @@ bool Status::init() {
 
     return true;
 }
-
 Status::Status(const Status & st) {
     Layer::init();
     
@@ -70,9 +70,6 @@ Status::Status(const Status & st) {
     lbScore=nullptr;
     lbCombo=nullptr;
 }
-
-using namespace std;
-
 void Status::decreaseHP() {
     currentHP -= MAX_HP/3;
     bar_HP->setTextureRect(Rect(0, 0, getContentSize().width * currentHP /MAX_HP, bar_HP->getContentSize().height));
@@ -82,57 +79,13 @@ void Status::resetCombo() {
     combo = 0;
     lbCombo->setString(string("combo : ") + to_string(combo));
 }
-
 void Status::increaseCombo(int i, const Vec2& posCharacter) {
-<<<<<<< HEAD
-
 	combo += i;
 	if (combo > MAX_COMBO)
 		MAX_COMBO = combo;
 
-    lbCombo->setString(string("combo : ") + to_string(combo));
-    auto *Label_Combo = CCLabelTTF::create(to_string(combo)+" Combo!", "futura-48.fnt", 25);
-    Label_Combo->setColor(ccc3(0, 0, 0));
-
-	bool leftorright2 = rand() % 2;
-    bool leftorright = rand() % 2;
-    Label_Combo->setPosition(posCharacter.x + (leftorright?80:-80), posCharacter.y + 80);
-    Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
-    Label_Combo->getPhysicsBody()->setVelocity(Vec2((leftorright?100:-100),30));
-    Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
-    getParent()->addChild(Label_Combo);
-
-	int check = rand() % 100;
-	int rand_block = rand() % 2;
-	
-	auto frag1 = Sprite::create("fragment_1.png");
-	auto frag2 = Sprite::create("fragment_2.png");
-
-	if (rand_block == 0){
-		if (check % 2 == 1)
-			frag1->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
-		else
-			frag1->setPosition(posCharacter.x - check * 2, posCharacter.y + 80);
-		
-		frag1->setPhysicsBody(PhysicsBody::createBox(frag1->getContentSize()));
-		frag1->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
-		frag1->getPhysicsBody()->setCollisionBitmask(0x00);
-		getParent()->addChild(frag1, 3);
-	}
-	else if (rand_block == 1){
-		if (check % 2 == 1)
-			frag2->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
-		else
-			frag2->setPosition(posCharacter.x - check * 2, posCharacter.y + 80);
-		
-		frag2->setPhysicsBody(PhysicsBody::createBox(frag2->getContentSize()));
-		frag2->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
-		frag2->getPhysicsBody()->setCollisionBitmask(0x00);
-		getParent()->addChild(frag2, 3);
-=======
-	Combo += i;
-	lbCombo->setString(string("combo : ") + to_string(Combo));
-	auto *Label_Combo = CCLabelTTF::create(to_string(Combo) + " Combo!", "futura-48.fnt", 35);
+	lbCombo->setString(string("combo : ") + to_string(combo));
+	auto *Label_Combo = CCLabelTTF::create(to_string(combo) + " Combo!", "futura-48.fnt", 25);
 	Label_Combo->setColor(ccc3(0, 0, 0));
 
 	bool leftorright2;
@@ -141,77 +94,46 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 	Label_Combo->setPhysicsBody(PhysicsBody::createBox(Label_Combo->getContentSize()));
 	Label_Combo->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
 	Label_Combo->getPhysicsBody()->setCollisionBitmask(0x00);
-	getParent()->addChild(Label_Combo,4);
+	getParent()->addChild(Label_Combo, 4);
+
 	int block_n = rand() % 3;
 	int num = 0;
 	int check[3];
 	int block_select = rand() % 2;
 
-	Sprite* frag;
-	//반복문 {
-	//    frag=Sprite::create
-	//	asdsad
-	//	addchild(frag);
-	//}
-	/*
-	auto frag3 = Sprite::create("fragment_3.png");
+	auto frag1 = Sprite::create("fragment_1.png");
+	auto frag2 = Sprite::create("fragment_2.png");
 
-	auto frag4 = Sprite::create("fragment_4.png");
-	*/
-	while (num <= block_n)
-	{
+	Sprite* frag;
+	while (num <= block_n){
 		leftorright2 = rand() % 2;
 		check[num] = rand() % 100;
-		if (block_select == 0)
-		{
+		
+		if (block_select == 0){
 			frag = Sprite::create("fragment_1.png");
-			if (check[num]%2== 1)
-			{
+			if (check[num] % 2 == 1)
 				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
-			}
 			else
-			{
 				frag->setPosition(posCharacter.x - check[num] * 2, posCharacter.y + 80);
-			}
+			
 			frag->setPhysicsBody(PhysicsBody::createBox(frag->getContentSize()));
 			frag->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
 			frag->getPhysicsBody()->setCollisionBitmask(0x00);
 			getParent()->addChild(frag, 3);
 		}
-		else if (block_select == 1)
-		{
+		else if (block_select == 1){
 			frag = Sprite::create("fragment_2.png");
 			if (check[num] % 2 == 1)
-			{
 				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
-			}
 			else
-			{
 				frag->setPosition(posCharacter.x - check[num] * 2, posCharacter.y + 80);
-			}
+			
 			frag->setPhysicsBody(PhysicsBody::createBox(frag->getContentSize()));
 			frag->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
 			frag->getPhysicsBody()->setCollisionBitmask(0x00);
 			getParent()->addChild(frag, 3);
 		}
 		num++;
-	}/*
-	 
-	else if (rand_block == 2)
-	{
-		if (check % 2 == 1)
-		{
-			frag3->setPosition(posCharacter.x + check * 2, posCharacter.y + 80);
-		}
-		else
-		{
-			frag3->setPosition(posCharacter.x - check * 2, posCharacter.y + 80);
-		}
-		frag3->setPhysicsBody(PhysicsBody::createBox(frag3->getContentSize()));
-		frag3->getPhysicsBody()->setVelocity(Vec2((leftorright2 ? 150 : -150), 40));
-		frag3->getPhysicsBody()->setCollisionBitmask(0x00);
-		getParent()->addChild(frag3, 3);
->>>>>>> origin/master
 	}
 }
 void Status::increaseScore(int i) {
