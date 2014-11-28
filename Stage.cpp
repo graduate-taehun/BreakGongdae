@@ -211,13 +211,17 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         }
 		case EventKeyboard::KeyCode::KEY_C:
 		{
-			auto blade = Sprite::create("Blade.png");
+			blade = Sprite::create("Blade.png");
 			blade->setPosition(visibleSize.width / 2, character->getPosition().y);
 			addChild(blade);
 			if (!isScheduled(schedule_selector(Stage::blade_scheduler)))
 				schedule(schedule_selector(Stage::blade_scheduler));
 			
-		}
+		}/*
+		case EventKeyboard::KeyCode::KEY_V:
+		{
+											  removeChild(blade);
+		}*/
         default:
             break;
     }
@@ -231,6 +235,8 @@ void Stage::blade_scheduler(float time)
 		setNextBuilding();
 		unschedule(schedule_selector(Stage::blade_scheduler));
 	}
+	status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
+	status->increaseCombo(1, blade->getPosition()+Vec2(0,400));
 }
 void Stage::menuCloseCallback(Ref* pSender)
 {

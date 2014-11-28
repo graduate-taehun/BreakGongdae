@@ -50,7 +50,7 @@ protected:
     Status* status;
     Character* character;
     Building* building;
-   
+	Sprite* blade;
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {}
     virtual bool onContactBegin(PhysicsContact& contact) {return true;}
