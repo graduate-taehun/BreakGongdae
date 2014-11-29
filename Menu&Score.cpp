@@ -15,6 +15,75 @@
 #include <cstdlib>
 using namespace std;
 
+//
+//ScoreBoard
+//
+Scene* ScoreBoard::createScene()
+{
+    auto scene = Scene::create();
+    auto layer = ScoreBoard::create();
+    scene->addChild(layer);
+    return scene;
+}
+
+bool ScoreBoard::init()
+{
+    if (!Layer::init())
+        return false;
+    
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
+    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
+    
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+    
+    auto label = LabelTTF::create("ScoreBoard", "Arial", 50);
+    label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
+    this->addChild(label);
+    
+    // 파일 입력
+    // string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
+    // "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
+    string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
+    ifstream in;
+    in.open(filePath.c_str());
+    
+    int score;
+    int i = 0;
+    
+    while (!in.eof()){
+        in >> score;
+        auto lbtemp = LabelTTF::create(to_string(score), "Arial", 35);
+        lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 +100 - 50 * i++));
+        addChild(lbtemp);
+    }
+    
+    in.close();
+    
+    return true;
+}
+
+void ScoreBoard::menuCloseCallback(Ref* pSender)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
+    return;
+#endif
+    
+    Director::getInstance()->replaceScene(MenuStage::createScene());
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    exit(0);
+#endif
+}
+
+//
+//MenuStage
+//
 Scene* MenuStage::createScene()
 {
     srand(time(NULL));
@@ -23,6 +92,7 @@ Scene* MenuStage::createScene()
     scene->addChild(layer);
     return scene;
 }
+
 bool MenuStage::init()
 {
     if (!Layer::init())
@@ -58,6 +128,7 @@ bool MenuStage::init()
     
     return true;
 }
+
 void MenuStage::menuCallbackforStage(Ref* pSender){
     Director::getInstance()->replaceScene(Stage1::createScene());
 }
@@ -68,67 +139,9 @@ void MenuStage::menuCallbackforExit(Ref* pSender){
     Director::getInstance()->end();
 }
 
-Scene* ScoreBoard::createScene()
-{
-    auto scene = Scene::create();
-    auto layer = ScoreBoard::create();
-    scene->addChild(layer);
-    return scene;
-}
-bool ScoreBoard::init()
-{
-    if (!Layer::init())
-        return false;
-    
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
-    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
-    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
-    
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-		
-	auto label = LabelTTF::create("ScoreBoard", "Arial", 50);
-	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
-	this->addChild(label);
-
-	// 파일 입력
-	// string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
-	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
-	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
-	ifstream in;
-	in.open(filePath.c_str());
-
-	int score;
-	int i = 0;
-	
-	while (!in.eof()){
-		in >> score;
-		auto lbtemp = LabelTTF::create(to_string(score), "Arial", 35);
-		lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 +100 - 50 * i++));
-		addChild(lbtemp);
-	}
-
-	in.close();
-	
-    return true;
-}
-void ScoreBoard::menuCloseCallback(Ref* pSender)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
-    return;
-#endif
-    
-    Director::getInstance()->replaceScene(MenuStage::createScene());
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
-}
-
+//
+//EndScene
+//
 Scene* EndScene::createSceneWithScore(Status status) {
 	auto scene = Scene::create();
 	auto layer = EndScene::createWithScore(status);
@@ -190,6 +203,7 @@ bool EndScene::initWithScore(Status& status) {
 
 	return true;
 }
+
 void EndScene::menuCloseCallback(Ref* pSender){	
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");

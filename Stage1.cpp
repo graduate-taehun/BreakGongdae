@@ -9,6 +9,9 @@
 #include "Stage1.h"
 #include "Stage2.h"
 #include "BonusStage.h"
+
+const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
+
 Scene* Stage1::createScene()
 {
     auto scene=Stage::createScene();
@@ -35,20 +38,20 @@ Stage1* Stage1::create() {
 }
 bool Stage1::init(Status* _status=nullptr) {
     if(!Stage::init(_status)) return false;
-    //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
-    //fileBuilding[10]={};
+    level=fileBuilding.cbegin();
     building=nullptr;
+    blade=nullptr;
 	lbTitle->setString("Stage1");
 	setNextBuilding();
     return true;
 }
 void Stage1::setNextBuilding() {
-    Vec2 posRemoved(0,0);
+    float posRemoved;
     if(building!=nullptr)
-        posRemoved=building->getPosition();
+        posRemoved=building->getPositionOfTop();
     removeChild(building);
-    building = Building::create(10, "block.png",wholeNumberOfBuilding);
-    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved.y+BUILDING_START_HEIGHT);
+    building = Building::create(*level++);
+    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved+BUILDING_START_HEIGHT);
     addChild(building,2);
 }
 void Stage1::decreaseCharacterHP() {
@@ -110,10 +113,9 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                 status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
                 status->increaseCombo(1, character->getPosition());//하나 부실때마다 콤보 1씩 증가하게
                 if(building->attack(false)) {
-					if (1)//이거 대신에 stage전환인자확인을 해줘야됨)
-					{
+					if (level==fileBuilding.cend())
                         replaceNextScene();
-					}
+					
                     setNextBuilding();
                     break;
                 }
@@ -141,8 +143,8 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 				blade->setPosition(visibleSize.width / 2, character->getPositionOfTop());
 				addChild(blade, MENU_Z_ORDER - 1);
 
-				if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
-					schedule(schedule_selector(Stage1::blade_scheduler));
+				//if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
+                schedule(schedule_selector(Stage1::blade_scheduler));
 			
 				status->setBlade(0);
 			}
@@ -170,11 +172,12 @@ void Stage1::block_scheduler(float time) {
             status->decreaseGauge(false);
             character->getPhysicsBody()->setVelocity(Vec2(0,-CHARACTER_VEL_AFTER_BLOCKING+building->getPhysicsBody()->getVelocity().y));
         }
+        
+        //땅에서 막기를 사용하면 콤보가 끊어진다.
         if (character->getState() == sGround) {
             status->decreaseGauge(true);
             status->resetCombo();
         }
-        //땅에서 막기를 사용하면 콤보가 끊어진다. 나중에 죽었을때도 콤보가 끊어지도록 수정해야함
         
         building->getPhysicsBody()->setVelocity(Vec2(0,BUILDING_VEL_AFTER_BLOCKING));
         //if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
@@ -183,14 +186,15 @@ void Stage1::block_scheduler(float time) {
 void Stage1::blade_return_scheduler(float time) {
     blade->setOpacity(0);
     blade->getPhysicsBody()->setVelocity(Vec2(0,-BLADE_VELOCITY*3));
-    schedule(schedule_selector(Stage1::jump_scheduler));
+
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
 }
 void Stage1::blade_scheduler(float time)
 {
-    if(isScheduled(schedule_selector(Stage1::jump_scheduler)))
+    if(isScheduled(schedule_selector(Stage1::jump_scheduler))) {
         unschedule(schedule_selector(Stage1::jump_scheduler));
+    }
  
 	static bool breaking=true;
     setViewPoint(blade->getPosition().y);
@@ -205,9 +209,10 @@ void Stage1::blade_scheduler(float time)
             }
         }
     }
-    else if(blade->getPosition().y<=visibleSize.height/2) {
+    else if(blade->getPosition().y<=visibleSize.height/2 || blade->getPosition().y<=character->getPosition().y) {
         breaking=true;
         unschedule(schedule_selector(Stage1::blade_scheduler));
+        schedule(schedule_selector(Stage1::jump_scheduler));
         removeChild(blade);
         setNextBuilding();
     }

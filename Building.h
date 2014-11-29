@@ -11,30 +11,36 @@
 
 #include "cocos2d.h"
 #include "BalanceSetting.h"
-#include <queue>
+#include <string>
+#include <map>
+#include <vector>
 USING_NS_CC;
+using namespace std;
 
 class Block : public Sprite {
+private:
     int durability;
-    virtual bool init(int _durability);
+    virtual bool init(int _durability, string filename, int index);
+    
 public:
     //Block(int _durability=10) : durability(_durability) {}
     int getDurability();
     void attack();
-    static Block* createWithDurability(int _durability);
+    static Block* create(int _durability, string filename, int index);
     
 };
 
-using namespace std;
 class Building : public Layer {
 private:
     queue<Block *>* blocks;
-    PhysicsMaterial material;
-    virtual bool init(int numbers, string filename, int level);
-public:
-    ~Building();
+    Sprite* background;
+    const static PhysicsMaterial material;
+    const static map<string,const vector<int>> durabilities;
     
-    static Building* create(int numbers, string filename, int level);
+    virtual bool init(string filename);
+    
+public:
+    static Building* create(string filename);
     void setPositionOfBottom(float bottom);
     float getPositionOfTop();
     float getPositionOfBottom();

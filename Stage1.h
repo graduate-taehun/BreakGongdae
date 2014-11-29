@@ -10,6 +10,8 @@
 #define __BreakGongDae__Stage1__
 
 #include "Stage.h"
+#include <vector>
+
 class Stage1 : public Stage {
 private:
     void blade_scheduler(float time);
@@ -17,23 +19,24 @@ private:
     void block_scheduler(float time);
 
 protected:
+    vector<string>::const_iterator level;
     Building* building;
     Sprite* blade;
     
-    virtual bool init(Status* _status);
-    int wholeNumberOfBuilding;
-    queue<string> fileBuilding;
     virtual void setNextBuilding();
+    
+    void decreaseCharacterHP();
+    
+    virtual void replaceNextScene();
     
     virtual bool onContactBegin(PhysicsContact& contact);
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     
-    void decreaseCharacterHP();
+    virtual bool init(Status* _status);
     
-    virtual void replaceNextScene();
-
 public:
+    static const vector<string> fileBuilding;
     static cocos2d::Scene* createScene();
     static Stage1* create();
 };

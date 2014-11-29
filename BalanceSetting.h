@@ -17,9 +17,9 @@
 
 #define BUILDING_VEL_LIMIT 600
 #define GRAVITY 400
-#define BUILDING_START_HEIGHT 1000
+#define BUILDING_START_HEIGHT 500
 
-#define CHARACTER_JUMP_VEL 1000
+#define CHARACTER_JUMP_VEL 1200
 
 #define ATTACK_RANGE 100
 
@@ -35,6 +35,33 @@
 #define HONEY_BSCORE 2
 #define NORMAL_BSCORE 1
 #define HARD_BSCORE 0
+
+#define WIDTH_BLOCK 780
+#define HEIGHT_BLOCK 260
+
+#define FILE_BUILDINGS_STAGE1 \
+    "Muenujae.png", \
+    "Jigok.png", \
+    "Old_dormitory_9101112.png", \
+    "Old_dormitory_131415.png", \
+    "Gym.png", \
+    "Old_dormitory_dice.png", \
+    "Old_dormitory_171819.png", \
+    "RC.png", \
+    "Old_dormitory_1234.png", \
+    "Old_dormitory_5678.png", \
+    "78.png"
+
+#define DURABS_MUEUNJAE 1,1,2
+#define DURABS_JIGOK 5
+#define DURABS_OLD_DORM_4 1,2,1,2,1,3,1,4
+#define DURABS_OLD_DORM_3 1,2,1,3,1,4
+#define DURABS_GYM 4,4,4
+#define DURABS_DICE 5,6
+#define DURABS_RC 1,1,2,3,5
+#define DURABS_78 1
+
+
 #endif
 
 /*
@@ -72,3 +99,6 @@
 	0011
 	0101
 */
+/*
+ "Mueunjae.png", "Jigok.png", "Old_dormitory_9101112.png", "Old_dormitory_131415.png", "Old_dormitory_dice.png", "Old_dormitory_171819.png", "RC.png", "Old_dormitory_1234.png", "Old_dormitory_5678.png", "78.png"
+ */

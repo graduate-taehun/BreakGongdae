@@ -1,9 +1,8 @@
-
 //
 //  BonusStage.h
 //  BreakGongDae
 //
-//  Created by ¿ÃªÛ?Œ on 2014. 11. 28..
+//  Created by 이상민 on 2014. 11. 28..
 //
 //
 
