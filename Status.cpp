@@ -13,14 +13,15 @@ using namespace std;
 bool Status::init() {
     if(!Layer::init())
         return false;
-
-	combo = 0;
+	
     score = 0;
+    combo = 0;
 	MAX_COMBO = 0;
+    currentHP = MAX_HP;
+    B_Score=0;
 	currentblade = 0;
-	currentHP = MAX_HP;
-    currentGauge = 100;
-    targetGauge = 100;
+    currentGauge = MAX_GAUGE;
+    targetGauge = MAX_GAUGE;
     
     bar_HP = Sprite::create("status_hp.png");
     float x = -bar_HP->getContentSize().width/2;
@@ -69,23 +70,25 @@ Status::Status(const Status & st) {
     Status::init();
     
     score = st.score;
-    lbScore->setString(string("score : ") + to_string(score));
-    
-    currentHP = st.currentHP;
-    bar_HP->setTextureRect(Rect(0, 0, getContentSize().width * currentHP /MAX_HP, bar_HP->getContentSize().height));
+    lbScore->setString(st.lbScore->getString());
     
     combo=st.combo;
-    lbCombo->setString(string("combo : ") + to_string(combo));
+    lbCombo->setString(st.lbCombo->getString());
+    
+    currentHP = st.currentHP;
+    bar_HP->setTextureRect(st.bar_HP->getTextureRect());
+    
+    B_Score=st.B_Score;
 	
     MAX_COMBO = st.MAX_COMBO;
-	
+    
+    currentblade=st.currentblade;
+    
     currentGauge=st.currentGauge;
     
     targetGauge=st.targetGauge;
     
-    currentblade=st.currentblade;
-    
-    bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_HP->getContentSize().height));
+    bar_blade->setTextureRect(st.bar_blade->getTextureRect());
 }
 void Status::decreaseHP() {
     currentHP -= MAX_HP/3;
@@ -96,6 +99,7 @@ void Status::resetCombo() {
     combo = 0;
     lbCombo->setString(string("combo : ") + to_string(combo));
 }
+
 void Status::increaseCombo(int i, const Vec2& posCharacter) {
 
 	if (currentblade<MAX_BLADE)
@@ -191,24 +195,10 @@ void Status::setBlockingGaugeMode(bool decrease) {
     if(decrease && blockingIsPossible()) targetGauge=0;
     else targetGauge=MAX_GAUGE;
 }
-/*
-void Status::setBonusScore(int s, int i)
-{
-	bonus_score[i] = s;
-}
-int Status::getBonusScore(int i)
-{
-	return bonus_score[i];
-}*/
 
 void Status::increaseBScore(int i) {
 	B_Score = B_Score + i;
 }
 int Status::getBScore() {
 	return B_Score;
-}
-
-void Status::setBScore(int i)
-{
-	B_Score = i;
 }
