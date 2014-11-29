@@ -7,7 +7,7 @@
 //
 #include "BonusStage.h"
 #include "Stage2.h"
-//Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
+
 Scene* BonusStage::createScene(Status* _status)
 {
 	auto scene = Stage::createScene();
@@ -42,6 +42,11 @@ bool BonusStage::init(Status* _status) {
 
 	return true;
 }
+
+void BonusStage::replaceNextScene() {
+    Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
+}
+
 bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	if (!Stage::onContactBegin(contact)) return false;
 	/*
@@ -101,7 +106,7 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 		makesubject();
 	}
 	else if (stage_num==3)
-		Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
+        replaceNextScene();
 	return true;
 }
 /*

@@ -20,7 +20,7 @@ bool LaserWarning::init() {
     return true;
 }
 void LaserWarning::warning_scheduler(float time) {
-    setOpacity(getOpacity()-3);
+    setOpacity(getOpacity()-3.5);
     if (getOpacity()<5) {
         setOpacity(0);
         //Sett Laser

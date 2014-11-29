@@ -30,6 +30,8 @@ protected:
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     
     void decreaseCharacterHP();
+    
+    virtual void replaceNextScene();
 
 public:
     static cocos2d::Scene* createScene();

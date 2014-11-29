@@ -159,6 +159,7 @@ void Stage::jump_scheduler(float time) {
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
 }
+
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
 		CCDirector::sharedDirector()->resume();

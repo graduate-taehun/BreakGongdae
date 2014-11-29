@@ -38,7 +38,7 @@ bool Stage1::init(Status* _status=nullptr) {
     //fileBuilding=queue<string>("Mueunjae.png", "RC.png", "78.png", "Old_dormitory.png", "Jigok.png");
     //fileBuilding[10]={};
     building=nullptr;
-	lbTitle->setString("Stage2");
+	lbTitle->setString("Stage1");
 	setNextBuilding();
     return true;
 }
@@ -58,6 +58,11 @@ void Stage1::decreaseCharacterHP() {
     if (status->getHP() == 0)
         Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
 }
+
+void Stage1::replaceNextScene() {
+    Director::getInstance()->replaceScene(BonusStage::createScene(new Status(*status)));
+}
+
 bool Stage1::onContactBegin(PhysicsContact& contact) {
     if(!Stage::onContactBegin(contact)) return false;
     building->getPhysicsBody()->setCategoryBitmask(0x03);
@@ -107,7 +112,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                 if(building->attack(false)) {
 					if (1)//이거 대신에 stage전환인자확인을 해줘야됨)
 					{
-						Director::getInstance()->replaceScene(BonusStage::createScene(new Status(*status)));
+                        replaceNextScene();
 					}
                     setNextBuilding();
                     break;

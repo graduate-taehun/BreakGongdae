@@ -19,7 +19,7 @@ private:
     void makeLaser_scheduler(float time);
     void removeLaser_scheduler(float time);
     int laserposition;
-
+    virtual void replaceNextScene();
 public:
     ~Stage2();
     void shotbyLaser();
