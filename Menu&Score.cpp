@@ -195,6 +195,7 @@ bool EndScene::initWithScore(Status& status) {
 	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
 	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
 	ofstream out;
+//	out.open(filePath.c_str(),ios_base::openmode("wb"));
 	out.open(filePath.c_str());
 
 	out << status.getScore() << endl;

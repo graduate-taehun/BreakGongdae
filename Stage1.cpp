@@ -12,8 +12,7 @@
 
 const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
 
-Scene* Stage1::createScene()
-{
+Scene* Stage1::createScene(){
     auto scene=Stage::createScene();
     scene->removeChildByTag(Stage::THIS_TAG);
     
@@ -46,7 +45,7 @@ bool Stage1::init(Status* _status=nullptr) {
     return true;
 }
 void Stage1::setNextBuilding() {
-    float posRemoved;
+	float posRemoved = getPosition().y + getContentSize().height;
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
@@ -190,11 +189,9 @@ void Stage1::blade_return_scheduler(float time) {
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
 }
-void Stage1::blade_scheduler(float time)
-{
-    if(isScheduled(schedule_selector(Stage1::jump_scheduler))) {
+void Stage1::blade_scheduler(float time){
+    if(isScheduled(schedule_selector(Stage1::jump_scheduler)))
         unschedule(schedule_selector(Stage1::jump_scheduler));
-    }
  
 	static bool breaking=true;
     setViewPoint(blade->getPosition().y);

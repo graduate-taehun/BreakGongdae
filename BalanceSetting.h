@@ -70,7 +70,6 @@
 
 #define FILE_BUILDINGS_STAGE2 ""
 
-
 #endif
 
 /*
@@ -110,4 +109,4 @@
 */
 /*
  "Mueunjae.png", "Jigok.png", "Old_dormitory_9101112.png", "Old_dormitory_131415.png", "Old_dormitory_dice.png", "Old_dormitory_171819.png", "RC.png", "Old_dormitory_1234.png", "Old_dormitory_5678.png", "78.png"
- */
+*/

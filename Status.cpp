@@ -103,7 +103,7 @@ void Status::resetCombo() {
 void Status::increaseCombo(int i, const Vec2& posCharacter) {
 
 	if (currentblade<MAX_BLADE)
-		currentblade += i;
+		currentblade += 2*i;
 	bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_HP->getContentSize().height));
 
 	combo += i;
@@ -173,7 +173,8 @@ int Status::getBlade(){ return currentblade; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
 int Status::getMAX_BLADE(){ return MAX_BLADE; }
 void Status::setBlade(int b){ currentblade = b; }
-//char* Status::getcoinCombo(){ return coinCombo; }
+void Status::increaseBScore(int i) { B_Score = B_Score + i; }
+int Status::getBScore() { return B_Score; }
 
 void Status::gauge_scheduler(float time) {
     if(currentGauge>targetGauge) currentGauge-=0.5;
@@ -194,11 +195,4 @@ void Status::decreaseGauge(bool onGround) {
 void Status::setBlockingGaugeMode(bool decrease) {
     if(decrease && blockingIsPossible()) targetGauge=0;
     else targetGauge=MAX_GAUGE;
-}
-
-void Status::increaseBScore(int i) {
-	B_Score = B_Score + i;
-}
-int Status::getBScore() {
-	return B_Score;
 }

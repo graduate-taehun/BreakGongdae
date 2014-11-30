@@ -59,21 +59,22 @@ void BonusStage::replaceNextScene() {
 
 bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	if (!Stage::onContactBegin(contact)) return false;
-	/*
+/*
 	building->getPhysicsBody()->setCategoryBitmask(0x03);
 	building->getPhysicsBody()->setContactTestBitmask(0x08);
 	building->getPhysicsBody()->setCollisionBitmask(0x03);
-	*/
-    
+*/
     auto Label = CCLabelTTF::create("", "Arial Rounded MT Bold", 30);
     bool leftorright = rand() % 2;
     Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPosition().y + 80);
     Label->setPhysicsBody(PhysicsBody::createBox(Label->getContentSize()));
     Label->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
     Label->getPhysicsBody()->setCollisionBitmask(0x00);
-    if(contact.getShapeA()->getBody()->getNode()==nullptr
+    
+	if(contact.getShapeA()->getBody()->getNode()==nullptr
        || contact.getShapeB()->getBody()->getNode()==nullptr) return true;
-    auto course=(HONEY_TAG <= contact.getShapeA()->getBody()->getNode()->getTag()
+    
+	auto course=(HONEY_TAG <= contact.getShapeA()->getBody()->getNode()->getTag()
                  && contact.getShapeA()->getBody()->getNode()->getTag() <= HARD_TAG)
                 ?(contact.getShapeA()->getBody()->getNode())
                 :(contact.getShapeB()->getBody()->getNode());
@@ -100,18 +101,17 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
     Label->setString(strForLabel);
     addChild(Label, MENU_Z_ORDER-1);
     
-    for(int i=0; i<3; i++) {
+    for(int i=0; i<3; i++)
         removeChild(courses[i]);
-    }
-    if(cntMajor==3) replaceNextScene();
-    makeCourses();
+   
+	if(cntMajor==3) replaceNextScene();
+		makeCourses();
 	return true;
 }
 
 void BonusStage::makeCourses() {
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
-	int course_select[3];
-	int k=0;
+	int k=0, course_select[3];
 
 	while (k < 3) {
 		int check = 0;
@@ -129,7 +129,8 @@ void BonusStage::makeCourses() {
     for(int i=0; i<3; i++) {
         courses[i]=Sprite::create(string()+(char)(i+'b')+".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
-        auto body = PhysicsBody::createBox(courses[i]->getContentSize(), material);
+    
+		auto body = PhysicsBody::createBox(courses[i]->getContentSize(), material);
         body->setCategoryBitmask(0x03);
         body->setContactTestBitmask(0x08);
         body->setCollisionBitmask(0x03);
