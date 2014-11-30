@@ -12,9 +12,12 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <vector>
+#include <algorithm>
 #include <cstdlib>
 using namespace std;
 
+bool comp(int i, int j){ return (i > j); }
 //
 //ScoreBoard
 //
@@ -46,7 +49,7 @@ bool ScoreBoard::init()
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
 
-	auto label = LabelTTF::create("ScoreBoard", "Arial Rounded MT Bold", 50);
+	auto label = LabelTTF::create("** Ranking **", "Arial Rounded MT Bold", 60);
     label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
     this->addChild(label);
     
@@ -57,29 +60,32 @@ bool ScoreBoard::init()
     ifstream in;
     in.open(filePath.c_str());
     
-	for (int i = 1; i <= 5; i++){	
-		string score;
-		getline(in, score);
-
-		if (!in.eof()){
-			LabelTTF* lbtemp;
-
-			if (i == 1)
-				lbtemp = LabelTTF::create(to_string(i) + "st        " + score, "Arial Rounded MT Bold", 35);
-			else if (i == 2)
-				lbtemp = LabelTTF::create(to_string(i) + "nd        " + score, "Arial Rounded MT Bold", 35);
-			else if (i == 3)
-				lbtemp = LabelTTF::create(to_string(i) + "rd        " + score, "Arial Rounded MT Bold", 35);
-			else
-				lbtemp = LabelTTF::create(to_string(i) + "th        " + score, "Arial Rounded MT Bold", 35);
-
-			lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 100 - 50 * i++));
-			addChild(lbtemp);
-		}
-		else
-			break;
+	vector<int> temp_score(0);
+	while (!in.eof()){
+		int score;
+		in >> score;
+		temp_score.push_back(score);
 	}
+	LabelTTF* lbtemp;
+	sort(temp_score.begin(), temp_score.end(), comp);
 
+	for (int i = 1; i <= 5; i++){	
+		if (i > temp_score.size())
+			break;
+
+		if (i == 1)
+			lbtemp = LabelTTF::create(to_string(i) + "st        " +	to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+		else if (i == 2)
+			lbtemp = LabelTTF::create(to_string(i) + "nd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+		else if (i == 3)
+			lbtemp = LabelTTF::create(to_string(i) + "rd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+		else
+			lbtemp = LabelTTF::create(to_string(i) + "th        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+
+		lbtemp->setPosition(Vec2(origin.x + visibleSize.width *9 / 24, origin.y + visibleSize.height / 2 + 100 - 50 * i));
+		lbtemp->setAnchorPoint(Vec2(0, 0.5));
+		addChild(lbtemp);
+	}
     in.close();
     
     return true;
