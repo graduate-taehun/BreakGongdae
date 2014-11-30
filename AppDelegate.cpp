@@ -3,12 +3,9 @@
 #include "Menu&Score.h"
 USING_NS_CC;
 
-AppDelegate::AppDelegate() {
-}
+AppDelegate::AppDelegate() {}
 
-AppDelegate::~AppDelegate() 
-{
-}
+AppDelegate::~AppDelegate() {}
 
 //if you want a different context,just modify the value of glContextAttrs
 //it will takes effect on all platforms
