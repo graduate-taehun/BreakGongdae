@@ -24,8 +24,8 @@ private:
     void stopAttackAction();
     
 public:
-    static float ATTACK_FRAME;
-    static const int ATTACK_TAG = 21;
+    const static float ATTACK_FRAME;
+    const static int ATTACK_TAG = 21;
     virtual bool init();
     
     CREATE_FUNC(Character);

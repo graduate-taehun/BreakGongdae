@@ -14,6 +14,7 @@
 #define BLOCKING_TIME_LIMIT 3000
 #define COST_BLOCKING 50
 #define MIN_COST_BLOCKING 15
+#define BLOCKING_GAUGE_VELOCITY 0.5
 
 #define BUILDING_VEL_LIMIT 600
 #define GRAVITY 400
@@ -69,6 +70,7 @@
                   10
 
 #define FILE_BUILDINGS_STAGE2 ""
+
 
 #endif
 

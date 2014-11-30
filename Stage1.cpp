@@ -10,7 +10,7 @@
 #include "Stage2.h"
 #include "BonusStage.h"
 
-const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
+//const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
 
 Scene* Stage1::createScene(){
     auto scene=Stage::createScene();
@@ -45,7 +45,7 @@ bool Stage1::init(Status* _status=nullptr) {
     return true;
 }
 void Stage1::setNextBuilding() {
-	float posRemoved = getPosition().y + getContentSize().height;
+    float posRemoved=0;
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);

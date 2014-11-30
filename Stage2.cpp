@@ -9,7 +9,7 @@
 #include "Stage2.h"
 #include <climits>
 
-const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
+//const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
 
 Scene* Stage2::createScene(Status* _status)
 {

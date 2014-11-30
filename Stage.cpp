@@ -9,7 +9,7 @@
 #include "Stage.h"
 #include <SimpleAudioEngine.h>
 
-Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
+//Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
@@ -183,8 +183,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             if (Game_Pause == 0) {
                 CCDirector::sharedDirector()->pause();
                 Game_Pause = 1;
-                //CCScene* pScene = PopLayer::scene(); //팝업레이어는 일단 미완성이라 주석처리함
-                //this->addChild(pScene, 2000, 2000);
             }
         }		
         default:
@@ -204,7 +202,3 @@ void Stage::menuCloseCallback(Ref* pSender)
 	exit(0);
 #endif
 }
-/*void Stage::setGamePause(bool p)
-{
-	Game_Pause = p;
-}*/

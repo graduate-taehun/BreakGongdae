@@ -177,8 +177,8 @@ void Status::increaseBScore(int i) { B_Score = B_Score + i; }
 int Status::getBScore() { return B_Score; }
 
 void Status::gauge_scheduler(float time) {
-    if(currentGauge>targetGauge) currentGauge-=0.5;
-    else if(currentGauge<targetGauge) currentGauge+=0.5;
+    if(currentGauge>targetGauge) currentGauge-=BLOCKING_GAUGE_VELOCITY;
+    else if(currentGauge<targetGauge) currentGauge+=BLOCKING_GAUGE_VELOCITY;
     //else targetGauge=MAX_GAUGE;
     bar_gauge->setTextureRect(Rect(0, 0, getContentSize().width * currentGauge /MAX_GAUGE, bar_gauge->getContentSize().height));
 }

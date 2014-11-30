@@ -8,7 +8,7 @@
 
 #include "Character.h"
 
-float Character::ATTACK_FRAME = 0.1f;
+//const float Character::ATTACK_FRAME = 0.1f;
 bool Character::init() {
     if(!Sprite::initWithFile("grossini.png"))
         return false;

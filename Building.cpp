@@ -45,7 +45,8 @@ void Block::attack() {
 //
 //Building
 //
-const PhysicsMaterial Building::material=PhysicsMaterial(10000000.0f,0.0f,0.0f);
+//const PhysicsMaterial Building::material=PhysicsMaterial(10000000.0f,0.0f,0.0f);
+
 /*
 const map<string, const vector<int>> Building::durabilities
 = {
@@ -62,20 +63,6 @@ const map<string, const vector<int>> Building::durabilities
 	{ Stage1::fileBuilding[10], vector<int>{DURABS_78} }
 };
 */
-const map<string, const vector<int>> Building::durabilities
-={
-	{"Muenujae.png", vector<int>{1,1,2} },
-	{"Jigok.png", vector<int>{5} },
-	{"Old_dormitory_9101112.png", vector<int>{1,2,1,2,1,3,1,4} },
-	{"Old_dormitory_131415.png", vector<int>{1,2,1,3,1,4} },
-	{"Gym.png", vector<int>{4,4,4} },
-	{"Old_dormitory_dice.png", vector<int>{5,6} },
-	{"Old_dormitory_171819.png", vector<int>{1,2,1,3,1,4} },
-	{"RC.png", vector<int>{1,1,2,3,5} },
-	{"Old_dormitory_1234.png", vector<int>{1,2,1,2,1,3,1,4} },
-	{"Old_dormitory_5678.png", vector<int>{1,2,1,2,1,3,1,4} },
-	{"78.png", vector<int>{1} }
-};
 
 bool Building::init(string filename) {
     if(!Layer::init()) return false;
