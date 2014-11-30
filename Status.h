@@ -40,6 +40,7 @@ private:
     CCLabelTTF *lbCombo;
     
     virtual bool init();
+
 public:
     Status() {}
     Status(const Status & st);

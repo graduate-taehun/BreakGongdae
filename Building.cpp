@@ -27,8 +27,7 @@ Block* Block::create(int _durability, string filename, int index) {
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
@@ -47,19 +46,35 @@ void Block::attack() {
 //Building
 //
 const PhysicsMaterial Building::material=PhysicsMaterial(10000000.0f,0.0f,0.0f);
+/*
+const map<string, const vector<int>> Building::durabilities
+= {
+	{ Stage1::fileBuilding[0], vector<int>{DURABS_MUEUNJAE} },
+	{ Stage1::fileBuilding[1], vector<int>{DURABS_JIGOK} },
+	{ Stage1::fileBuilding[2], vector<int>{DURABS_OLD_DORM_4} },
+	{ Stage1::fileBuilding[3], vector<int>{DURABS_OLD_DORM_3} },
+	{ Stage1::fileBuilding[4], vector<int>{DURABS_GYM} },
+	{ Stage1::fileBuilding[5], vector<int>{DURABS_DICE} },
+	{ Stage1::fileBuilding[6], vector<int>{DURABS_OLD_DORM_3} },
+	{ Stage1::fileBuilding[7], vector<int>{DURABS_RC} },
+	{ Stage1::fileBuilding[8], vector<int>{DURABS_OLD_DORM_4} },
+	{ Stage1::fileBuilding[9], vector<int>{DURABS_OLD_DORM_4} },
+	{ Stage1::fileBuilding[10], vector<int>{DURABS_78} }
+};
+*/
 const map<string, const vector<int>> Building::durabilities
 ={
-    {Stage1::fileBuilding[0],vector<int>{DURABS_MUEUNJAE}},
-    {Stage1::fileBuilding[1],vector<int>{DURABS_JIGOK}},
-    {Stage1::fileBuilding[2],vector<int>{DURABS_OLD_DORM_4}},
-    {Stage1::fileBuilding[3],vector<int>{DURABS_OLD_DORM_3}},
-    {Stage1::fileBuilding[4],vector<int>{DURABS_GYM}},
-    {Stage1::fileBuilding[5],vector<int>{DURABS_DICE}},
-    {Stage1::fileBuilding[6],vector<int>{DURABS_OLD_DORM_3}},
-    {Stage1::fileBuilding[7],vector<int>{DURABS_RC}},
-    {Stage1::fileBuilding[8],vector<int>{DURABS_OLD_DORM_4}},
-    {Stage1::fileBuilding[9],vector<int>{DURABS_OLD_DORM_4}},
-    {Stage1::fileBuilding[10],vector<int>{DURABS_78}}
+	{"Muenujae.png", vector<int>{1,1,2} },
+	{"Jigok.png", vector<int>{5} },
+	{"Old_dormitory_9101112.png", vector<int>{1,2,1,2,1,3,1,4} },
+	{"Old_dormitory_131415.png", vector<int>{1,2,1,3,1,4} },
+	{"Gym.png", vector<int>{4,4,4} },
+	{"Old_dormitory_dice.png", vector<int>{5,6} },
+	{"Old_dormitory_171819.png", vector<int>{1,2,1,3,1,4} },
+	{"RC.png", vector<int>{1,1,2,3,5} },
+	{"Old_dormitory_1234.png", vector<int>{1,2,1,2,1,3,1,4} },
+	{"Old_dormitory_5678.png", vector<int>{1,2,1,2,1,3,1,4} },
+	{"78.png", vector<int>{1} }
 };
 
 bool Building::init(string filename) {
@@ -111,26 +126,22 @@ bool Building::init(string filename) {
 Building* Building::create(string filename)
 {
     Building *pRet = new Building();
-    if (pRet && pRet->init(filename))
-    {
+    if (pRet && pRet->init(filename)){
         pRet->autorelease();
         return pRet;
     }
-    else
-    {
+    else{
         delete pRet;
         pRet = NULL;
         return NULL;
     }
 }
 
-
 bool Building::attack(bool isBlade) {
     auto bottom=blocks->front();
     if(!isBlade)
     bottom->attack();
-    
-    
+        
     if(bottom->getDurability()<=0 || isBlade) {
         setPosition(Vec2(getPosition().x,getPosition().y+HEIGHT_BLOCK));
         
@@ -142,7 +153,6 @@ bool Building::attack(bool isBlade) {
             removeAllChildren();
             return true;
         }
-
         //일단 Shape 모두 제거
         getPhysicsBody()->removeAllShapes();
         for(auto i=getChildren().begin(); i!=getChildren().end(); i++) {
@@ -165,7 +175,6 @@ bool Building::attack(bool isBlade) {
         getPhysicsBody()->setCategoryBitmask(0x03);
         getPhysicsBody()->setContactTestBitmask(0x08);
         getPhysicsBody()->setCollisionBitmask(0x03);
-
 	}
     return false;
 }

@@ -9,8 +9,7 @@
 #include "Stage2.h"
 #include <climits>
 
-Scene* Stage2::createScene(Status* _status)
-{
+Scene* Stage2::createScene(Status* _status){
     auto scene=Stage1::createScene();
     scene->removeChildByTag(Stage1::THIS_TAG);
     
@@ -60,8 +59,7 @@ void Stage2::makeLaser_scheduler(float time) {
         laserwarning->setContentSize(Size(getContentSize().width/3,getContentSize().height));
         laserwarning->setPosition(Vec2(posCharacter[laserposition],0));
         
-        addChild(laserwarning,256);
-        
+        addChild(laserwarning,256);        
     }
 }
 

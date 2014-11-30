@@ -17,8 +17,7 @@ USING_NS_CC;
 enum State{ sGround, sAir };
 enum ActionState{Attacking , None, Blocking };
 
-class Character : public Sprite
-{
+class Character : public Sprite{
 private:
     State state;
     ActionState action;
