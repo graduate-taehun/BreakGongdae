@@ -19,7 +19,7 @@ Scene* Stage::createScene()
     Vect gravity = Vect(0.0f, -GRAVITY);
     
     auto scene = Scene::createWithPhysics();
-    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(gravity);
     scene->getPhysicsWorld()->setSubsteps(3);
     
@@ -66,7 +66,7 @@ bool Stage::init(Status* _status=nullptr)
 {
     if (!LayerColor::initWithColor(Color4B(255, 255, 255, 255)))
         return false;
-
+    
 	CCDirector::sharedDirector()->resume();
     
     setContentSize(Size(visibleSize.width,visibleSize.height*10));

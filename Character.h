@@ -22,10 +22,11 @@ private:
     State state;
     ActionState action;
     void stopAttackAction();
-    
+    void pre_jump_scheduler(float time);
 public:
     const static float ATTACK_FRAME;
     const static int ATTACK_TAG = 21;
+    const static float CHARACTER_OFFSET;
     virtual bool init();
     
     CREATE_FUNC(Character);

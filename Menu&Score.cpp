@@ -130,7 +130,7 @@ bool MenuStage::init()
 }
 
 void MenuStage::menuCallbackforStage(Ref* pSender){
-    Director::getInstance()->replaceScene(Stage1::createScene());
+    Director::getInstance()->replaceScene(START_SCENE);
 }
 void MenuStage::menuCallbackforScoreBoard(Ref* pSender){
     Director::getInstance()->replaceScene(ScoreBoard::createScene());

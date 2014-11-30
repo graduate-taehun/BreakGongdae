@@ -9,6 +9,9 @@
 #ifndef BreakGongDae_BalanceSetting_h
 #define BreakGongDae_BalanceSetting_h
 
+#define START_SCENE Stage1::createScene()
+
+//Blocking
 #define CHARACTER_VEL_AFTER_BLOCKING 700
 #define BUILDING_VEL_AFTER_BLOCKING 100
 #define BLOCKING_TIME_LIMIT 3000
@@ -16,12 +19,14 @@
 #define MIN_COST_BLOCKING 15
 #define BLOCKING_GAUGE_VELOCITY 0.5
 
+//Building
 #define BUILDING_VEL_LIMIT 600
 #define GRAVITY 400
 #define BUILDING_START_HEIGHT 500
 
+//Character
 #define CHARACTER_JUMP_VEL 1200
-
+#define TIME_PRE_JUMP 0.2
 #define ATTACK_RANGE 100
 
 #define TIME_WARNING 0.1
@@ -53,6 +58,7 @@
     "Old_dormitory_5678.png", \
     "78.png"
 
+/*
 #define DURABS_MUEUNJAE 1,1,2
 #define DURABS_JIGOK 5
 #define DURABS_OLD_DORM_4 1,2,1,2,1,3,1,4
@@ -68,9 +74,35 @@
                   7,3,3,3,3,3,3,3,3,3,3,\
                   9,4,4,4,4,4,5,5,5,6,6,\
                   10
+*/
+#define DURABS_MUEUNJAE 1,1,1
+#define DURABS_JIGOK 1
+#define DURABS_OLD_DORM_4 1,2,1,2,1,3,1,1
+#define DURABS_OLD_DORM_3 1,2,1,3,1,1
+#define DURABS_GYM 1,1,1
+#define DURABS_DICE 1,1
+#define DURABS_RC 1,1,1,1,1
+#define DURABS_78 4,1,1,1,1,1,1,1,1,1,1,\
+4,1,1,1,1,1,1,1,1,1,1,\
+4,1,1,1,1,1,1,1,1,1,1,\
+5,2,2,2,2,2,2,2,2,2,2,\
+5,2,2,2,2,2,2,2,2,2,2,\
+7,3,3,3,3,3,3,3,3,3,3,\
+9,4,4,4,4,4,5,5,5,6,6,\
+10
 
-#define FILE_BUILDINGS_STAGE2 ""
+#define FILE_MAJORS \
+    "eece", \
+    "csed", \
+    "math", \
+    "cheb"
 
+#define FILE_BUILDINGS_STAGE2 \
+    "ABC.png", \
+    "basic.png", \
+    "electronic.png", \
+    "english.png", \
+    "math.png"
 
 #endif
 

@@ -67,6 +67,7 @@ void Stage1::replaceNextScene() {
 
 bool Stage1::onContactBegin(PhysicsContact& contact) {
     if(!Stage::onContactBegin(contact)) return false;
+    building->getPhysicsBody()->setVelocity(Vec2(0,0));
     building->getPhysicsBody()->setCategoryBitmask(0x03);
     building->getPhysicsBody()->setContactTestBitmask(0x08);
     building->getPhysicsBody()->setCollisionBitmask(0x03);
@@ -74,6 +75,11 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
     decreaseCharacterHP();
     return true;
 }
+
+bool Stage1::isLevelEnd() {
+    return level==fileBuilding.cend();
+}
+
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
         CCDirector::sharedDirector()->resume();
@@ -91,7 +97,6 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         {
             if (character->getState() == sGround){
                 character->setState(sAir);
-                character->getPhysicsBody()->setVelocity(Vec2(0,CHARACTER_JUMP_VEL));
                 
                 if (!isScheduled(schedule_selector(Stage1::jump_scheduler)))
                     schedule(schedule_selector(Stage1::jump_scheduler));
@@ -112,7 +117,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                 status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
                 status->increaseCombo(1, character->getPosition());//하나 부실때마다 콤보 1씩 증가하게
                 if(building->attack(false)) {
-					if (level==fileBuilding.cend())
+					if (isLevelEnd())
                         replaceNextScene();
 					
                     setNextBuilding();
@@ -132,7 +137,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         {
 			if (status->getBlade() == status->getMAX_BLADE()){
 				blade = Sprite::create("Blade.png");
-
+                character->setTexture("ch_blade.png");
 				auto body = PhysicsBody::createBox(blade->getContentSize(), PhysicsMaterial(0.f, 0.5f, 0.5f));
 				body->setCollisionBitmask(0x00);
 				body->setGravityEnable(false);
@@ -201,6 +206,8 @@ void Stage1::blade_scheduler(float time){
             status->increaseCombo(1, blade->getPosition() + Vec2(0, 400));
             if (building->attack(true)){
                 breaking=false;
+                
+                character->setTexture("ch_base.png");
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }

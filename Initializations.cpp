@@ -1,4 +1,5 @@
 #include "Stage2.h"
+#include "BonusStage.h"
 #include "Character.h"
 #include "Building.h"
 
@@ -8,11 +9,15 @@ Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 //Stage1
 const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
 
+//Bonus Stage
+const vector<string> BonusStage::majors={FILE_MAJORS};
+
 //Stage2
 const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
 
 //Character
-const float Character::ATTACK_FRAME = 0.1f;
+const float Character::ATTACK_FRAME = 0.05f;
+const float Character::CHARACTER_OFFSET=50;
 
 //Building
 const PhysicsMaterial Building::material=PhysicsMaterial(10000000.0f,0.0f,0.0f);
@@ -28,5 +33,6 @@ const map<string, const vector<int>> Building::durabilities
     { Stage1::fileBuilding[7], vector<int>{DURABS_RC} },
     { Stage1::fileBuilding[8], vector<int>{DURABS_OLD_DORM_4} },
     { Stage1::fileBuilding[9], vector<int>{DURABS_OLD_DORM_4} },
-    { Stage1::fileBuilding[10], vector<int>{DURABS_78} }
+    { Stage1::fileBuilding[10], vector<int>{DURABS_78} },
+    { Stage2::fileBuilding[0], vector<int>{DURABS_MUEUNJAE} }
 };

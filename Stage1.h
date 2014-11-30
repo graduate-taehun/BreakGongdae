@@ -23,6 +23,8 @@ protected:
     Building* building;
     Sprite* blade;
     
+    virtual bool isLevelEnd();
+    
     virtual void setNextBuilding();
     
     void decreaseCharacterHP();

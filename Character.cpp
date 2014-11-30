@@ -10,10 +10,12 @@
 
 //const float Character::ATTACK_FRAME = 0.1f;
 bool Character::init() {
-    if(!Sprite::initWithFile("grossini.png"))
+    if(!Sprite::initWithFile("ch_base.png"))
         return false;
     
-    auto body = PhysicsBody::createBox(Sprite::getContentSize(),PhysicsMaterial(10.0f,0.0f,0.0f));
+    auto body = PhysicsBody::createBox(Size(getContentSize().width,getContentSize().height-CHARACTER_OFFSET),PhysicsMaterial(10.0f,0.0f,0.0f),Vec2(0,-CHARACTER_OFFSET));
+    ignoreAnchorPointForPosition(false);
+    setAnchorPoint(Vec2(0.5,0.5*(1-CHARACTER_OFFSET/getContentSize().height)));
     //body->setMass(100);
     body->setRotationEnable(false);
 	setPhysicsBody(body);
@@ -26,18 +28,20 @@ bool Character::init() {
 void Character::stopAttackAction(){
     setActionState(None);
 }
+using namespace std;
 void Character::doAttackAction() {
-    stopActionByTag(ATTACK_TAG);
+    if(getActionByTag(ATTACK_TAG)!=nullptr) return;
+    //stopActionByTag(ATTACK_TAG);
     //if (getActionState() == None) {
     setActionState(Attacking);
-    Vector<SpriteFrame*> animFrames(3);
-    char str[100] = { 0 };
-    for (int i = 1; i < 4; i++){
-        sprintf(str, "grossini_dance_%02d.png", i);
-        auto frame = SpriteFrame::create(str, Rect(0, 0, 80, 115));
+    Vector<SpriteFrame*> animFrames(6);
+    string str;
+    for (int i = 1; i <= 6; i++){
+        str="ch_attack_"+to_string(i)+".png";
+        auto frame = SpriteFrame::create(str, getTextureRect());
         animFrames.pushBack(frame);
     }
-    auto frame = SpriteFrame::create("grossini_dance_05.png", Rect(0, 0, 80, 115));
+    auto frame = SpriteFrame::create("ch_base.png", getTextureRect());
     animFrames.pushBack(frame);
     auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
     auto animate = Animate::create(animation);
@@ -46,6 +50,12 @@ void Character::doAttackAction() {
     auto pSequence = Sequence::create(animate, pCallback, nullptr);
     pSequence->setTag(ATTACK_TAG);
     runAction(pSequence);
+}
+
+void Character::pre_jump_scheduler(float time) {
+    
+    getPhysicsBody()->setVelocity(Vec2(0,CHARACTER_JUMP_VEL));
+    setTexture("ch_base.png");
 }
 void Character::setState(State _state){
 	state = _state;
@@ -58,9 +68,19 @@ void Character::setState(State _state){
 		getPhysicsBody()->setCategoryBitmask(0x01);
 		getPhysicsBody()->setContactTestBitmask(0x04);
 		getPhysicsBody()->setCollisionBitmask(0x03);
+        setTexture("ch_jump_start.png");
+        schedule(schedule_selector(Character::pre_jump_scheduler),TIME_PRE_JUMP,1,TIME_PRE_JUMP);
+        
 	}
 }
-float Character::getPositionOfTop() { return getPosition().y + getContentSize().height / 2; }
+void Character::setActionState(ActionState _action){
+    action = _action;
+    if(action==Blocking)
+        setTexture("ch_blocking.png");
+    else if(action==None)
+        setTexture("ch_base.png");
+}
+
+float Character::getPositionOfTop() { return getPosition().y + getContentSize().height/2; }
 State Character::getState(){ return state; }
 ActionState Character::getActionState(){ return action; }
-void Character::setActionState(ActionState _action){ action = _action; }

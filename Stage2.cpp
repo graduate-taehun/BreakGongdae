@@ -41,7 +41,10 @@ bool Stage2::init(Status *_status) {
     if(!Stage1::init(_status)) return false;
     schedule(schedule_selector(Stage2::makeLaser_scheduler),1,INT_MAX,1);
     laserwarning=nullptr;
+    level=Stage2::fileBuilding.cbegin();
 	lbTitle->setString("Stage2");
+    building->setPositionOfBottom(-building->getContentSize().height);
+    setNextBuilding();
 	return true;
 }
 
@@ -51,6 +54,10 @@ Stage2::~Stage2() {
 
 void Stage2::replaceNextScene() {
     
+}
+
+bool Stage2::isLevelEnd() {
+    return level==fileBuilding.cend();
 }
 
 void Stage2::makeLaser_scheduler(float time) {

@@ -93,13 +93,13 @@ bool Building::init(string filename) {
         
         //블록 1개당 1개의 PhysicsShape
         auto shapebox = PhysicsShapeBox::create(block->getContentSize(),material,block->getPosition());
-        shapebox->setTag(i);
         
         body->addShape(shapebox);
         blocks->push(block);
         addChild(block);
     }
-    
+    auto shapeRoof=PhysicsShapeBox::create(Size(WIDTH_BLOCK, HEIGHT_BLOCK/10),material,Vec2(0,(durabTemp.size()-1/20)*HEIGHT_BLOCK));
+    body->addShape(shapeRoof);
     body->setVelocityLimit(BUILDING_VEL_LIMIT);
     
     body->setCategoryBitmask(0x03);
@@ -152,9 +152,9 @@ bool Building::attack(bool isBlade) {
             //shape 재생성 및 추가
             auto shapebox = PhysicsShapeBox::create((*i)->getContentSize(),material,(*i)->getPosition());
             getPhysicsBody()->addShape(shapebox);
-            //크기 재설정
-            
         }
+        auto shapeRoof=PhysicsShapeBox::create(Size(WIDTH_BLOCK, HEIGHT_BLOCK/10),material,Vec2(0,(blocks->size()-1/20)*HEIGHT_BLOCK));
+        getPhysicsBody()->addShape(shapeRoof);
         setContentSize(Size(WIDTH_BLOCK,HEIGHT_BLOCK*blocks->size()));
         background->setTextureRect(Rect(0,0,WIDTH_BLOCK,HEIGHT_BLOCK*blocks->size()));
         background->setContentSize(getContentSize());

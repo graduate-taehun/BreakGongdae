@@ -38,11 +38,8 @@ bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
 	
 	//status->blockingIsPossible.
-	cntMajor = -1;
-    majors[0]="EECE";
-    majors[1]="CSE1";
-    majors[2]="MATH";
-    majors[3]="CSE2";
+	cntMajor = majors.cbegin();
+    
     
 	makeCourses();
 
@@ -104,7 +101,7 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
     for(int i=0; i<3; i++)
         removeChild(courses[i]);
    
-	if(cntMajor==3) replaceNextScene();
+	if(cntMajor==majors.cend()) replaceNextScene();
 		makeCourses();
 	return true;
 }
@@ -125,9 +122,9 @@ void BonusStage::makeCourses() {
 		if (check == 0)
 			k++;
 	}
-    cntMajor++;
+    
     for(int i=0; i<3; i++) {
-        courses[i]=Sprite::create(string()+(char)(i+'b')+".png");
+        courses[i]=Sprite::create(*cntMajor + "_" + to_string(i) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
     
 		auto body = PhysicsBody::createBox(courses[i]->getContentSize(), material);
@@ -140,4 +137,5 @@ void BonusStage::makeCourses() {
         courses[i]->setPhysicsBody(body);
         addChild(courses[i]);
     }
+    cntMajor++;
 }

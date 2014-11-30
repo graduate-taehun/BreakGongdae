@@ -15,12 +15,14 @@
 class Stage2 : public Stage1 {
 private:
 	LaserWarning *laserwarning;
-    virtual bool init(Status* _status);
+    
     void makeLaser_scheduler(float time);
     void removeLaser_scheduler(float time);
+    virtual bool isLevelEnd();
     int laserposition;
     virtual void replaceNextScene();
     
+    virtual bool init(Status* _status);
 public:
     ~Stage2();
     static const vector<string> fileBuilding;
