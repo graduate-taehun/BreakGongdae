@@ -71,7 +71,6 @@
 
 #define FILE_BUILDINGS_STAGE2 ""
 
-
 #endif
 
 /*

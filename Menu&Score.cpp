@@ -53,7 +53,6 @@ bool ScoreBoard::init()
     label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
     this->addChild(label);
     
-    // 파일 입력
     // string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
     // "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
     string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
@@ -77,7 +76,7 @@ bool ScoreBoard::init()
 			break;
 
 		if (i == 1)
-			lbtemp = LabelTTF::create(to_string(i) + "st        " +	to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+			lbtemp = LabelTTF::create(to_string(i) + "st        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
 		else if (i == 2)
 			lbtemp = LabelTTF::create(to_string(i) + "nd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
 		else if (i == 3)
@@ -111,8 +110,7 @@ void ScoreBoard::menuCloseCallback(Ref* pSender)
 //
 //MenuStage
 //
-Scene* MenuStage::createScene()
-{
+Scene* MenuStage::createScene(){
     srand(time(NULL));
     auto scene = Scene::create();
     auto layer = MenuStage::create();
@@ -120,8 +118,7 @@ Scene* MenuStage::createScene()
     return scene;
 }
 
-bool MenuStage::init()
-{
+bool MenuStage::init(){
     if (!Layer::init())
         return false;
     
@@ -152,7 +149,7 @@ bool MenuStage::init()
 }
 
 void MenuStage::menuCallbackforStage(Ref* pSender){
-    Director::getInstance()->replaceScene(Stage1::createScene());
+    Director::getInstance()->replaceScene(Stage2::createScene(nullptr));
 }
 void MenuStage::menuCallbackforScoreBoard(Ref* pSender){
     Director::getInstance()->replaceScene(ScoreBoard::createScene());
@@ -212,7 +209,6 @@ bool EndScene::initWithScore(Status& status) {
 	combo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 180));
 	addChild(combo);
 
-	// 파일 출력
 	// string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
 	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
 	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
