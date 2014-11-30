@@ -12,9 +12,12 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <vector>
+#include <algorithm>
 #include <cstdlib>
 using namespace std;
 
+bool comp(int i, int j){ return (i > j); }
 //
 //ScoreBoard
 //
@@ -41,27 +44,50 @@ bool ScoreBoard::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    auto label = LabelTTF::create("ScoreBoard", "Arial", 50);
+	auto background = Sprite::create("rank.png");
+	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(background);
+
+	auto label = LabelTTF::create("** Ranking **", "Arial Rounded MT Bold", 60);
     label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
     this->addChild(label);
     
-    // 파일 입력
     // string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
     // "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
     string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
     ifstream in;
     in.open(filePath.c_str());
     
-    int score;
-    int i = 0;
-    
-    while (!in.eof()){
-        in >> score;
-        auto lbtemp = LabelTTF::create(to_string(score), "Arial", 35);
-        lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 +100 - 50 * i++));
-        addChild(lbtemp);
-    }
-    
+	vector<int> temp_score(0);
+
+	while (!in.eof()){
+		string score;
+		getline(in,score);
+		if (score == "") break;
+		int a = stoi(score);
+		temp_score.push_back(a);
+	}
+	LabelTTF* lbtemp;
+	sort(temp_score.begin(), temp_score.end(), comp);
+
+	for (int i = 1; i <= 5; i++){	
+		if (i > temp_score.size())
+			break;
+
+		if (i == 1)
+			lbtemp = LabelTTF::create(to_string(i) + "st        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+		else if (i == 2)
+			lbtemp = LabelTTF::create(to_string(i) + "nd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+		else if (i == 3)
+			lbtemp = LabelTTF::create(to_string(i) + "rd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+		else
+			lbtemp = LabelTTF::create(to_string(i) + "th        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+
+		lbtemp->setPosition(Vec2(origin.x + visibleSize.width *9 / 24, origin.y + visibleSize.height / 2 + 100 - 50 * i));
+		lbtemp->setAnchorPoint(Vec2(0, 0.5));
+		addChild(lbtemp);
+	}
     in.close();
     
     return true;
@@ -84,8 +110,7 @@ void ScoreBoard::menuCloseCallback(Ref* pSender)
 //
 //MenuStage
 //
-Scene* MenuStage::createScene()
-{
+Scene* MenuStage::createScene(){
     srand(time(NULL));
     auto scene = Scene::create();
     auto layer = MenuStage::create();
@@ -93,8 +118,7 @@ Scene* MenuStage::createScene()
     return scene;
 }
 
-bool MenuStage::init()
-{
+bool MenuStage::init(){
     if (!Layer::init())
         return false;
     
@@ -105,11 +129,6 @@ bool MenuStage::init()
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
 
-	auto lbTitle = LabelBMFont::create("BreakGongDae", "bitmapFontChinese.fnt");
-	lbTitle->setScale(2, 3);
-	lbTitle->setPosition(visibleSize.width / 2, visibleSize.height * 5 / 6);
-	addChild(lbTitle);
-
 	auto item1 = LabelBMFont::create("START", "bitmapFontTest3.fnt");
 	auto item_1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));
 	item_1->setScale(2, 2);
@@ -117,7 +136,7 @@ bool MenuStage::init()
 	auto item2 = LabelBMFont::create("SCORE", "bitmapFontTest3.fnt");
 	auto item_2 = MenuItemLabel::create(item2, CC_CALLBACK_1(MenuStage::menuCallbackforScoreBoard, this));
 	item_2->setScale(2, 2);
-
+		
 	auto item3 = LabelBMFont::create("EXIT", "bitmapFontTest3.fnt");
 	auto item_3 = MenuItemLabel::create(item3, CC_CALLBACK_1(MenuStage::menuCallbackforExit, this));
 	item_3->setScale(2, 2);
@@ -190,13 +209,11 @@ bool EndScene::initWithScore(Status& status) {
 	combo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 180));
 	addChild(combo);
 
-	// 파일 출력
 	// string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
 	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
 	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
 	ofstream out;
-//	out.open(filePath.c_str(),ios_base::openmode("wb"));
-	out.open(filePath.c_str());
+	out.open(filePath.c_str(), ios::app);
 
 	out << status.getScore() << endl;
 
