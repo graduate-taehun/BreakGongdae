@@ -41,7 +41,12 @@ bool ScoreBoard::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-    auto label = LabelTTF::create("ScoreBoard", "Arial", 50);
+	auto background = Sprite::create("rank.png");
+	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(background);
+
+	auto label = LabelTTF::create("ScoreBoard", "Arial Rounded MT Bold", 50);
     label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
     this->addChild(label);
     
@@ -52,16 +57,29 @@ bool ScoreBoard::init()
     ifstream in;
     in.open(filePath.c_str());
     
-    int score;
-    int i = 0;
-    
-    while (!in.eof()){
-        in >> score;
-        auto lbtemp = LabelTTF::create(to_string(score), "Arial", 35);
-        lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 +100 - 50 * i++));
-        addChild(lbtemp);
-    }
-    
+	for (int i = 1; i <= 5; i++){	
+		string score;
+		getline(in, score);
+
+		if (!in.eof()){
+			LabelTTF* lbtemp;
+
+			if (i == 1)
+				lbtemp = LabelTTF::create(to_string(i) + "st        " + score, "Arial Rounded MT Bold", 35);
+			else if (i == 2)
+				lbtemp = LabelTTF::create(to_string(i) + "nd        " + score, "Arial Rounded MT Bold", 35);
+			else if (i == 3)
+				lbtemp = LabelTTF::create(to_string(i) + "rd        " + score, "Arial Rounded MT Bold", 35);
+			else
+				lbtemp = LabelTTF::create(to_string(i) + "th        " + score, "Arial Rounded MT Bold", 35);
+
+			lbtemp->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 100 - 50 * i++));
+			addChild(lbtemp);
+		}
+		else
+			break;
+	}
+
     in.close();
     
     return true;
