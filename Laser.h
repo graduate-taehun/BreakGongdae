@@ -21,7 +21,6 @@ private:
     void warning_scheduler(float time);
     void laserlaunch_scheduler(float time);
     void laser_scheduler(float time);
-
 public:
     CREATE_FUNC(LaserWarning)
 };

@@ -40,7 +40,7 @@
 #define HEIGHT_BLOCK 260
 
 #define FILE_BUILDINGS_STAGE1 \
-    "Muenujae.png", \
+    "Mueunjae.png", \
     "Jigok.png", \
     "Old_dormitory_9101112.png", \
     "Old_dormitory_131415.png", \
@@ -59,7 +59,16 @@
 #define DURABS_GYM 4,4,4
 #define DURABS_DICE 5,6
 #define DURABS_RC 1,1,2,3,5
-#define DURABS_78 1
+#define DURABS_78 4,1,1,1,1,1,1,1,1,1,1,\
+                  4,1,1,1,1,1,1,1,1,1,1,\
+                  4,1,1,1,1,1,1,1,1,1,1,\
+                  5,2,2,2,2,2,2,2,2,2,2,\
+                  5,2,2,2,2,2,2,2,2,2,2,\
+                  7,3,3,3,3,3,3,3,3,3,3,\
+                  9,4,4,4,4,4,5,5,5,6,6,\
+                  10
+
+#define FILE_BUILDINGS_STAGE2 ""
 
 
 #endif

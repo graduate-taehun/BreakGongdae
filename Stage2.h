@@ -20,11 +20,15 @@ private:
     void removeLaser_scheduler(float time);
     int laserposition;
     virtual void replaceNextScene();
+    
 public:
     ~Stage2();
-    void shotbyLaser();
+    static const vector<string> fileBuilding;
+    
 	static cocos2d::Scene* createScene(Status* _status);
     static Stage2* create(Status* status);
+    
+    void shotbyLaser();
 };
 
 #endif /* defined(__BreakGongDae__Stage2__) */
