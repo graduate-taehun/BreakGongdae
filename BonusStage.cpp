@@ -36,10 +36,15 @@ BonusStage* BonusStage::create(Status *_status) {
 
 bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
-	
+
+	st_scene = Sprite::create("bonus_stage_start.png");
+	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(st_scene, MENU_Z_ORDER + 2);
+	schedule(schedule_selector(BonusStage::scene_scheduler), 2, 1, 2);
+
 	//status->blockingIsPossible.
 	cntMajor = majors.cbegin();
-    
     
 	makeCourses();
 

@@ -69,11 +69,11 @@ bool Stage::init(Status* _status=nullptr)
         return false;
     
 	CCDirector::sharedDirector()->resume();
-    
+	
     setContentSize(Size(visibleSize.width,visibleSize.height*10));
     
-    posStatus=Vec2(visibleSize.width/8, visibleSize.height*18/20);
-    posTitle=Vec2(visibleSize.width*7/8, visibleSize.height*19/20);
+    posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
+    posTitle=Vec2(visibleSize.width * 7 / 8, visibleSize.height * 19 / 20);
     posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
     posCharacter[1]=Stage::visibleSize.width / 2;
     posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
@@ -86,9 +86,22 @@ bool Stage::init(Status* _status=nullptr)
 
 	menuClose = Menu::create(btnClose, NULL);
 	menuClose->setPosition(Vec2::ZERO);
-	addChild(menuClose,MENU_Z_ORDER);
-   
-	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("Track 01.mp3", false);
+	addChild(menuClose,MENU_Z_ORDER+2);
+
+	auto body = PhysicsBody::createBox(Size(visibleSize.width, GROUND_HEIGHT), PhysicsMaterial(0.0f, 0.0f, 0.0f));
+	body->setDynamic(false);
+	body->setCategoryBitmask(0x09);
+	body->setContactTestBitmask(0x03);
+	body->setCollisionBitmask(0x05);
+
+	groundNode = Sprite::create("ground.png");
+	groundNode->setContentSize(Size(visibleSize.width, GROUND_HEIGHT));
+	groundNode->setPosition(visibleSize.width / 2, GROUND_HEIGHT / 2);
+	groundNode->setTag(GROUND_TAG);
+	groundNode->setPhysicsBody(body);
+	addChild(groundNode, MENU_Z_ORDER);
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", false);
 	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
@@ -99,7 +112,7 @@ bool Stage::init(Status* _status=nullptr)
     contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
     
-    auto background=Sprite::create("stage_background.png");
+    auto background=Sprite::create("background.png");
     background->setContentSize(Size(visibleSize.width,visibleSize.height*10));
     background->setPosition(visibleSize.width/2,visibleSize.height*5);
     addChild(background);
@@ -133,29 +146,28 @@ void Stage::setViewPoint(float threshold) {
         lbTitle->setPosition(posTitle.x, threshold + posTitle.y-visibleSize.height/2);
         btnClose->setPosition(posClose.x, threshold + posClose.y-visibleSize.height/2);
         this->setPosition(Vec2(this->getPosition().x,-threshold+visibleSize.height/2));
-        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(
-                    Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,
+        this->getChildByTag(GROUND_TAG)->setPosition(
+                    Vec2(this->getChildByTag(GROUND_TAG)->getPosition().x,
                          GROUND_HEIGHT/2+(visibleSize.height/2-threshold)               ));
     }
     else {
-        //배경 안움직임
         status->setPosition(posStatus);
         lbTitle->setPosition(posTitle);
         btnClose->setPosition(posClose);
         
         this->setPosition(this->getPosition().x,0);
-        this->getScene()->getChildByTag(GROUND_TAG)->setPosition(
-                Vec2(this->getScene()->getChildByTag(GROUND_TAG)->getPosition().x,
-                     GROUND_HEIGHT/2                                                ));
+        this->getChildByTag(GROUND_TAG)->setPosition(Vec2(this->getChildByTag(GROUND_TAG)->getPosition().x, GROUND_HEIGHT/2));
     }
 }
+void Stage::scene_scheduler(float time) {
+	removeChild(st_scene);
+}
+
 void Stage::jump_scheduler(float time) {
     setViewPoint(character->getPositionOfBottom()+character->getHeight()/2);
     if(character->getPositionOfBottom()<=GROUND_HEIGHT+10) {
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
         character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
-        
-        //점프 중지
 		character->setState(sGround);
         unschedule(schedule_selector(Stage::jump_scheduler));
     }
@@ -163,6 +175,7 @@ void Stage::jump_scheduler(float time) {
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
+		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		CCDirector::sharedDirector()->resume();
 		Game_Pause = 0;
         return;
@@ -173,7 +186,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW: {
             if(cntofPosCharacter!=0)
                 character->setPosition(posCharacter[--cntofPosCharacter],character->getPosition().y);
-            break;
+            break;	
         }
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW: {
             if(cntofPosCharacter!=2)
@@ -182,7 +195,8 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         }
         case EventKeyboard::KeyCode::KEY_ESCAPE: {
             if (Game_Pause == 0) {
-                CCDirector::sharedDirector()->pause();
+			//	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+				CCDirector::sharedDirector()->pause();
                 Game_Pause = 1;
             }
         }		

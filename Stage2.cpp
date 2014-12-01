@@ -43,7 +43,14 @@ bool Stage2::init(Status *_status) {
     laserwarning=nullptr;
     level=Stage2::fileBuilding.cbegin();
 	lbTitle->setString("Stage2");
-    building->setPositionOfBottom(-building->getContentSize().height);
+
+	st_scene = Sprite::create("stage2_start.png");
+	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(st_scene, MENU_Z_ORDER + 2);
+	schedule(schedule_selector(Stage2::scene_scheduler), 2, 1, 2);
+
+	building->setPositionOfBottom(-building->getContentSize().height);
     setNextBuilding();
 	return true;
 }
@@ -53,7 +60,7 @@ Stage2::~Stage2() {
 }
 
 void Stage2::replaceNextScene() {
-    
+
 }
 
 bool Stage2::isLevelEnd() {
