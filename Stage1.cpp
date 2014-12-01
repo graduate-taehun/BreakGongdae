@@ -9,6 +9,7 @@
 #include "Stage1.h"
 #include "Stage2.h"
 #include "BonusStage.h"
+#include <SimpleAudioEngine.h>
 #include <climits>
 
 //const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
@@ -42,11 +43,18 @@ bool Stage1::init(Status* _status=nullptr) {
     building=nullptr;
     blade=nullptr;
 	lbTitle->setString("Stage1");
+
+	st_scene = Sprite::create("stage1_start.png");
+	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(st_scene, MENU_Z_ORDER+5);
+	schedule(schedule_selector(Stage1::scene_scheduler), 2, 1, 2);
+
 	setNextBuilding();
     return true;
 }
 void Stage1::setNextBuilding() {
-    float posRemoved=0;
+    float posRemoved = 3000;
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
@@ -58,8 +66,10 @@ void Stage1::decreaseCharacterHP() {
     status->decreaseHP();
     status->resetCombo();
     
-    if (status->getHP() == 0)
+	if (status->getHP() == 0){
+		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
+	}
 }
 
 void Stage1::replaceNextScene() {
@@ -83,7 +93,7 @@ bool Stage1::isLevelEnd() {
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-        CCDirector::sharedDirector()->resume();
+		CCDirector::sharedDirector()->resume();
         Game_Pause = 0;
         return;
     }

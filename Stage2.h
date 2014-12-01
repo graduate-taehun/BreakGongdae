@@ -23,6 +23,7 @@ private:
     virtual void replaceNextScene();
     
     virtual bool init(Status* _status);
+
 public:
     ~Stage2();
     static const vector<string> fileBuilding;

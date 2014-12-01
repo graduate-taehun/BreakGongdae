@@ -46,12 +46,15 @@ protected:
     LabelBMFont *lbTitle;
     
     Status* status;
+	Sprite* groundNode;
     Character* character;
-    
+	Sprite* st_scene;
+
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {}
-    virtual bool onContactBegin(PhysicsContact& contact) {return true; }
+    virtual bool onContactBegin(PhysicsContact& contact) { return true; }
     
+	void scene_scheduler(float time);
     void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
 	void gauge_up_scheduler(float time);
     

@@ -9,6 +9,7 @@
 #include "Menu&Score.h"
 #include "Stage2.h"
 #include "BonusStage.h"
+#include <SimpleAudioEngine.h>
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -124,10 +125,12 @@ bool MenuStage::init(){
     
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto background = Sprite::create("start.png");
+	auto background = Sprite::create("start_scecne.png");
 	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("opening.mp3", false);
 
 	auto item1 = LabelBMFont::create("START", "bitmapFontTest3.fnt");
 	auto item_1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));
