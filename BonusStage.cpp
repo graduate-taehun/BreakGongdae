@@ -139,5 +139,6 @@ void BonusStage::makeCourses() {
         courses[i]->setPhysicsBody(body);
         addChild(courses[i]);
     }
-	cntMajor++;
+    if(cntMajor!=majors.end())
+        cntMajor++;
 }
