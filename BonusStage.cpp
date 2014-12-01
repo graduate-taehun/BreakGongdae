@@ -37,17 +37,16 @@ BonusStage* BonusStage::create(Status *_status) {
 bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
 
+	lbTitle->setString("BonusStage");
 	st_scene = Sprite::create("bonus_stage_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(st_scene, MENU_Z_ORDER + 2);
 	schedule(schedule_selector(BonusStage::scene_scheduler), 2, 1, 2);
 
-	//status->blockingIsPossible.
 	cntMajor = majors.cbegin();
-    
 	makeCourses();
-
+	
 	return true;
 }
 
@@ -61,11 +60,7 @@ void BonusStage::replaceNextScene() {
 
 bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	if (!Stage::onContactBegin(contact)) return false;
-/*
-	building->getPhysicsBody()->setCategoryBitmask(0x03);
-	building->getPhysicsBody()->setContactTestBitmask(0x08);
-	building->getPhysicsBody()->setCollisionBitmask(0x03);
-*/
+
     auto Label = CCLabelTTF::create("", "Arial Rounded MT Bold", 30);
     bool leftorright = rand() % 2;
     Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPositionOfTop() + 80);
@@ -105,12 +100,14 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
     
     for(int i=0; i<3; i++)
         removeChild(courses[i]);
-   
-	if(cntMajor==majors.cend()) replaceNextScene();
+
+	if (cntMajor == majors.cend())
+		replaceNextScene();
+	else
 		makeCourses();
+
 	return true;
 }
-
 void BonusStage::makeCourses() {
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
 	int k=0, course_select[3];
@@ -127,7 +124,7 @@ void BonusStage::makeCourses() {
 		if (check == 0)
 			k++;
 	}
-    
+
     for(int i=0; i<3; i++) {
         courses[i]=Sprite::create(*cntMajor + "_" + to_string(i+1) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
@@ -142,5 +139,5 @@ void BonusStage::makeCourses() {
         courses[i]->setPhysicsBody(body);
         addChild(courses[i]);
     }
-    cntMajor++;
+	cntMajor++;
 }

@@ -43,7 +43,8 @@ bool Stage2::init(Status *_status) {
     laserwarning=nullptr;
     level=Stage2::fileBuilding.cbegin();
 	lbTitle->setString("Stage2");
-
+	
+	removeChild(st_scene);
 	st_scene = Sprite::create("stage2_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);

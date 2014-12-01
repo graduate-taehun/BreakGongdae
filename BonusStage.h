@@ -16,10 +16,9 @@ private:
     const static int HONEY_TAG=100;
     const static int NORMAL_TAG=101;
     const static int HARD_TAG=102;
-    
+	
     vector<string>::const_iterator cntMajor;
     const static vector<string> majors;
-    
     Sprite* courses[3];
     
     virtual bool init(Status* _status);

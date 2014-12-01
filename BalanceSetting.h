@@ -9,7 +9,7 @@
 #ifndef BreakGongDae_BalanceSetting_h
 #define BreakGongDae_BalanceSetting_h
 
-#define START_SCENE Stage1::createScene()
+#define START_SCENE BonusStage::createScene(nullptr)
 #define DEBUG_MODE PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
@@ -22,7 +22,7 @@
 //Building
 #define BUILDING_VEL_LIMIT 600
 #define GRAVITY 400
-#define BUILDING_START_HEIGHT 500
+#define BUILDING_START_HEIGHT 1500
 
 //Character
 #define CHARACTER_JUMP_VEL 1200
@@ -57,7 +57,6 @@
     "Old_dormitory_1234.png", \
     "Old_dormitory_5678.png", \
     "78.png"
-
 
 #define DURABS_MUEUNJAE 1,1,2
 #define DURABS_JIGOK 5
@@ -126,7 +125,4 @@
 	1001
 	0011
 	0101
-*/
-/*
- "Mueunjae.png", "Jigok.png", "Old_dormitory_9101112.png", "Old_dormitory_131415.png", "Old_dormitory_dice.png", "Old_dormitory_171819.png", "RC.png", "Old_dormitory_1234.png", "Old_dormitory_5678.png", "78.png"
 */
