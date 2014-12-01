@@ -10,7 +10,7 @@
 #define BreakGongDae_BalanceSetting_h
 
 #define START_SCENE BonusStage::createScene(nullptr)
-#define DEBUG_MODE PhysicsWorld::DEBUGDRAW_NONE
+#define DEBUG_MODE PhysicsWorld::DEBUGDRAW_ALL
 
 //Blocking
 #define CHARACTER_VEL_AFTER_BLOCKING 700
@@ -60,8 +60,8 @@
 
 #define DURABS_MUEUNJAE 1,1,2
 #define DURABS_JIGOK 5
-#define DURABS_OLD_DORM_4 1,2,1,2,1,3,1,4
-#define DURABS_OLD_DORM_3 1,2,1,3,1,4
+#define DURABS_OLD_DORM_4 1,2,1,2,1,3
+#define DURABS_OLD_DORM_3 1,2,1,3,1
 #define DURABS_GYM 4,4,4
 #define DURABS_DICE 2,3
 #define DURABS_RC 2,3,5

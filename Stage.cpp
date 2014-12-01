@@ -19,7 +19,7 @@ Scene* Stage::createScene()
     Vect gravity = Vect(0.0f, -GRAVITY);
     
     auto scene = Scene::createWithPhysics();
-    scene->getPhysicsWorld()->setDebugDrawMask(DEBUG_MODE);
+ //   scene->getPhysicsWorld()->setDebugDrawMask(DEBUG_MODE);
     scene->getPhysicsWorld()->setGravity(gravity);
     scene->getPhysicsWorld()->setSubsteps(3);
     
@@ -28,14 +28,7 @@ Scene* Stage::createScene()
     body->setCategoryBitmask(0x09);
     body->setContactTestBitmask(0x03);
     body->setCollisionBitmask(0x05);
-
-    auto groundNode = Sprite::create("ground.png");
-    groundNode->setContentSize(Size(visibleSize.width,GROUND_HEIGHT));
-    groundNode->setPosition(visibleSize.width/2,GROUND_HEIGHT/2);
-    groundNode->setTag(GROUND_TAG);
-    groundNode->setPhysicsBody(body);
-    scene->addChild(groundNode, MENU_Z_ORDER);
-    
+ 
     body=PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10));
     auto edgeBox = Node::create();
     edgeBox->setPosition(Point(visibleSize.width/2, visibleSize.height*5));
@@ -79,15 +72,6 @@ bool Stage::init(Status* _status=nullptr)
     posCharacter[2]=Stage::visibleSize.width / 2 + Stage::visibleSize.width / 3;
     cntofPosCharacter = 1;
     
-	Game_Pause = 0;
-	btnClose = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
-    posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
-	btnClose->setPosition(posClose);
-
-	menuClose = Menu::create(btnClose, NULL);
-	menuClose->setPosition(Vec2::ZERO);
-	addChild(menuClose,MENU_Z_ORDER+2);
-
 	auto body = PhysicsBody::createBox(Size(visibleSize.width, GROUND_HEIGHT), PhysicsMaterial(0.0f, 0.0f, 0.0f));
 	body->setDynamic(false);
 	body->setCategoryBitmask(0x09);
@@ -99,7 +83,16 @@ bool Stage::init(Status* _status=nullptr)
 	groundNode->setPosition(visibleSize.width / 2, GROUND_HEIGHT / 2);
 	groundNode->setTag(GROUND_TAG);
 	groundNode->setPhysicsBody(body);
-	addChild(groundNode, MENU_Z_ORDER);
+	addChild(groundNode, MENU_Z_ORDER-1);
+
+	Game_Pause = 0;
+	btnClose = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
+    posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
+	btnClose->setPosition(posClose);
+
+	menuClose = Menu::create(btnClose, NULL);
+	menuClose->setPosition(Vec2::ZERO);
+	addChild(menuClose,MENU_Z_ORDER+2);
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", false);
 	
