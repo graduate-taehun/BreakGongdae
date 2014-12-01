@@ -45,32 +45,31 @@ void Block::attack() {
 //
 //Building
 //
-bool Building::init(string filename) {
-    if(!Layer::init()) return false;
-    
+bool Building::initWithBlockSize(string filename, Size _blocksize) {
+    if(!LayerColor::initWithColor(Color4B::GREEN)) return false;
+    blocksize=_blocksize;
     const vector<int>& durabTemp=durabilities.at(filename);
     
     //초기화
     removeAllChildren();
     ignoreAnchorPointForPosition(false);
-    setAnchorPoint(Vec2(0.5,0));
-    setContentSize(Size(WIDTH_BLOCK, HEIGHT_BLOCK*durabTemp.size()));
-    
+    setAnchorPoint(Vec2(0.5,0.));
+    setContentSize(Size(blocksize.width, blocksize.height*durabTemp.size()));
     background=Sprite::create(filename);
     background->setContentSize(getContentSize());
-    background->setPosition(Vec2(getContentSize().width/2,getContentSize().height));
+    background->setPosition(Vec2(getContentSize().width/2,getContentSize().height/2));
     addChild(background);
     
     blocks=new queue<Block *>();
     auto body = PhysicsBody::createBox(getContentSize(),material);
     body->setRotationEnable(false);
     body->removeAllShapes();
-
+    
     //block들 생성
     for(int i=0; i<durabTemp.size(); i++) {
         auto block=Block::create(durabTemp.at(i),filename,i);
-        block->setContentSize(Size(WIDTH_BLOCK,HEIGHT_BLOCK));
-        block->setPosition(Vec2(0,(i+0.5)*HEIGHT_BLOCK));
+        block->setContentSize(blocksize);
+        block->setPosition(Vec2(0,((float)i-durabTemp.size()/2)*blocksize.height));
         
         //블록 1개당 1개의 PhysicsShape
         auto shapebox = PhysicsShapeBox::create(block->getContentSize(),material,block->getPosition());
@@ -79,7 +78,7 @@ bool Building::init(string filename) {
         blocks->push(block);
         addChild(block);
     }
-    auto shapeRoof=PhysicsShapeBox::create(Size(WIDTH_BLOCK, HEIGHT_BLOCK/10),material,Vec2(0,(durabTemp.size()-1/20)*HEIGHT_BLOCK));
+    auto shapeRoof=PhysicsShapeBox::create(Size(blocksize.width, blocksize.height/10),material,Vec2(0,(durabTemp.size()-1/20)*blocksize.height));
     body->addShape(shapeRoof);
     body->setVelocityLimit(BUILDING_VEL_LIMIT);
     
@@ -87,14 +86,29 @@ bool Building::init(string filename) {
     body->setContactTestBitmask(0x08);
     body->setCollisionBitmask(0x03);
     setPhysicsBody(body);
-
+    
     return true;
 }
+bool Building::init(string filename) {
+    return initWithBlockSize(filename, Size(WIDTH_BLOCK,HEIGHT_BLOCK));
+}
 
-Building* Building::create(string filename)
-{
+Building* Building::create(string filename) {
     Building *pRet = new Building();
     if (pRet && pRet->init(filename)){
+        pRet->autorelease();
+        return pRet;
+    }
+    else{
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
+}
+
+Building* Building::createWithBlockSize(string filename, Size _blocksize) {
+    Building *pRet = new Building();
+    if (pRet && pRet->initWithBlockSize(filename, _blocksize)){
         pRet->autorelease();
         return pRet;
     }
@@ -111,7 +125,7 @@ bool Building::attack(bool isBlade) {
     bottom->attack();
         
     if(bottom->getDurability()<=0 || isBlade) {
-        setPosition(Vec2(getPosition().x,getPosition().y+HEIGHT_BLOCK));
+        setPosition(Vec2(getPosition().x,getPosition().y+blocksize.height/2));
         
         //제거
         removeChild(bottom);
@@ -128,18 +142,20 @@ bool Building::attack(bool isBlade) {
                 continue;
             //블럭 위치 재설정
             (*i)->setPosition(Vec2((*i)->getPosition().x,
-                                                  (*i)->getPosition().y-(*i)->getContentSize().height));
+                                                  (*i)->getPosition().y-(*i)->getContentSize().height/2));
             
             //shape 재생성 및 추가
             auto shapebox = PhysicsShapeBox::create((*i)->getContentSize(),material,(*i)->getPosition());
             getPhysicsBody()->addShape(shapebox);
         }
-        auto shapeRoof=PhysicsShapeBox::create(Size(WIDTH_BLOCK, HEIGHT_BLOCK/10),material,Vec2(0,(blocks->size()-1/20)*HEIGHT_BLOCK));
+        
+        setContentSize(Size(blocksize.width,blocksize.height*blocks->size()));
+        
+        auto shapeRoof=PhysicsShapeBox::create(Size(blocksize.width, blocksize.height/10),material,Vec2(0,getContentSize().height/2-blocksize.height/20));
         getPhysicsBody()->addShape(shapeRoof);
-        setContentSize(Size(WIDTH_BLOCK,HEIGHT_BLOCK*blocks->size()));
-        background->setTextureRect(Rect(0,0,WIDTH_BLOCK,HEIGHT_BLOCK*blocks->size()));
+        background->setTextureRect(Rect(0,0,blocksize.width,blocksize.height*blocks->size()));
         background->setContentSize(getContentSize());
-        background->setPosition(Vec2(getContentSize().width/2,getContentSize().height));
+        background->setPosition(Vec2(getContentSize().width/2,getContentSize().height/2));
         getPhysicsBody()->setCategoryBitmask(0x03);
         getPhysicsBody()->setContactTestBitmask(0x08);
         getPhysicsBody()->setCollisionBitmask(0x03);
@@ -148,13 +164,27 @@ bool Building::attack(bool isBlade) {
 }
 
 void Building::setPositionOfBottom(float bottom) {
-    setPosition(getPosition().x,bottom);
+    setPosition(getPosition().x,bottom+getContentSize().height/2);
 }
 
 float Building::getPositionOfTop() {
-    return getPosition().y+getContentSize().height;
+    return getPosition().y+getContentSize().height/2;
 }
 
 float Building::getPositionOfBottom() {
-    return getPosition().y;
+    return getPosition().y-getContentSize().height/2;
+}
+
+//
+//Stairs78
+//
+bool Stairs78::init() {
+    if(!Building::initWithBlockSize("78.png",SIZE_78)) return false;
+    /*numberOfBuilding=1;
+    nextBuilding=Building::createWithBlockSize("78.png", SIZE_78);
+    nextBuilding->setPosition(Vec2(0,getContentSize().height));
+    nextBuilding->getPhysicsBody()->setDynamic(false);
+    setContentSize(Size(getContentSize().width,getContentSize().height+nextBuilding->getContentSize().height));
+    addChild(nextBuilding);*/
+    return true;
 }

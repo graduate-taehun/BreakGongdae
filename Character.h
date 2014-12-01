@@ -29,13 +29,15 @@ public:
     const static float CHARACTER_OFFSET;
     virtual bool init();
     
-    CREATE_FUNC(Character);
+    CREATE_FUNC(Character)
     
     State getState();
     void setState(State _state);
     ActionState getActionState();
     void setActionState(ActionState _action);
     float getPositionOfTop();
+    float getPositionOfBottom();
+    float getHeight();
     
     void doAttackAction();
 };

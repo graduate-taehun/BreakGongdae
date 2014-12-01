@@ -34,10 +34,10 @@ private:
     void gauge_scheduler(float time);
     
     Sprite* bar_gauge;
-    Sprite *bar_HP;
+    Sprite* bar_HP;
 	Sprite* bar_blade;
-    CCLabelTTF *lbScore;
-    CCLabelTTF *lbCombo;
+    CCLabelTTF* lbScore;
+    CCLabelTTF* lbCombo;
     
     virtual bool init();
 

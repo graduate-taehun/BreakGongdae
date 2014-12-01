@@ -14,6 +14,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <queue>
 USING_NS_CC;
 using namespace std;
 
@@ -30,15 +31,18 @@ public:
     
 };
 
-class Building : public Layer {
+class Building : public LayerColor {
 private:
     queue<Block *>* blocks;
     Sprite* background;
+    Size blocksize;
+    virtual bool init(string filename);
+protected:
     const static PhysicsMaterial material;
     const static map<string,const vector<int>> durabilities;
     
-    virtual bool init(string filename);
-    
+    virtual bool initWithBlockSize(string filename, Size _blocksize);
+    static Building* createWithBlockSize(string filename, Size _blocksize);
 public:
     static Building* create(string filename);
     void setPositionOfBottom(float bottom);
@@ -46,6 +50,15 @@ public:
     float getPositionOfBottom();
     bool attack(bool isBlade); //다 없어지면 true 리턴
     void destroyAll();
+};
+
+class Stairs78 : public Building {
+private:
+    Building* nextBuilding;
+    int numberOfBuilding;
+    virtual bool init();
+public:
+    CREATE_FUNC(Stairs78)
 };
 
 #endif /* defined(__BreakGongDae__Building__) */

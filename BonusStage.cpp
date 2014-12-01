@@ -63,7 +63,7 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 */
     auto Label = CCLabelTTF::create("", "Arial Rounded MT Bold", 30);
     bool leftorright = rand() % 2;
-    Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPosition().y + 80);
+    Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPositionOfTop() + 80);
     Label->setPhysicsBody(PhysicsBody::createBox(Label->getContentSize()));
     Label->getPhysicsBody()->setVelocity(Vec2((leftorright ? 100 : -100), 30));
     Label->getPhysicsBody()->setCollisionBitmask(0x00);

@@ -125,9 +125,6 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 	int block_n = rand() % 3;
 	int block_select = rand() % 2;
 
-	auto frag1 = Sprite::create("fragment_1.png");
-	auto frag2 = Sprite::create("fragment_2.png");
-
 	Sprite* frag;
 	while (num <= block_n){
 		leftorright2 = rand() % 2;

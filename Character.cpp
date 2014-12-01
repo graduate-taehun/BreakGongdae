@@ -13,9 +13,8 @@ bool Character::init() {
     if(!Sprite::initWithFile("ch_base.png"))
         return false;
     
-    auto body = PhysicsBody::createBox(Size(getContentSize().width,getContentSize().height-CHARACTER_OFFSET),PhysicsMaterial(10.0f,0.0f,0.0f),Vec2(0,-CHARACTER_OFFSET));
-    ignoreAnchorPointForPosition(false);
-    setAnchorPoint(Vec2(0.5,0.5*(1-CHARACTER_OFFSET/getContentSize().height)));
+    auto body = PhysicsBody::createBox(Size(getContentSize().width,getContentSize().height-CHARACTER_OFFSET),PhysicsMaterial(10.0f,0.0f,0.0f),Vec2(0,-CHARACTER_OFFSET/2));
+
     //body->setMass(100);
     body->setRotationEnable(false);
 	setPhysicsBody(body);
@@ -53,8 +52,6 @@ void Character::doAttackAction() {
 }
 
 void Character::pre_jump_scheduler(float time) {
-    
-    getPhysicsBody()->setVelocity(Vec2(0,CHARACTER_JUMP_VEL));
     setTexture("ch_base.png");
 }
 void Character::setState(State _state){
@@ -71,6 +68,7 @@ void Character::setState(State _state){
         setTexture("ch_jump_start.png");
         schedule(schedule_selector(Character::pre_jump_scheduler),TIME_PRE_JUMP,1,TIME_PRE_JUMP);
         
+        
 	}
 }
 void Character::setActionState(ActionState _action){
@@ -81,6 +79,8 @@ void Character::setActionState(ActionState _action){
         setTexture("ch_base.png");
 }
 
-float Character::getPositionOfTop() { return getPosition().y + getContentSize().height/2; }
+float Character::getPositionOfTop() { return getPosition().y + getContentSize().height/2-CHARACTER_OFFSET; }
+float Character::getPositionOfBottom() { return getPosition().y-getContentSize().height/2; }
+float Character::getHeight() { return getContentSize().height-CHARACTER_OFFSET; }
 State Character::getState(){ return state; }
 ActionState Character::getActionState(){ return action; }

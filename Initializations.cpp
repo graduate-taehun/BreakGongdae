@@ -17,7 +17,7 @@ const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
 
 //Character
 const float Character::ATTACK_FRAME = 0.05f;
-const float Character::CHARACTER_OFFSET=50;
+const float Character::CHARACTER_OFFSET=49;
 
 //Building
 const PhysicsMaterial Building::material=PhysicsMaterial(10000000.0f,0.0f,0.0f);

@@ -19,7 +19,7 @@ Scene* Stage::createScene()
     Vect gravity = Vect(0.0f, -GRAVITY);
     
     auto scene = Scene::createWithPhysics();
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    scene->getPhysicsWorld()->setDebugDrawMask(DEBUG_MODE);
     scene->getPhysicsWorld()->setGravity(gravity);
     scene->getPhysicsWorld()->setSubsteps(3);
     
@@ -29,8 +29,9 @@ Scene* Stage::createScene()
     body->setContactTestBitmask(0x03);
     body->setCollisionBitmask(0x05);
 
-    auto groundNode = Node::create();
-    groundNode->setPosition(Point(visibleSize.width / 2, GROUND_HEIGHT/2));
+    auto groundNode = Sprite::create("ground.png");
+    groundNode->setContentSize(Size(visibleSize.width,GROUND_HEIGHT));
+    groundNode->setPosition(visibleSize.width/2,GROUND_HEIGHT/2);
     groundNode->setTag(GROUND_TAG);
     groundNode->setPhysicsBody(body);
     scene->addChild(groundNode);
@@ -104,7 +105,7 @@ bool Stage::init(Status* _status=nullptr)
     addChild(background);
     
     character = Character::create();
-    character->setPosition(visibleSize.width / 2, GROUND_HEIGHT + character->getContentSize().height / 2);
+    character->setPosition(visibleSize.width / 2, GROUND_HEIGHT+character->getContentSize().height/2);
 	addChild(character);
     
     if(_status==nullptr)
@@ -149,8 +150,8 @@ void Stage::setViewPoint(float threshold) {
     }
 }
 void Stage::jump_scheduler(float time) {
-    setViewPoint(character->getPosition().y);
-    if(character->getPositionOfTop()-character->getContentSize().height<=GROUND_HEIGHT+10) {
+    setViewPoint(character->getPositionOfBottom()+character->getHeight()/2);
+    if(character->getPositionOfBottom()<=GROUND_HEIGHT+10) {
         character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
         character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
         

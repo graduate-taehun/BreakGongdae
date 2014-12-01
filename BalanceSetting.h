@@ -10,11 +10,11 @@
 #define BreakGongDae_BalanceSetting_h
 
 #define START_SCENE Stage1::createScene()
+#define DEBUG_MODE PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
 #define CHARACTER_VEL_AFTER_BLOCKING 700
 #define BUILDING_VEL_AFTER_BLOCKING 100
-#define BLOCKING_TIME_LIMIT 3000
 #define COST_BLOCKING 50
 #define MIN_COST_BLOCKING 15
 #define BLOCKING_GAUGE_VELOCITY 0.5
@@ -27,7 +27,7 @@
 //Character
 #define CHARACTER_JUMP_VEL 1200
 #define TIME_PRE_JUMP 0.2
-#define ATTACK_RANGE 100
+#define ATTACK_RANGE 150
 
 #define TIME_WARNING 0.1
 #define INTERVAL_WARNING_AND_LASER 0.3
@@ -58,39 +58,22 @@
     "Old_dormitory_5678.png", \
     "78.png"
 
-/*
+
 #define DURABS_MUEUNJAE 1,1,2
 #define DURABS_JIGOK 5
 #define DURABS_OLD_DORM_4 1,2,1,2,1,3,1,4
 #define DURABS_OLD_DORM_3 1,2,1,3,1,4
 #define DURABS_GYM 4,4,4
-#define DURABS_DICE 5,6
-#define DURABS_RC 1,1,2,3,5
-#define DURABS_78 4,1,1,1,1,1,1,1,1,1,1,\
+#define DURABS_DICE 2,3
+#define DURABS_RC 2,3,5
+#define DURABS_78 4,1,1,1,1,1,1,1,1/*,1,1,\
                   4,1,1,1,1,1,1,1,1,1,1,\
                   4,1,1,1,1,1,1,1,1,1,1,\
                   5,2,2,2,2,2,2,2,2,2,2,\
                   5,2,2,2,2,2,2,2,2,2,2,\
                   7,3,3,3,3,3,3,3,3,3,3,\
                   9,4,4,4,4,4,5,5,5,6,6,\
-                  10
-*/
-#define DURABS_MUEUNJAE 1,1,1
-#define DURABS_JIGOK 1
-#define DURABS_OLD_DORM_4 1,2,1,2,1,3,1,1
-#define DURABS_OLD_DORM_3 1,2,1,3,1,1
-#define DURABS_GYM 1,1,1
-#define DURABS_DICE 1,1
-#define DURABS_RC 1,1,1,1,1
-#define DURABS_78 \
-4,1,1,1,1,1,1,1,1,1,1,\
-4,1,1,1,1,1,1,1,1,1,1,\
-4,1,1,1,1,1,1,1,1,1,1,\
-5,2,2,2,2,2,2,2,2,2,2,\
-5,2,2,2,2,2,2,2,2,2,2,\
-7,3,3,3,3,3,3,3,3,3,3,\
-9,4,4,4,4,4,5,5,5,6,6,\
-10
+                  10*/
 
 #define FILE_MAJORS \
     "eece", \
@@ -106,6 +89,8 @@
     "math.png"
 
 #endif
+
+#define SIZE_78 Size(880,HEIGHT_BLOCK)
 
 /*
 	"American Typewriter"

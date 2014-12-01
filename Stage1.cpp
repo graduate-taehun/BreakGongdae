@@ -9,6 +9,7 @@
 #include "Stage1.h"
 #include "Stage2.h"
 #include "BonusStage.h"
+#include <climits>
 
 //const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
 
@@ -97,6 +98,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         {
             if (character->getState() == sGround){
                 character->setState(sAir);
+                character->getPhysicsBody()->setVelocity(Vec2(0,CHARACTER_JUMP_VEL));
                 
                 if (!isScheduled(schedule_selector(Stage1::jump_scheduler)))
                     schedule(schedule_selector(Stage1::jump_scheduler));
@@ -112,10 +114,10 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
             if(   (0<=building->getPositionOfBottom()-character->getPositionOfTop()
                    && building->getPositionOfBottom()-character->getPositionOfTop()<ATTACK_RANGE)
                || (0<=character->getPositionOfTop()-building->getPositionOfBottom()
-                   && character->getPositionOfTop()-building->getPositionOfBottom()<character->getContentSize().height/3)
+                   && character->getPositionOfTop()-building->getPositionOfBottom()<character->getHeight()/3)
                || abs(building->getPositionOfBottom()-GROUND_HEIGHT)<=5) {
                 status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
-                status->increaseCombo(1, character->getPosition());//하나 부실때마다 콤보 1씩 증가하게
+                status->increaseCombo(1, Vec2(character->getPosition().x,character->getPositionOfTop()));//하나 부실때마다 콤보 1씩 증가하게
                 if(building->attack(false)) {
 					if (isLevelEnd())
                         replaceNextScene();
@@ -137,7 +139,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         {
 			if (status->getBlade() == status->getMAX_BLADE()){
 				blade = Sprite::create("Blade.png");
-                character->setTexture("ch_blade.png");
+                character->setTexture("ch_lethal_move.png");
 				auto body = PhysicsBody::createBox(blade->getContentSize(), PhysicsMaterial(0.f, 0.5f, 0.5f));
 				body->setCollisionBitmask(0x00);
 				body->setGravityEnable(false);
@@ -169,7 +171,7 @@ void Stage1::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Eve
 
 void Stage1::block_scheduler(float time) {
     status->setBlockingGaugeMode(true);
-    if(status->blockingIsPossible() && abs(character->getPositionOfTop()-building->getPositionOfBottom())<10) {
+    if(status->blockingIsPossible() && abs(character->getPositionOfTop()-building->getPositionOfBottom())<5) {
         character->stopActionByTag(Character::ATTACK_TAG);
         
         if(character->getState()==sAir) {
@@ -213,7 +215,7 @@ void Stage1::blade_scheduler(float time){
             }
         }
     }
-    else if(blade->getPosition().y<=visibleSize.height/2 || blade->getPosition().y<=character->getPosition().y) {
+    else if(blade->getPosition().y<=visibleSize.height/2 || blade->getPosition().y<=character->getPositionOfTop()) {
         breaking=true;
         unschedule(schedule_selector(Stage1::blade_scheduler));
         schedule(schedule_selector(Stage1::jump_scheduler));
