@@ -102,7 +102,7 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
         removeChild(courses[i]);
    
 	if(cntMajor==majors.cend()) replaceNextScene();
-		makeCourses();
+    makeCourses();
 	return true;
 }
 
@@ -137,5 +137,6 @@ void BonusStage::makeCourses() {
         courses[i]->setPhysicsBody(body);
         addChild(courses[i]);
     }
-    cntMajor++;
+    if(cntMajor!=majors.end())
+        cntMajor++;
 }

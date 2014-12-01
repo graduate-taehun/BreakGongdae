@@ -34,7 +34,7 @@ Scene* Stage::createScene()
     groundNode->setPosition(visibleSize.width/2,GROUND_HEIGHT/2);
     groundNode->setTag(GROUND_TAG);
     groundNode->setPhysicsBody(body);
-    scene->addChild(groundNode);
+    scene->addChild(groundNode, MENU_Z_ORDER);
     
     body=PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10));
     auto edgeBox = Node::create();
