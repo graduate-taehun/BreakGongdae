@@ -124,7 +124,7 @@ void BonusStage::makeCourses() {
 	}
     
     for(int i=0; i<3; i++) {
-        courses[i]=Sprite::create(*cntMajor + "_" + to_string(i) + ".png");
+        courses[i]=Sprite::create(*cntMajor + "_" + to_string(i+1) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
     
 		auto body = PhysicsBody::createBox(courses[i]->getContentSize(), material);
