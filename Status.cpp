@@ -21,30 +21,36 @@ bool Status::init() {
     currentGauge = MAX_GAUGE;
     targetGauge = MAX_GAUGE;
     
+	state = Sprite::create(FILE_ETC + "gauge.png");
+	state->setPosition(Vec2(-state->getContentSize().width/2+50, 0));
+	state->setAnchorPoint(Vec2(0, 0.5));
+	addChild(state, 255+1);
+
     bar_HP = Sprite::create(FILE_ETC+"gauge_bar.png");
-    float x = -bar_HP->getContentSize().width/2;
-    bar_HP->setPosition(Vec2(x,bar_HP->getContentSize().height*1.5));
+    float x = -bar_HP->getContentSize().width/2+120;
+    bar_HP->setPosition(Vec2(x-70,-bar_HP->getContentSize().height*2.5));
     bar_HP->setAnchorPoint(Vec2(0,0.5));
-    addChild(bar_HP);
+    addChild(bar_HP, 255+2);
     
     bar_gauge = Sprite::create(FILE_ETC+"gauge_bar.png");
-    bar_gauge->setPosition(Vec2(x,bar_gauge->getContentSize().height/2));
+    bar_gauge->setPosition(Vec2(x,-bar_gauge->getContentSize().height/2));
     bar_gauge->setAnchorPoint(Vec2(0,0.5));
-    addChild(bar_gauge);
+    addChild(bar_gauge, 255+2);
 	
 	bar_blade = Sprite::create(FILE_ETC+"gauge_bar.png");
-	bar_blade->setPosition(Vec2(x, -bar_blade->getContentSize().height / 2));
+	bar_blade->setPosition(Vec2(x, +bar_blade->getContentSize().height*0.5));
 	bar_blade->setAnchorPoint(Vec2(0, 0.5));
-	addChild(bar_blade);
-	
-    lbScore = CCLabelTTF::create("score : 0", FILE_FONT+"futura-48.fnt", 32);
-    lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height*1.5));
+	addChild(bar_blade, 255+2);
+
+	x = -bar_HP->getContentSize().width / 2 + 50;
+	lbScore = LabelTTF::create("score : 0", "Arial Rounded MT Bold", 30);
+    lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height*4));
     lbScore->setAnchorPoint(Vec2(0,0.5));
     lbScore->setColor(ccc3(0, 0, 0));
     addChild(lbScore);
     
-    lbCombo = CCLabelTTF::create("combo : 0", FILE_FONT+"futura-48.fnt", 28);
-    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*2.5));
+	lbCombo = LabelTTF::create("combo : 0", "Arial Rounded MT Bold", 30);
+    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*5));
     lbCombo->setAnchorPoint(Vec2(0,0.5));
     lbCombo->setColor(ccc3(0, 0, 0));
     addChild(lbCombo);
