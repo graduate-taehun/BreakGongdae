@@ -172,6 +172,39 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 				status->setBlade(0);
 			}
         }
+		case EventKeyboard::KeyCode::KEY_ESCAPE: {
+			if (Game_Pause == 0) {
+				if (blade == nullptr)
+				{
+					P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
+					P_Label->setColor(ccc3(0, 0, 0));
+					P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
+					P_Label->setTag(125);
+					addChild(P_Label, 50);
+					P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
+					P_Layer->setOpacity(100);
+					P_Layer->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
+					addChild(P_Layer, 49);
+					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+					CCDirector::sharedDirector()->pause();
+					Game_Pause = 1;
+				}
+				else
+				{
+					P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
+					P_Label->setColor(ccc3(0, 0, 0));
+					P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(max(visibleSize.height / 2, character->getPosition().y),blade->getPosition().y) + 250));
+					addChild(P_Label, 50);
+					P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
+					P_Layer->setOpacity(100);
+					P_Layer->setPosition(Vec2(visibleSize.width / 2, max(max(visibleSize.height / 2, character->getPosition().y), blade->getPosition().y)));
+					addChild(P_Layer, 49);
+					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+					CCDirector::sharedDirector()->pause();
+					Game_Pause = 1;
+				}
+			 }
+		}
         default: Stage::onKeyPressed(keyCode, event);
     }
 }

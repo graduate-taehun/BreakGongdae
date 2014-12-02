@@ -191,7 +191,6 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 				P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
 				P_Label->setColor(ccc3(0, 0, 0));
 				P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
-				P_Label->setTag(125);
 				addChild(P_Label, 50);
 				P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
 				P_Layer->setOpacity(100);
