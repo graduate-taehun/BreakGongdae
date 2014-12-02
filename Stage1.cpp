@@ -43,6 +43,8 @@ bool Stage1::init(Status* _status=nullptr) {
     blade=nullptr;
 	lbTitle->setString("Stage1");
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
+
 	st_scene = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
@@ -57,8 +59,6 @@ void Stage1::setNextBuilding() {
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
-
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
 
     building = Building::create(*level++);
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved+BUILDING_START_HEIGHT);
@@ -96,9 +96,9 @@ bool Stage1::isLevelEnd() {
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		CCDirector::sharedDirector()->resume();
 		removeChild(P_Label);
 		removeChild(P_Layer);
+		CCDirector::sharedDirector()->resume();
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
@@ -172,39 +172,6 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 				status->setBlade(0);
 			}
         }
-		case EventKeyboard::KeyCode::KEY_ESCAPE: {
-			if (Game_Pause == 0) {
-				if (blade == nullptr)
-				{
-					P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
-					P_Label->setColor(ccc3(0, 0, 0));
-					P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
-					P_Label->setTag(125);
-					addChild(P_Label, 50);
-					P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
-					P_Layer->setOpacity(100);
-					P_Layer->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
-					addChild(P_Layer, 49);
-					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-					CCDirector::sharedDirector()->pause();
-					Game_Pause = 1;
-				}
-				else
-				{
-					P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
-					P_Label->setColor(ccc3(0, 0, 0));
-					P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(max(visibleSize.height / 2, character->getPosition().y),blade->getPosition().y) + 250));
-					addChild(P_Label, 50);
-					P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
-					P_Layer->setOpacity(100);
-					P_Layer->setPosition(Vec2(visibleSize.width / 2, max(max(visibleSize.height / 2, character->getPosition().y), blade->getPosition().y)));
-					addChild(P_Layer, 49);
-					CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-					CCDirector::sharedDirector()->pause();
-					Game_Pause = 1;
-				}
-			 }
-		}
         default: Stage::onKeyPressed(keyCode, event);
     }
 }

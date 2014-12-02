@@ -168,8 +168,7 @@ void Building::setPositionOfBottom(float bottom) {
     setPosition(getPosition().x,bottom+getContentSize().height/2);
 }
 
-float Building::getPositionOfTop() {
-    return getPosition().y+getContentSize().height/2;
+float Building::getPositionOfTop() {   return getPosition().y+getContentSize().height/2;
 }
 
 float Building::getPositionOfBottom() {
