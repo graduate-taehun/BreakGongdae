@@ -8,7 +8,6 @@
 
 #include "Laser.h"
 #include "Stage2.h"
-#include <cstdlib>
 
 bool LaserWarning::init() {
 	if (!LayerColor::initWithColor(Color4B::RED))
@@ -29,7 +28,7 @@ void LaserWarning::warning_scheduler(float time) {
     }
 }
 void LaserWarning::laserlaunch_scheduler(float time) {
-    Laser=Sprite::create("laser.png");
+    Laser=Sprite::create(FILE_BACKGROUND+"laser.png");
     Laser->ignoreAnchorPointForPosition(false);
     Laser->setAnchorPoint(Vec2(0.5,0));
     setContentSize(Laser->getContentSize());

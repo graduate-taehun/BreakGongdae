@@ -11,7 +11,7 @@
 
 //const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
 
-Scene* Stage2::createScene(Status* _status)
+Scene* Stage2::createScene(Status* _status=nullptr)
 {
     auto scene=Stage1::createScene();
     scene->removeChildByTag(Stage1::THIS_TAG);
@@ -45,7 +45,7 @@ bool Stage2::init(Status *_status) {
 	lbTitle->setString("Stage2");
 	
 	removeChild(st_scene);
-	st_scene = Sprite::create("stage2_start.png");
+	st_scene = Sprite::create(FILE_BACKGROUND+"stage2_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(st_scene, MENU_Z_ORDER + 2);

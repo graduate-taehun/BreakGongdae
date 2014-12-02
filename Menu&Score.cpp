@@ -9,14 +9,11 @@
 #include "Menu&Score.h"
 #include "Stage2.h"
 #include "BonusStage.h"
-#include <SimpleAudioEngine.h>
 #include <iostream>
 #include <fstream>
 #include <ctime>
 #include <vector>
 #include <algorithm>
-#include <cstdlib>
-using namespace std;
 
 bool comp(int i, int j){ return (i > j); }
 //
@@ -38,14 +35,14 @@ bool ScoreBoard::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
+    auto closeItem = MenuItemImage::create(FILE_ETC+"CloseNormal.png", FILE_ETC+"CloseSelected.png", CC_CALLBACK_1(ScoreBoard::menuCloseCallback, this));
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
     
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
-	auto background = Sprite::create("rank.png");
+	auto background = Sprite::create(FILE_BACKGROUND+"rank.png");
 	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
@@ -125,22 +122,22 @@ bool MenuStage::init(){
     
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
-	auto background = Sprite::create("start_scecne.png");
+	auto background = Sprite::create(FILE_BACKGROUND+"start_scene.png");
 	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("opening.mp3", false);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("opening.mp3"), false);
 
-	auto item1 = LabelBMFont::create("START", "bitmapFontTest3.fnt");
+	auto item1 = LabelBMFont::create("START", FILE_FONT+"bitmapFontTest3.fnt");
 	auto item_1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));
 	item_1->setScale(2, 2);
 
-	auto item2 = LabelBMFont::create("SCORE", "bitmapFontTest3.fnt");
+	auto item2 = LabelBMFont::create("SCORE", FILE_FONT+"bitmapFontTest3.fnt");
 	auto item_2 = MenuItemLabel::create(item2, CC_CALLBACK_1(MenuStage::menuCallbackforScoreBoard, this));
 	item_2->setScale(2, 2);
 		
-	auto item3 = LabelBMFont::create("EXIT", "bitmapFontTest3.fnt");
+	auto item3 = LabelBMFont::create("EXIT", FILE_FONT+"bitmapFontTest3.fnt");
 	auto item_3 = MenuItemLabel::create(item3, CC_CALLBACK_1(MenuStage::menuCallbackforExit, this));
 	item_3->setScale(2, 2);
 
@@ -190,10 +187,10 @@ bool EndScene::initWithScore(Status& status) {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(EndScene::menuCloseCallback, this));
+	auto closeItem = MenuItemImage::create(FILE_ETC+"CloseNormal.png", FILE_ETC+"CloseSelected.png", CC_CALLBACK_1(EndScene::menuCloseCallback, this));
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width / 2, origin.y + closeItem->getContentSize().height / 2));
 
-	auto background = Sprite::create("end.png");
+	auto background = Sprite::create(FILE_BACKGROUND+"end.png");
 	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
@@ -230,7 +227,6 @@ void EndScene::menuCloseCallback(Ref* pSender){
 	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.", "Alert");
 	return;
 #endif
-
 	Director::getInstance()->replaceScene(MenuStage::createScene());
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

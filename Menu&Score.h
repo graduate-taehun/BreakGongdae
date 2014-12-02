@@ -9,9 +9,7 @@
 #ifndef __BreakGongDae__Menu_Score__
 #define __BreakGongDae__Menu_Score__
 
-#include "cocos2d.h"
 #include "Status.h"
-USING_NS_CC;
 
 class ScoreBoard : public cocos2d::Layer{
 private:

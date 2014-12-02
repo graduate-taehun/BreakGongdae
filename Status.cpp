@@ -7,8 +7,6 @@
 //
 
 #include "Status.h"
-#include <cstdlib>
-using namespace std;
 
 bool Status::init() {
     if(!Layer::init())
@@ -23,29 +21,29 @@ bool Status::init() {
     currentGauge = MAX_GAUGE;
     targetGauge = MAX_GAUGE;
     
-    bar_HP = Sprite::create("status_hp.png");
+    bar_HP = Sprite::create(FILE_ETC+"gauge_bar.png");
     float x = -bar_HP->getContentSize().width/2;
     bar_HP->setPosition(Vec2(x,bar_HP->getContentSize().height*1.5));
     bar_HP->setAnchorPoint(Vec2(0,0.5));
     addChild(bar_HP);
     
-    bar_gauge = Sprite::create("status_hp.png");
+    bar_gauge = Sprite::create(FILE_ETC+"gauge_bar.png");
     bar_gauge->setPosition(Vec2(x,bar_gauge->getContentSize().height/2));
     bar_gauge->setAnchorPoint(Vec2(0,0.5));
     addChild(bar_gauge);
 	
-	bar_blade = Sprite::create("status_hp.png");
+	bar_blade = Sprite::create(FILE_ETC+"gauge_bar.png");
 	bar_blade->setPosition(Vec2(x, -bar_blade->getContentSize().height / 2));
 	bar_blade->setAnchorPoint(Vec2(0, 0.5));
 	addChild(bar_blade);
 	
-    lbScore = CCLabelTTF::create("score : 0", "futura-48.fnt", 32);
+    lbScore = CCLabelTTF::create("score : 0", FILE_FONT+"futura-48.fnt", 32);
     lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height*1.5));
     lbScore->setAnchorPoint(Vec2(0,0.5));
     lbScore->setColor(ccc3(0, 0, 0));
     addChild(lbScore);
     
-    lbCombo = CCLabelTTF::create("combo : 0", "futura-48.fnt", 28);
+    lbCombo = CCLabelTTF::create("combo : 0", FILE_FONT+"futura-48.fnt", 28);
     lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*2.5));
     lbCombo->setAnchorPoint(Vec2(0,0.5));
     lbCombo->setColor(ccc3(0, 0, 0));
@@ -131,7 +129,7 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 		check[num] = rand() % 100;
 		
 		if (block_select == 0){
-			frag = Sprite::create("fragment_1.png");
+			frag = Sprite::create(FILE_ETC+"fragment_1.png");
 			if (check[num] % 2 == 1)
 				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
 			else
@@ -143,7 +141,7 @@ void Status::increaseCombo(int i, const Vec2& posCharacter) {
 			getParent()->addChild(frag, 3);
 		}
 		else if (block_select == 1){
-			frag = Sprite::create("fragment_2.png");
+			frag = Sprite::create(FILE_ETC+"fragment_2.png");
 			if (check[num] % 2 == 1)
 				frag->setPosition(posCharacter.x + check[num] * 2, posCharacter.y + 80);
 			else

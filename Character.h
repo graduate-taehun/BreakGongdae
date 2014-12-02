@@ -9,13 +9,10 @@
 #ifndef __BreakGongDae__Character__
 #define __BreakGongDae__Character__
 
-#include "cocos2d.h"
 #include "BalanceSetting.h"
 
-USING_NS_CC;
-
 enum State{ sGround, sAir };
-enum ActionState{Attacking , None, Blocking };
+enum ActionState{Attacking , None, Blocking, Blading };
 
 class Character : public Sprite{
 private:

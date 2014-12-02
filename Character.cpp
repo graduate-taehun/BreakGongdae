@@ -10,7 +10,7 @@
 
 //const float Character::ATTACK_FRAME = 0.1f;
 bool Character::init() {
-    if(!Sprite::initWithFile("ch_base.png"))
+    if(!Sprite::initWithFile(FILE_CHARACTER+"ch_base.png"))
         return false;
     
     auto body = PhysicsBody::createBox(Size(getContentSize().width,getContentSize().height-CHARACTER_OFFSET),PhysicsMaterial(10.0f,0.0f,0.0f),Vec2(0,-CHARACTER_OFFSET/2));
@@ -27,7 +27,7 @@ bool Character::init() {
 void Character::stopAttackAction(){
     setActionState(None);
 }
-using namespace std;
+
 void Character::doAttackAction() {
     if(getActionByTag(ATTACK_TAG)!=nullptr) return;
     //stopActionByTag(ATTACK_TAG);
@@ -36,11 +36,11 @@ void Character::doAttackAction() {
     Vector<SpriteFrame*> animFrames(6);
     string str;
     for (int i = 1; i <= 6; i++){
-        str="ch_attack_"+to_string(i)+".png";
+        str=FILE_CHARACTER+"ch_attack_"+to_string(i)+".png";
         auto frame = SpriteFrame::create(str, getTextureRect());
         animFrames.pushBack(frame);
     }
-    auto frame = SpriteFrame::create("ch_base.png", getTextureRect());
+    auto frame = SpriteFrame::create(FILE_CHARACTER+"ch_base.png", getTextureRect());
     animFrames.pushBack(frame);
     auto animation = Animation::createWithSpriteFrames(animFrames, ATTACK_FRAME);
     auto animate = Animate::create(animation);
@@ -52,7 +52,7 @@ void Character::doAttackAction() {
 }
 
 void Character::pre_jump_scheduler(float time) {
-    setTexture("ch_base.png");
+    setTexture(FILE_CHARACTER+"ch_base.png");
 }
 void Character::setState(State _state){
 	state = _state;
@@ -65,7 +65,7 @@ void Character::setState(State _state){
 		getPhysicsBody()->setCategoryBitmask(0x01);
 		getPhysicsBody()->setContactTestBitmask(0x04);
 		getPhysicsBody()->setCollisionBitmask(0x03);
-        setTexture("ch_jump_start.png");
+        setTexture(FILE_CHARACTER+"ch_jump_start.png");
         schedule(schedule_selector(Character::pre_jump_scheduler),TIME_PRE_JUMP,1,TIME_PRE_JUMP);
         
         
@@ -73,10 +73,13 @@ void Character::setState(State _state){
 }
 void Character::setActionState(ActionState _action){
     action = _action;
+    if(action!=Attacking) stopActionByTag(ATTACK_TAG);
     if(action==Blocking)
-        setTexture("ch_blocking.png");
+        setTexture(FILE_CHARACTER+"ch_blocking.png");
+    if(action==Blading)
+        setTexture(FILE_CHARACTER+"ch_lethal_move.png");
     else if(action==None)
-        setTexture("ch_base.png");
+        setTexture(FILE_CHARACTER+"ch_base.png");
 }
 
 float Character::getPositionOfTop() { return getPosition().y + getContentSize().height/2-CHARACTER_OFFSET; }

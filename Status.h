@@ -9,10 +9,7 @@
 #ifndef __BreakGongDae__Status__
 #define __BreakGongDae__Status__
 
-#include "cocos2d.h"
 #include "BalanceSetting.h"
-#include <string>
-USING_NS_CC;
 
 class Status : public Layer {
 private:

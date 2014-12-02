@@ -9,9 +9,7 @@
 #ifndef __BreakGongDae__Laser__
 #define __BreakGongDae__Laser__
 
-#include "cocos2d.h"
 #include "BalanceSetting.h"
-USING_NS_CC;
 
 class LaserWarning : public LayerColor {
 private:

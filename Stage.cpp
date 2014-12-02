@@ -7,7 +7,6 @@
 //
 
 #include "Stage.h"
-#include <SimpleAudioEngine.h>
 
 //Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 Scene* Stage::createScene()
@@ -58,7 +57,7 @@ Stage* Stage::create() {
 }
 bool Stage::init(Status* _status=nullptr)
 {
-    if (!LayerColor::initWithColor(Color4B(255, 255, 255, 255)))
+    if (!Layer::init())
         return false;
     
 	CCDirector::sharedDirector()->resume();
@@ -78,7 +77,7 @@ bool Stage::init(Status* _status=nullptr)
 	body->setContactTestBitmask(0x03);
 	body->setCollisionBitmask(0x05);
 
-	groundNode = Sprite::create("ground.png");
+	groundNode = Sprite::create(FILE_BACKGROUND+"ground.png");
 	groundNode->setContentSize(Size(visibleSize.width, GROUND_HEIGHT));
 	groundNode->setPosition(visibleSize.width / 2, GROUND_HEIGHT / 2);
 	groundNode->setTag(GROUND_TAG);
@@ -86,7 +85,7 @@ bool Stage::init(Status* _status=nullptr)
 	addChild(groundNode, MENU_Z_ORDER-1);
 
 	Game_Pause = 0;
-	btnClose = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
+	btnClose = MenuItemImage::create(FILE_ETC+"CloseNormal.png", FILE_ETC+"CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
     posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
 	btnClose->setPosition(posClose);
 
@@ -94,7 +93,7 @@ bool Stage::init(Status* _status=nullptr)
 	menuClose->setPosition(Vec2::ZERO);
 	addChild(menuClose,MENU_Z_ORDER+2);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", false);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
 	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
@@ -105,7 +104,7 @@ bool Stage::init(Status* _status=nullptr)
     contactListener->onContactBegin = CC_CALLBACK_1(Stage::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
     
-    auto background=Sprite::create("background.png");
+    auto background=Sprite::create(FILE_BACKGROUND+"background.png");
     background->setContentSize(Size(visibleSize.width,visibleSize.height*10));
     background->setPosition(visibleSize.width/2,visibleSize.height*5);
     addChild(background);
@@ -127,7 +126,7 @@ bool Stage::init(Status* _status=nullptr)
     gaugeBlocking->setPosition(posGauge);
     addChild(gaugeBlocking);*/
 
-    lbTitle = LabelBMFont::create("Stage", "futura-48.fnt");
+    lbTitle = LabelBMFont::create("Stage", FILE_FONT+"futura-48.fnt");
     lbTitle->setPosition(posTitle);
     addChild(lbTitle, MENU_Z_ORDER);
    

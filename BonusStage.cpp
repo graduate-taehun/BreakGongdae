@@ -8,7 +8,7 @@
 #include "BonusStage.h"
 #include "Stage2.h"
 
-Scene* BonusStage::createScene(Status* _status)
+Scene* BonusStage::createScene(Status* _status=nullptr)
 {
 	auto scene = Stage::createScene();
 	scene->removeChildByTag(Stage::THIS_TAG);
@@ -38,7 +38,7 @@ bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
 
 	lbTitle->setString("Bonus");
-	st_scene = Sprite::create("bonus_stage_start.png");
+	st_scene = Sprite::create(FILE_BACKGROUND+"bonus_stage_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(st_scene, MENU_Z_ORDER + 2);
@@ -126,7 +126,7 @@ void BonusStage::makeCourses() {
 	}
 
     for(int i=0; i<3; i++) {
-        courses[i]=Sprite::create(*cntMajor + "_" + to_string(i+1) + ".png");
+        courses[i]=Sprite::create(FILE_BOUNS_STAGE+*cntMajor + "_" + to_string(i+1) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
     
 		auto body = PhysicsBody::createBox(courses[i]->getContentSize(), material);

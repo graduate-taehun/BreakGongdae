@@ -13,9 +13,8 @@
 #include "Status.h"
 #include "Building.h"
 #include "Menu&Score.h"
-#include <cstdlib>
 
-class Stage : public LayerColor {
+class Stage : public Layer {
 private:
     void menuCloseCallback(Ref* pSender);
     

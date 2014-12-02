@@ -9,7 +9,6 @@
 #include "Stage1.h"
 #include "Stage2.h"
 #include "BonusStage.h"
-#include <SimpleAudioEngine.h>
 #include <climits>
 
 //const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
@@ -44,7 +43,7 @@ bool Stage1::init(Status* _status=nullptr) {
     blade=nullptr;
 	lbTitle->setString("Stage1");
 
-	st_scene = Sprite::create("stage1_start.png");
+	st_scene = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(st_scene, MENU_Z_ORDER+5);
@@ -54,7 +53,7 @@ bool Stage1::init(Status* _status=nullptr) {
     return true;
 }
 void Stage1::setNextBuilding() {
-    float posRemoved = 3000;
+    float posRemoved = 2500;
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
@@ -148,8 +147,9 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         case EventKeyboard::KeyCode::KEY_C:
         {
 			if (status->getBlade() == status->getMAX_BLADE()){
-				blade = Sprite::create("Blade.png");
-                character->setTexture("ch_lethal_move.png");
+				blade = Sprite::create(FILE_ETC+"Blade.png");
+                character->setActionState(Blading);
+                //setTexture("ch_lethal_move.png");
 				auto body = PhysicsBody::createBox(blade->getContentSize(), PhysicsMaterial(0.f, 0.5f, 0.5f));
 				body->setCollisionBitmask(0x00);
 				body->setGravityEnable(false);
@@ -219,7 +219,8 @@ void Stage1::blade_scheduler(float time){
             if (building->attack(true)){
                 breaking=false;
                 
-                character->setTexture("ch_base.png");
+                character->setActionState(Blading);
+                //setTexture("ch_base.png");
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }

@@ -8,7 +8,6 @@
 
 #include "Building.h"
 #include "Stage2.h"
-#include <cstdlib>
 
 //
 //Block
@@ -91,7 +90,7 @@ bool Building::initWithBlockSize(string filename, Size _blocksize) {
     return true;
 }
 bool Building::init(string filename) {
-    return initWithBlockSize(filename, Size(WIDTH_BLOCK,HEIGHT_BLOCK));
+    return initWithBlockSize(filename, SIZE_DEFAULT_BLOCK);
 }
 
 Building* Building::create(string filename) {
@@ -181,7 +180,7 @@ float Building::getPositionOfBottom() {
 //Stairs78
 //
 bool Stairs78::init() {
-    if(!Building::initWithBlockSize("78.png",SIZE_78)) return false;
+    if(!Building::initWithBlockSize(FILE_STAGE1+"78.png",SIZE_78)) return false;
     /*numberOfBuilding=1;
     nextBuilding=Building::createWithBlockSize("78.png", SIZE_78);
     nextBuilding->setPosition(Vec2(0,getContentSize().height));

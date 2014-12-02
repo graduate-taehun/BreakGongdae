@@ -9,14 +9,10 @@
 #ifndef __BreakGongDae__Building__
 #define __BreakGongDae__Building__
 
-#include "cocos2d.h"
 #include "BalanceSetting.h"
-#include <string>
 #include <map>
 #include <vector>
 #include <queue>
-USING_NS_CC;
-using namespace std;
 
 class Block : public Sprite {
 private:
@@ -24,7 +20,6 @@ private:
     virtual bool init(int _durability, string filename, int index);
     
 public:
-    //Block(int _durability=10) : durability(_durability) {}
     int getDurability();
     void attack();
     static Block* create(int _durability, string filename, int index);
