@@ -63,7 +63,7 @@ using namespace std;
  || (CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
     #define DIR_SEPERATOR "/"
 #else
-    #define DIR_SEPERATOR "\\"
+    #define DIR_SEPERATOR "/"
 #endif
 
 //Folders

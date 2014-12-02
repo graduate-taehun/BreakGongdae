@@ -40,10 +40,11 @@ protected:
     static Size visibleSize;
 	float posCharacter[3]; //캐릭터의 x좌표로 가능한 것들
     
+	Sprite* P_Layer;
     Menu* menuClose;
 	MenuItemImage* btnClose;
     LabelBMFont *lbTitle;
-    
+	LabelTTF *P_Label;
     Status* status;
 	Sprite* groundNode;
     Character* character;
