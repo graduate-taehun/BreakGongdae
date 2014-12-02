@@ -209,13 +209,17 @@ void Stage1::block_scheduler(float time) {
 void Stage1::blade_return_scheduler(float time) {
     blade->setOpacity(0);
     blade->getPhysicsBody()->setVelocity(Vec2(0,-BLADE_VELOCITY*3));
-
+	
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
+	removeChild(B_Label);
 }
 void Stage1::blade_scheduler(float time){
-    if(isScheduled(schedule_selector(Stage1::jump_scheduler)))
-        unschedule(schedule_selector(Stage1::jump_scheduler));
+	if (isScheduled(schedule_selector(Stage1::jump_scheduler)))
+	{
+		unschedule(schedule_selector(Stage1::jump_scheduler));
+		removeChild(B_Label);
+	}
  
 	static bool breaking=true;
     setViewPoint(blade->getPosition().y);
@@ -228,6 +232,10 @@ void Stage1::blade_scheduler(float time){
                 
                 character->setActionState(Blading);
                 //setTexture("ch_base.png");
+				B_Label = Sprite::create(FILE_ETC + "B_Label2.png");
+				B_Label->setColor(ccc3(255, 0, 0));
+				B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
+				addChild(B_Label, 30);
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }

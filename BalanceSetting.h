@@ -17,7 +17,7 @@ using namespace std;
 #define BreakGongDae_BalanceSetting_h
 
 //For_Debug
-#define START_SCENE     BonusStage::createScene(nullptr)
+#define START_SCENE     Stage1::createScene()
 #define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_ALL
 
 //Blocking

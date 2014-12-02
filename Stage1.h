@@ -22,7 +22,7 @@ protected:
     vector<string>::const_iterator level;
     Building* building;
     Sprite* blade;
-    
+	Sprite* B_Label;
     virtual bool isLevelEnd();
     
     virtual void setNextBuilding();
