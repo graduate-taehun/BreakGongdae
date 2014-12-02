@@ -265,7 +265,7 @@ void Stage1::blade_scheduler(float time){
                 
                 character->setActionState(Blading);
                 //setTexture("ch_base.png");
-				B_Label = Sprite::create(FILE_ETC + "B_Label2.png");
+				B_Label = Sprite::create(FILE_ETC + "B_Label.png");
 				B_Label->setColor(ccc3(255, 0, 0));
 				B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
 				addChild(B_Label, 30);
