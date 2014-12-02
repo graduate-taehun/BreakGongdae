@@ -44,6 +44,8 @@ bool Stage2::init(Status *_status) {
     level=Stage2::fileBuilding.cbegin();
 	lbTitle->setString("Stage2");
 	
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
+
 	removeChild(st_scene);
 	st_scene = Sprite::create(FILE_BACKGROUND+"stage2_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
