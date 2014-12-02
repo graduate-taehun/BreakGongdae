@@ -57,6 +57,9 @@ void Stage1::setNextBuilding() {
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
+
     building = Building::create(*level++);
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved+BUILDING_START_HEIGHT);
     addChild(building,2);
@@ -72,6 +75,7 @@ void Stage1::decreaseCharacterHP() {
 }
 
 void Stage1::replaceNextScene() {
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     Director::getInstance()->replaceScene(BonusStage::createScene(new Status(*status)));
 }
 
@@ -93,7 +97,8 @@ bool Stage1::isLevelEnd() {
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
 		CCDirector::sharedDirector()->resume();
-        Game_Pause = 0;
+		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+		Game_Pause = 0;
         return;
     }
     if(Game_Pause==1) return;

@@ -92,8 +92,6 @@ bool Stage::init(Status* _status=nullptr)
 	menuClose = Menu::create(btnClose, NULL);
 	menuClose->setPosition(Vec2::ZERO);
 	addChild(menuClose,MENU_Z_ORDER+2);
-
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
 	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
@@ -167,8 +165,8 @@ void Stage::jump_scheduler(float time) {
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		CCDirector::sharedDirector()->resume();
+		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
 	}
@@ -187,7 +185,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         }
         case EventKeyboard::KeyCode::KEY_ESCAPE: {
             if (Game_Pause == 0) {
-			//	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 				CCDirector::sharedDirector()->pause();
                 Game_Pause = 1;
             }
@@ -203,6 +201,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 	return;
 #endif
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	Director::getInstance()->replaceScene(MenuStage::createScene());
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

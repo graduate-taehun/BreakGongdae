@@ -17,7 +17,7 @@ using namespace std;
 #define BreakGongDae_BalanceSetting_h
 
 //For_Debug
-#define START_SCENE     Stage1::createScene()
+#define START_SCENE     BonusStage::createScene(nullptr)
 #define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_ALL
 
 //Blocking
@@ -63,7 +63,7 @@ using namespace std;
  || (CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
     #define DIR_SEPERATOR "/"
 #else
-    #define DIR_SEPERATOR "\\"
+    #define DIR_SEPERATOR "/"
 #endif
 
 //Folders
