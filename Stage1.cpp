@@ -97,6 +97,8 @@ bool Stage1::isLevelEnd() {
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
 		CCDirector::sharedDirector()->resume();
+		removeChild(P_Label);
+		removeChild(P_Layer);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
