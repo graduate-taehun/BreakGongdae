@@ -37,6 +37,8 @@ BonusStage* BonusStage::create(Status *_status) {
 bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("bonus.mp3"), false);
+
 	lbTitle->setString("Bonus");
 	st_scene = Sprite::create(FILE_BACKGROUND+"bonus_stage_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
@@ -51,6 +53,7 @@ bool BonusStage::init(Status* _status) {
 }
 
 void BonusStage::replace_scheduler(float time) {
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 }
 

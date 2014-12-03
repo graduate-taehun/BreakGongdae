@@ -149,6 +149,7 @@ bool MenuStage::init(){
 }
 
 void MenuStage::menuCallbackforStage(Ref* pSender){
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     Director::getInstance()->replaceScene(START_SCENE);
 }
 void MenuStage::menuCallbackforScoreBoard(Ref* pSender){

@@ -43,6 +43,8 @@ bool Stage1::init(Status* _status=nullptr) {
     blade=nullptr;
 	lbTitle->setString("Stage1");
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
+
 	st_scene = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
@@ -72,6 +74,7 @@ void Stage1::decreaseCharacterHP() {
 }
 
 void Stage1::replaceNextScene() {
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     Director::getInstance()->replaceScene(BonusStage::createScene(new Status(*status)));
 }
 
@@ -92,8 +95,11 @@ bool Stage1::isLevelEnd() {
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
+		removeChild(P_Label);
+		removeChild(P_Layer);
 		CCDirector::sharedDirector()->resume();
-        Game_Pause = 0;
+		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+		Game_Pause = 0;
         return;
     }
     if(Game_Pause==1) return;
@@ -205,10 +211,14 @@ void Stage1::blade_return_scheduler(float time) {
     
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
+	removeChild(B_Label);
 }
 void Stage1::blade_scheduler(float time){
-    if(isScheduled(schedule_selector(Stage1::jump_scheduler)))
-        unschedule(schedule_selector(Stage1::jump_scheduler));
+	if (isScheduled(schedule_selector(Stage1::jump_scheduler)))
+	{
+		unschedule(schedule_selector(Stage1::jump_scheduler));
+		removeChild(B_Label);
+	}
  
 	static bool breaking=true;
     

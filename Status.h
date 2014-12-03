@@ -30,6 +30,7 @@ private:
     
     void gauge_scheduler(float time);
     
+	Sprite* state;
     Sprite* bar_gauge;
     Sprite* bar_HP;
 	Sprite* bar_blade;

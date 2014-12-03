@@ -139,8 +139,7 @@ void Stage::setViewPoint(float threshold) {
         btnClose->setPosition(posClose.x, threshold + posClose.y-visibleSize.height/2);
         this->setPosition(Vec2(this->getPosition().x,-threshold+visibleSize.height/2));
         this->getChildByTag(GROUND_TAG)->setPosition(
-                    Vec2(this->getChildByTag(GROUND_TAG)->getPosition().x,
-                         GROUND_HEIGHT/2+(visibleSize.height/2-threshold)               ));
+                    Vec2(this->getChildByTag(GROUND_TAG)->getPosition().x, GROUND_HEIGHT/2+(visibleSize.height/2-threshold)));
     }
     else {
         status->setPosition(posStatus);
@@ -167,8 +166,8 @@ void Stage::jump_scheduler(float time) {
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		CCDirector::sharedDirector()->resume();
+		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
 	}
@@ -187,15 +186,25 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         }
         case EventKeyboard::KeyCode::KEY_ESCAPE: {
             if (Game_Pause == 0) {
-			//	CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+				CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 				CCDirector::sharedDirector()->pause();
-                Game_Pause = 1;
+				P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
+				P_Label->setColor(ccc3(0, 0, 0));
+				P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
+				P_Label->setTag(125);
+				addChild(P_Label, 50);
+				P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
+				P_Layer->setTag(126);
+				P_Layer->setOpacity(100);
+				P_Layer->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
+				addChild(P_Layer, 49);
+				Game_Pause = 1;
             }
         }		
         default:
             break;
     }
-}
+}	
 void Stage::menuCloseCallback(Ref* pSender)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -203,6 +212,7 @@ void Stage::menuCloseCallback(Ref* pSender)
 	return;
 #endif
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 	Director::getInstance()->replaceScene(MenuStage::createScene());
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
