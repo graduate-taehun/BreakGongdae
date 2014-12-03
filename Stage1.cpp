@@ -11,8 +11,6 @@
 #include "BonusStage.h"
 #include <climits>
 
-//const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
-
 Scene* Stage1::createScene(){
     auto scene=Stage::createScene();
     scene->removeChildByTag(Stage::THIS_TAG);
@@ -43,8 +41,6 @@ bool Stage1::init(Status* _status=nullptr) {
     blade=nullptr;
 	lbTitle->setString("Stage1");
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
-
 	st_scene = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
 	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
@@ -70,7 +66,7 @@ void Stage1::decreaseCharacterHP() {
     
 	if (status->getHP() == 0){
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-        Director::getInstance()->replaceScene(EndScene::createScene(*status,true));
+        Director::getInstance()->replaceScene(EndScene::createScene(*status));
 	}
 }
 
@@ -138,7 +134,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 					if (isLevelEnd())
                         replaceNextScene();
 					else
-                        setNextBuilding();
+                        setNextBuilding(status->getBScore());
                     break;
                 }
             }
@@ -156,7 +152,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 			if (status->bladeIsPossible()){
 				blade = Sprite::create(FILE_ETC+"Blade.png");
                 character->setActionState(Blading);
-                //setTexture("ch_lethal_move.png");
+                
 				auto body = PhysicsBody::createBox(blade->getContentSize(), PhysicsMaterial(0.f, 0.5f, 0.5f));
 				body->setCollisionBitmask(0x00);
 				body->setGravityEnable(false);
@@ -166,7 +162,6 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 				blade->setPosition(visibleSize.width / 2, character->getPositionOfTop());
 				addChild(blade, MENU_Z_ORDER - 1);
 
-				//if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
                 schedule(schedule_selector(Stage1::blade_scheduler));
 			
 				status->resetBlade();
@@ -203,7 +198,6 @@ void Stage1::block_scheduler(float time) {
         }
         
         building->getPhysicsBody()->setVelocity(Vec2(0,BUILDING_VEL_AFTER_BLOCKING));
-        //if(character->getState()==sGround) unschedule(schedule_selector(Stage::block_scheduler));
     }
 }
 void Stage1::blade_return_scheduler(float time) {
@@ -260,7 +254,7 @@ void Stage1::blade_scheduler(float time){
                 if (isLevelEnd())
                     replaceNextScene();
                 else
-                    setNextBuilding();
+                    setNextBuilding(status->getBScore());
             }
         }
     }

@@ -6,6 +6,9 @@
 //
 //
 
+#ifndef BreakGongDae_BalanceSetting_h
+#define BreakGongDae_BalanceSetting_h
+
 #include "SimpleAudioEngine.h"
 #include "cocos2d.h"
 #include <string>
@@ -13,11 +16,8 @@
 USING_NS_CC;
 using namespace std;
 
-#ifndef BreakGongDae_BalanceSetting_h
-#define BreakGongDae_BalanceSetting_h
-
 //For_Debug
-#define START_SCENE     Stage1::createScene()
+#define START_SCENE     Stage2::createScene()
 #define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
@@ -53,7 +53,6 @@ using namespace std;
 #define HONEY_BSCORE 1
 #define NORMAL_BSCORE 2
 #define HARD_BSCORE 3
-
 
 //Files
 //Seperator
@@ -130,6 +129,7 @@ using namespace std;
 
 #endif
 /*
+ Default Fonts
 	"American Typewriter"
 	"Arial"
 	"Arial Rounded MT Bold"

@@ -47,16 +47,14 @@ void Block::attack() {
 bool Building::init(string filename, Size _blocksize, const vector<int>& currentDurabilities, int weight=0) {
     if(!Layer::init()) return false;
     blocksize=_blocksize;
-    //const vector<int>& currentDurabilities=durabilities.at(filename);
-    
-    //초기화
+
     removeAllChildren();
     ignoreAnchorPointForPosition(false);
     setAnchorPoint(Vec2(0.5,0.5));
     background=Sprite::create(filename);
     
     setContentSize(Size(blocksize.width, background->getContentSize().height));
-    //background->setContentSize(getContentSize());
+    
     background->setPosition(Vec2(getContentSize().width/2,getContentSize().height/2));
     addChild(background);
     
@@ -153,8 +151,7 @@ bool Building::attack(bool isBlade) {
     
     if(bottom->getDurability()<=0 || isBlade) {
         setPosition(Vec2(getPosition().x,getPosition().y+blocksize.height/2));
-        
-        //제거
+
         removeChild(bottom);
         blocks->pop();
         
@@ -196,7 +193,6 @@ bool Stairs78::init() {
     
     currentDurab+=UNIT_NUM_78;
     nextBuilding=Sprite::create(FILE_78);
-    //nextBuilding->setContentSize(Size(nextBuilding->getContentSize().width,260));
     nextBuilding->setPosition(Vec2(getContentSize().width/2, getContentSize().height/2+nextBuilding->getContentSize().height/2+blocksize.height/2));
     addChild(nextBuilding);
     

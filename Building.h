@@ -32,9 +32,7 @@ protected:
     queue<Block *>* blocks;
     Sprite* background;
     Size blocksize;
-    //virtual bool init(string filename);
     
-
     const static PhysicsMaterial material;
     const static map<string,const vector<int>> durabilities;
     

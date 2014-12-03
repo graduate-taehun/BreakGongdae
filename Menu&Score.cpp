@@ -15,7 +15,6 @@
 #include <vector>
 #include <algorithm>
 
-bool comp(int i, int j){ return (i > j); }
 //
 //ScoreBoard
 //
@@ -26,6 +25,8 @@ Scene* ScoreBoard::createScene()
     scene->addChild(layer);
     return scene;
 }
+
+bool comp(int i, int j){ return (i > j); }
 
 bool ScoreBoard::init()
 {

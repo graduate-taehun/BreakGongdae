@@ -8,14 +8,12 @@
 
 #include "Character.h"
 
-//const float Character::ATTACK_FRAME = 0.1f;
 bool Character::init() {
     if(!Sprite::initWithFile(FILE_CHARACTER+"ch_base.png"))
         return false;
     
     auto body = PhysicsBody::createBox(Size(getContentSize().width,getContentSize().height-CHARACTER_OFFSET),PhysicsMaterial(10.0f,0.0f,0.0f),Vec2(0,-CHARACTER_OFFSET/2));
 
-    //body->setMass(100);
     body->setRotationEnable(false);
 	setPhysicsBody(body);
     

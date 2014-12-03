@@ -8,12 +8,9 @@
 
 #include "Stage.h"
 
-//Size Stage::visibleSize = Director::getInstance()->getVisibleSize();
 Scene* Stage::createScene()
 {
     visibleSize=Director::getInstance()->getVisibleSize();
-    
-    //origin=Director::getInstance()->getVisibleOrigin();
     
     Vect gravity = Vect(0.0f, -GRAVITY);
     
@@ -32,7 +29,6 @@ Scene* Stage::createScene()
     auto edgeBox = Node::create();
     edgeBox->setPosition(Point(visibleSize.width/2, Stage::THIS_HEIGHT/2));
     edgeBox->setContentSize(Size(visibleSize.width,Stage::THIS_HEIGHT));
-    //edgeBox->setTag(EDGE_TAG);
     edgeBox->setPhysicsBody(body);
     scene->addChild(edgeBox);
     
@@ -93,7 +89,7 @@ bool Stage::init(Status* _status=nullptr)
 	menuClose->setPosition(Vec2::ZERO);
 	addChild(menuClose,MENU_Z_ORDER+2);
 
-	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
 	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
@@ -120,11 +116,6 @@ bool Stage::init(Status* _status=nullptr)
     posStatus=Vec2(status->getContentSize().width/2, visibleSize.height / 2);
     status->setPosition(posStatus);
     addChild(status, MENU_Z_ORDER);
-
-    /*gaugeBlocking=BlockingGauge::create();
-    posGauge=Vec2(visibleSize.width*19/20-gaugeBlocking->getContentSize().width,visibleSize.height *1 / 20);
-    gaugeBlocking->setPosition(posGauge);
-    addChild(gaugeBlocking);*/
 
     lbTitle = LabelBMFont::create("Stage", FILE_FONT+"futura-48.fnt");
     lbTitle->setPosition(posTitle);

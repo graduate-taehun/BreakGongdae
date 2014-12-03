@@ -170,7 +170,7 @@ void Status::resetBlade() {
 void Status::gauge_scheduler(float time) {
     if(currentGauge>targetGauge) currentGauge-=BLOCKING_GAUGE_VELOCITY;
     else if(currentGauge<targetGauge) currentGauge+=BLOCKING_GAUGE_VELOCITY;
-    //else targetGauge=MAX_GAUGE;
+
     bar_gauge->setTextureRect(Rect(0, 0, GAUGE_WIDTH * currentGauge /MAX_GAUGE, bar_gauge->getContentSize().height));
 }
 

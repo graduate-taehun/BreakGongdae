@@ -9,8 +9,6 @@
 #include "Stage2.h"
 #include <climits>
 
-//const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
-
 Scene* Stage2::createScene(Status* _status)
 {
     auto scene=Stage1::createScene();
@@ -43,8 +41,6 @@ bool Stage2::init(Status *_status) {
     laserwarning=nullptr;
     level=Stage2::fileBuilding.cbegin();
 	lbTitle->setString("Stage2");
-	
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
 
 	removeChild(st_scene);
 	st_scene = Sprite::create(FILE_BACKGROUND+"stage2_start.png");
@@ -54,7 +50,7 @@ bool Stage2::init(Status *_status) {
 	schedule(schedule_selector(Stage2::scene_scheduler), 2, 1, 2);
 
 	building->setPositionOfBottom(-building->getContentSize().height);
-    setNextBuilding();
+    setNextBuilding(status->getBScore());
 	return true;
 }
 
@@ -79,7 +75,9 @@ void Stage2::makeLaser_scheduler(float time) {
         laserwarning->setContentSize(Size(getContentSize().width/3,getContentSize().height));
         laserwarning->setPosition(Vec2(posCharacter[laserposition],0));
         
-        addChild(laserwarning,256);        
+        addChild(laserwarning,256);
+        CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(0.05);
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILE_BGM("warning.wav"));
     }
 }
 

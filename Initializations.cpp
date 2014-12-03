@@ -1,3 +1,11 @@
+//
+//  Initiallizations.cpp
+//  BreakGongDae
+//
+//  Created by 유정민 on 2014. 11. 30..
+//
+//
+
 #include "Stage2.h"
 #include "BonusStage.h"
 #include "Character.h"
