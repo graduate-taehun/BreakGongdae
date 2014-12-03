@@ -126,8 +126,8 @@ bool MenuStage::init(){
 	background->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
-
-	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("opening.mp3"), false);
+    CocosDenshion::SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.6);
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("opening.mp3"), false);
 
 	auto item1 = LabelBMFont::create("START", FILE_FONT+"bitmapFontTest3.fnt");
 	auto item_1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));
@@ -142,7 +142,8 @@ bool MenuStage::init(){
 	item_3->setScale(2, 2);
 
 	auto menu = Menu::create(item_1, item_2, item_3, NULL);
-    menu->alignItemsVertically();
+    menu->alignItemsVerticallyWithPadding(20);
+    menu->setPosition(Vec2(visibleSize.width/2,visibleSize.height/2-30));
     this->addChild(menu);
     
     return true;
@@ -162,7 +163,7 @@ void MenuStage::menuCallbackforExit(Ref* pSender){
 //
 //EndScene
 //
-Scene* EndScene::createSceneWithScore(Status status) {
+Scene* EndScene::createSceneWithScore(Status& status) {
 	auto scene = Scene::create();
 	auto layer = EndScene::createWithScore(status);
 	scene->addChild(layer);

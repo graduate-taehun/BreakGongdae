@@ -55,12 +55,13 @@ bool Stage1::init(Status* _status=nullptr) {
     return true;
 }
 void Stage1::setNextBuilding() {
-    float posRemoved = 2500;
+    float posRemoved = 1500;
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
-    building = Stairs78::create(/**level++*/);
-    building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved+BUILDING_START_HEIGHT);
+    building = Building::create(*level++);
+    building->setPosition(visibleSize.width / 2, 0);
+    building->setPositionOfBottom(GROUND_HEIGHT+posRemoved+BUILDING_START_HEIGHT);
     addChild(building);
 }
 void Stage1::decreaseCharacterHP() {
@@ -152,7 +153,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
         }
         case EventKeyboard::KeyCode::KEY_C:
         {
-			if (status->getBlade() == status->getMAX_BLADE()){
+			if (status->bladeIsPossible()){
 				blade = Sprite::create(FILE_ETC+"Blade.png");
                 character->setActionState(Blading);
                 //setTexture("ch_lethal_move.png");
@@ -168,7 +169,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 				//if (!isScheduled(schedule_selector(Stage1::blade_scheduler)))
                 schedule(schedule_selector(Stage1::blade_scheduler));
 			
-				status->setBlade(0);
+				status->resetBlade();
 			}
         }
         default: Stage::onKeyPressed(keyCode, event);

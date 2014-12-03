@@ -64,7 +64,7 @@ bool Stage::init(Status* _status=nullptr)
 	
     setContentSize(Size(visibleSize.width,Stage::THIS_HEIGHT));
     
-    posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
+    
     posTitle=Vec2(visibleSize.width * 7 / 8, visibleSize.height * 19 / 20);
     posCharacter[0]=Stage::visibleSize.width / 2 - Stage::visibleSize.width / 3;
     posCharacter[1]=Stage::visibleSize.width / 2;
@@ -114,10 +114,10 @@ bool Stage::init(Status* _status=nullptr)
 	addChild(character);
     
     if(_status==nullptr)
-        status=Status::create();
+        status=Status::createWithHeight(visibleSize.height);
     else
         status=_status;
-    
+    posStatus=Vec2(status->getContentSize().width/2, visibleSize.height / 2);
     status->setPosition(posStatus);
     addChild(status, MENU_Z_ORDER);
 

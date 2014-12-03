@@ -43,7 +43,7 @@ private:
     static EndScene* createWithScore(Status& status);
     
 public:
-    static cocos2d::Scene* createSceneWithScore(Status status);
+    static cocos2d::Scene* createSceneWithScore(Status& status);
     
     void menuCloseCallback(cocos2d::Ref* pSender);
 };

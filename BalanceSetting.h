@@ -45,6 +45,7 @@ using namespace std;
 #define INTERVAL_REPLACE_BONUS_TO_STAGE2 1
 
 //Blade(Lethal Move)
+#define BLADE_GAUGE_UNIT 1.7
 #define BLADE_VELOCITY 1000
 #define TIME_BLADE_STOP 0.3
 
@@ -96,15 +97,15 @@ using namespace std;
 #define DURABS_DICE         2,3
 #define DURABS_RC           2,3,5
 
-#define DURABS_78           4,1,1,1,1,1,1,1,1,\
-                            4,1,1,1,1,1,1,1,1,\
-                            4,1,1,1,1,1,1,1,1,\
-                            5,2,2,2,2,2,2,2,2,\
-                            5,2,2,2,2,2,2,2,2,\
-                            7,3,3,3,3,3,3,3,3,\
-                            8,4,4,4,4,4,4,4,4,\
-                            9,5,5,5,5,5,6,6,6,\
-                            10,6,6,6,7,8
+#define DURABS_78           1,1,1,1,1,1,1,1,4,\
+                            1,1,1,1,1,1,1,1,4,\
+                            1,1,1,1,1,1,1,1,4,\
+                            2,2,2,2,2,2,2,2,5,\
+                            2,2,2,2,2,2,2,2,5,\
+                            3,3,3,3,3,3,3,3,7,\
+                            4,4,4,4,4,4,4,4,8,\
+                            5,5,5,5,5,6,6,6,9,\
+                            6,6,6,7,8,10
 
 //Files_BonusStage
 #define FILE_MAJORS \
@@ -121,6 +122,11 @@ using namespace std;
     FILE_STAGE2+"english.png", \
     FILE_STAGE2+"math.png"
 
+#define DURABS_ABC
+#define DURABS_BASIC
+#define DURABS_EE
+#define DURABS_ENG
+#define DURABS_MATH
 
 #endif
 /*

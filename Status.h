@@ -29,6 +29,7 @@ private:
     static const int MAX_GAUGE = 100;
     
     void gauge_scheduler(float time);
+    void increaseBlade(int _blade);
     
 	Sprite* state;
     Sprite* bar_gauge;
@@ -37,13 +38,24 @@ private:
     CCLabelTTF* lbScore;
     CCLabelTTF* lbCombo;
     
-    virtual bool init();
+    const static int BAR_BLADE_Y=65;
+    const static int BAR_GAUGE_Y=28;
+    const static int BAR_X=78;
+    const static int LABEL_X=20;
+    const static int LABEL_INTERVAL_Y=5;
+    
+    virtual bool initWithHeight(float height);
 
 public:
     Status() {}
     Status(const Status & st);
-    CREATE_FUNC(Status);
+    static Status* createWithHeight(float height);
 
+    float STATUS_WIDTH;
+    float GAUGE_WIDTH;
+    
+    
+    
 	int getWidth();
 
 	int getBScore();
@@ -53,8 +65,8 @@ public:
 	void resetCombo();
     void increaseCombo(int i, const Vec2& posCharacter, bool isBlade);
     
-	int getBlade();
-	void setBlade(int);
+	bool bladeIsPossible();
+    void resetBlade();
 	
     int getMAX_BLADE();
 	int getMAX_COMBO();

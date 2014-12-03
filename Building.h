@@ -27,7 +27,7 @@ public:
     const static Size SIZE_78_BLOCK;
 };
 
-class Building : public LayerColor {
+class Building : public Layer {
 protected:
     queue<Block *>* blocks;
     Sprite* background;

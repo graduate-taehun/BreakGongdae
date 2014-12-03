@@ -45,7 +45,7 @@ void Block::attack() {
 //Building
 //
 bool Building::initWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities) {
-    if(!LayerColor::initWithColor(Color4B::GREEN)) return false;
+    if(!Layer::init()) return false;
     blocksize=_blocksize;
     //const vector<int>& currentDurabilities=durabilities.at(filename);
     
