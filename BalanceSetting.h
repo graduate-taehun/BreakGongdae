@@ -18,7 +18,7 @@ using namespace std;
 
 //For_Debug
 #define START_SCENE     Stage1::createScene()
-#define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_ALL
+#define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
 #define CHARACTER_VEL_AFTER_BLOCKING 700
@@ -46,16 +46,13 @@ using namespace std;
 
 //Blade(Lethal Move)
 #define BLADE_VELOCITY 1000
-#define TIME_BLADE_STOP 0.5
+#define TIME_BLADE_STOP 0.3
 
 //Bonus Score
 #define HONEY_BSCORE 2
 #define NORMAL_BSCORE 1
 #define HARD_BSCORE 0
 
-//Blocks
-#define SIZE_DEFAULT_BLOCK Size(780,260)
-#define SIZE_78 Size(880,260)
 
 //Files
 //Seperator
@@ -99,14 +96,15 @@ using namespace std;
 #define DURABS_DICE         2,3
 #define DURABS_RC           2,3,5
 
-#define DURABS_78           4,1,1,1,1,1,1,1,1/*,1,1,\
-                            4,1,1,1,1,1,1,1,1,1,1,\
-                            4,1,1,1,1,1,1,1,1,1,1,\
-                            5,2,2,2,2,2,2,2,2,2,2,\
-                            5,2,2,2,2,2,2,2,2,2,2,\
-                            7,3,3,3,3,3,3,3,3,3,3,\
-                            9,4,4,4,4,4,5,5,5,6,6,\
-                            10*/
+#define DURABS_78           4,1,1,1,1,1,1,1,1,\
+                            4,1,1,1,1,1,1,1,1,\
+                            4,1,1,1,1,1,1,1,1,\
+                            5,2,2,2,2,2,2,2,2,\
+                            5,2,2,2,2,2,2,2,2,\
+                            7,3,3,3,3,3,3,3,3,\
+                            8,4,4,4,4,4,4,4,4,\
+                            9,5,5,5,5,5,6,6,6,\
+                            10,6,6,6,7,8
 
 //Files_BonusStage
 #define FILE_MAJORS \

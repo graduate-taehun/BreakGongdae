@@ -127,7 +127,7 @@ bool MenuStage::init(){
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("opening.mp3"), false);
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("opening.mp3"), false);
 
 	auto item1 = LabelBMFont::create("START", FILE_FONT+"bitmapFontTest3.fnt");
 	auto item_1 = MenuItemLabel::create(item1, CC_CALLBACK_1(MenuStage::menuCallbackforStage, this));

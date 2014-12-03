@@ -57,9 +57,9 @@ void Stage1::setNextBuilding() {
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
-    building = Building::create(*level++);
+    building = Stairs78::create(/**level++*/);
     building->setPosition(visibleSize.width / 2, GROUND_HEIGHT+building->getContentSize().height/2+posRemoved+BUILDING_START_HEIGHT);
-    addChild(building,2);
+    addChild(building);
 }
 void Stage1::decreaseCharacterHP() {
     status->decreaseHP();
@@ -200,9 +200,9 @@ void Stage1::block_scheduler(float time) {
     }
 }
 void Stage1::blade_return_scheduler(float time) {
-    blade->setOpacity(0);
+    blade->setVisible(false);
     blade->getPhysicsBody()->setVelocity(Vec2(0,-BLADE_VELOCITY*3));
-
+    
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
 }
@@ -211,26 +211,40 @@ void Stage1::blade_scheduler(float time){
         unschedule(schedule_selector(Stage1::jump_scheduler));
  
 	static bool breaking=true;
-    setViewPoint(blade->getPosition().y);
+    
     if(breaking) {
+        setViewPoint(blade->getPosition().y);
+        if(blade->getPosition().y>THIS_BACKGROUND_HEIGHT-visibleSize.height) {
+            breaking=false;
+            
+            unschedule(schedule_selector(Stage1::blade_scheduler));
+            schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
+        }
         if(building->getPositionOfBottom()<=blade->getPosition().y) {
             status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
             status->increaseCombo(1, blade->getPosition() + Vec2(0, 400));
             if (building->attack(true)){
                 breaking=false;
                 
-                character->setActionState(Blading);
-                //setTexture("ch_base.png");
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }
         }
     }
-    else if(blade->getPosition().y<=visibleSize.height/2 || blade->getPosition().y<=character->getPositionOfTop()) {
-        breaking=true;
-        unschedule(schedule_selector(Stage1::blade_scheduler));
-        schedule(schedule_selector(Stage1::jump_scheduler));
-        removeChild(blade);
-        setNextBuilding();
+    else {
+        if(blade->getPosition().y<=visibleSize.height/2-getPosition().y) setViewPoint(blade->getPosition().y);
+        if(blade->getPosition().y<=visibleSize.height/2 || blade->getPosition().y<=character->getPositionOfTop()) {
+            breaking=true;
+            unschedule(schedule_selector(Stage1::blade_scheduler));
+            schedule(schedule_selector(Stage1::jump_scheduler));
+            removeChild(blade);
+            blade=nullptr;
+            character->setActionState(None);
+            if(building->isEmpty()) {
+                if (isLevelEnd())
+                    replaceNextScene();
+                setNextBuilding();
+            }
+        }
     }
 }

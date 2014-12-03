@@ -52,7 +52,7 @@ void Character::doAttackAction() {
 }
 
 void Character::pre_jump_scheduler(float time) {
-    setTexture(FILE_CHARACTER+"ch_base.png");
+    setActionState(getActionState());
 }
 void Character::setState(State _state){
 	state = _state;

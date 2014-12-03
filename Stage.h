@@ -29,6 +29,8 @@ protected:
     static const int GROUND_HEIGHT = 50;
     static const int THIS_TAG = 2;
     static const int MENU_Z_ORDER = 255;
+    static const int THIS_HEIGHT = 5500;
+    static const int THIS_BACKGROUND_HEIGHT=3192;
     
     int cntofPosCharacter; //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
     

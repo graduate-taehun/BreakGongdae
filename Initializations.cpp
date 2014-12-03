@@ -19,6 +19,10 @@ const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
 const float Character::ATTACK_FRAME = 0.05f;
 const float Character::CHARACTER_OFFSET=49;
 
+//Block
+const Size Block::SIZE_DEFAULT_BLOCK = Size(780,260);
+const Size Block::SIZE_78_BLOCK      = Size(880,261);
+
 //Building
 const PhysicsMaterial Building::material=PhysicsMaterial(10000000.0f,0.0f,0.0f);
 const map<string, const vector<int>> Building::durabilities
@@ -36,3 +40,6 @@ const map<string, const vector<int>> Building::durabilities
     { Stage1::fileBuilding[10], vector<int>{DURABS_78} },
     { Stage2::fileBuilding[0], vector<int>{DURABS_MUEUNJAE} }
 };
+
+//Stairs78
+const string Stairs78::FILE_78= FILE_STAGE1+"78.png";

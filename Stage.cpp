@@ -18,7 +18,7 @@ Scene* Stage::createScene()
     Vect gravity = Vect(0.0f, -GRAVITY);
     
     auto scene = Scene::createWithPhysics();
- //   scene->getPhysicsWorld()->setDebugDrawMask(DEBUG_MODE);
+    scene->getPhysicsWorld()->setDebugDrawMask(DEBUG_MODE);
     scene->getPhysicsWorld()->setGravity(gravity);
     scene->getPhysicsWorld()->setSubsteps(3);
     
@@ -28,16 +28,16 @@ Scene* Stage::createScene()
     body->setContactTestBitmask(0x03);
     body->setCollisionBitmask(0x05);
  
-    body=PhysicsBody::createEdgeBox(Size(visibleSize.width,visibleSize.height*10));
+    body=PhysicsBody::createEdgeBox(Size(visibleSize.width,Stage::THIS_HEIGHT));
     auto edgeBox = Node::create();
-    edgeBox->setPosition(Point(visibleSize.width/2, visibleSize.height*5));
-    edgeBox->setContentSize(Size(visibleSize.width,visibleSize.height*10));
+    edgeBox->setPosition(Point(visibleSize.width/2, Stage::THIS_HEIGHT/2));
+    edgeBox->setContentSize(Size(visibleSize.width,Stage::THIS_HEIGHT));
     //edgeBox->setTag(EDGE_TAG);
     edgeBox->setPhysicsBody(body);
     scene->addChild(edgeBox);
     
     auto layer = Stage::create();
-    layer->setContentSize(Size(visibleSize.width,visibleSize.height*10));
+    layer->setContentSize(Size(visibleSize.width,Stage::THIS_HEIGHT));
     layer->setTag(2);
     scene->addChild(layer);
     
@@ -62,7 +62,7 @@ bool Stage::init(Status* _status=nullptr)
     
 	CCDirector::sharedDirector()->resume();
 	
-    setContentSize(Size(visibleSize.width,visibleSize.height*10));
+    setContentSize(Size(visibleSize.width,Stage::THIS_HEIGHT));
     
     posStatus=Vec2(visibleSize.width / 8, visibleSize.height * 18 / 20);
     posTitle=Vec2(visibleSize.width * 7 / 8, visibleSize.height * 19 / 20);
@@ -93,7 +93,7 @@ bool Stage::init(Status* _status=nullptr)
 	menuClose->setPosition(Vec2::ZERO);
 	addChild(menuClose,MENU_Z_ORDER+2);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
+	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
 	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
