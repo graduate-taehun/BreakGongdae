@@ -51,7 +51,7 @@ public:
     
     int getCombo();
 	void resetCombo();
-    void increaseCombo(int i, const Vec2& posCharacter);
+    void increaseCombo(int i, const Vec2& posCharacter, bool isBlade);
     
 	int getBlade();
 	void setBlade(int);

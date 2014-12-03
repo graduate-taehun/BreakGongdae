@@ -132,7 +132,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                    && character->getPositionOfTop()-building->getPositionOfBottom()<character->getHeight()/3)
                || abs(building->getPositionOfBottom()-GROUND_HEIGHT)<=5) {
                 status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
-                status->increaseCombo(1, Vec2(character->getPosition().x,character->getPositionOfTop()));//하나 부실때마다 콤보 1씩 증가하게
+                status->increaseCombo(1, Vec2(character->getPosition().x,character->getPositionOfTop()), false);//하나 부실때마다 콤보 1씩 증가하게
                 if(building->attack(false)) {
 					if (isLevelEnd())
                         replaceNextScene();
@@ -234,7 +234,7 @@ void Stage1::blade_scheduler(float time){
         }
         if(building->getPositionOfBottom()<=blade->getPosition().y) {
             status->increaseScore(1 + status->getCombo() * 10);//콤보당 10점씩 추가
-            status->increaseCombo(1, blade->getPosition() + Vec2(0, 400));
+            status->increaseCombo(1, blade->getPosition() + Vec2(0, 400), true);
             if (building->attack(true)){
                 breaking=false;
                 B_Label = Sprite::create(FILE_ETC + "B_Label.png");

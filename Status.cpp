@@ -22,49 +22,50 @@ bool Status::init() {
     targetGauge = MAX_GAUGE;
     
 	state = Sprite::create(FILE_ETC + "gauge.png");
-	state->setPosition(Vec2(-state->getContentSize().width/2+50, 0));
+	state->setPosition(Vec2(-state->getContentSize().width/2+30, -460-state->getContentSize().height/2));
 	state->setAnchorPoint(Vec2(0, 0.5));
 	addChild(state, 255+1);
 
-    bar_HP = Sprite::create(FILE_ETC+"gauge_bar.png");
-    float x = -bar_HP->getContentSize().width/2+120;
-    bar_HP->setPosition(Vec2(x-70,-bar_HP->getContentSize().height*2.5));
+    bar_HP = Sprite::create(FILE_ETC+"life.png");
+	bar_gauge = Sprite::create(FILE_ETC + "gauge_bar.png");
+
+    float x = -bar_gauge->getContentSize().width/2+100;
+	bar_HP->setPosition(Vec2(-state->getContentSize().width / 2 + 30, -600 - state->getContentSize().height / 2 + bar_HP->getContentSize().height*2.5));
     bar_HP->setAnchorPoint(Vec2(0,0.5));
-    addChild(bar_HP, 255+2);
-    
-    bar_gauge = Sprite::create(FILE_ETC+"gauge_bar.png");
-    bar_gauge->setPosition(Vec2(x,-bar_gauge->getContentSize().height/2));
+    addChild(bar_HP, 255);
+   
+    bar_gauge->setPosition(Vec2(x,-520-bar_gauge->getContentSize().height/2));
     bar_gauge->setAnchorPoint(Vec2(0,0.5));
     addChild(bar_gauge, 255+2);
 	
 	bar_blade = Sprite::create(FILE_ETC+"gauge_bar.png");
-	bar_blade->setPosition(Vec2(x, +bar_blade->getContentSize().height*0.5));
+	bar_blade->setPosition(Vec2(x, -520+bar_blade->getContentSize().height*0.5));
 	bar_blade->setAnchorPoint(Vec2(0, 0.5));
 	addChild(bar_blade, 255+2);
 
-	x = -bar_HP->getContentSize().width / 2 + 50;
-	lbScore = LabelTTF::create("score : 0", "Arial Rounded MT Bold", 30);
-    lbScore->setPosition(Vec2(x,-lbScore->getContentSize().height*4));
+	x = -bar_gauge->getContentSize().width / 2 + 20;
+	lbScore = LabelTTF::create("score : 0", "Arial Rounded MT Bold", 40);
+    lbScore->setPosition(Vec2(x,-40+lbScore->getContentSize().height/2));
     lbScore->setAnchorPoint(Vec2(0,0.5));
     lbScore->setColor(ccc3(0, 0, 0));
     addChild(lbScore);
     
-	lbCombo = LabelTTF::create("combo : 0", "Arial Rounded MT Bold", 30);
-    lbCombo->setPosition(Vec2(x,-lbCombo->getContentSize().height*5));
+	lbCombo = LabelTTF::create("combo : 0", "Arial Rounded MT Bold", 40);
+    lbCombo->setPosition(Vec2(x,-40+lbCombo->getContentSize().height*1.5));
     lbCombo->setAnchorPoint(Vec2(0,0.5));
     lbCombo->setColor(ccc3(0, 0, 0));
     addChild(lbCombo);
     
-    bar_HP->setContentSize(Size(lbCombo->getContentSize().width,bar_HP->getContentSize().height));
-    bar_HP->setTextureRect(Rect(0, 0, lbCombo->getContentSize().width, bar_HP->getContentSize().height));
+    bar_HP->setContentSize(Size(bar_HP->getContentSize().width,bar_HP->getContentSize().height));
+    bar_HP->setTextureRect(Rect(0, 0, bar_HP->getContentSize().width, bar_HP->getContentSize().height));
     
-    bar_gauge->setContentSize(bar_HP->getContentSize());
+    bar_gauge->setContentSize(bar_gauge->getContentSize());
     bar_gauge->setTextureRect(Rect(0, 0, lbCombo->getContentSize().width, bar_gauge->getContentSize().height));
     
-	bar_blade->setContentSize(bar_blade->getContentSize());
-	bar_blade->setTextureRect(Rect(0, 0, 0, bar_blade->getContentSize().height));
+	bar_blade->setContentSize(bar_gauge->getContentSize());
+	bar_blade->setTextureRect(Rect(0, 0, 0, bar_gauge->getContentSize().height));
 
-    setContentSize(Size(bar_HP->getContentSize().width,bar_HP->getContentSize().height*3));
+    setContentSize(Size(bar_gauge->getContentSize().width,bar_gauge->getContentSize().height*3));
         
     schedule(schedule_selector(Status::gauge_scheduler));
 
@@ -104,11 +105,11 @@ void Status::resetCombo() {
     lbCombo->setString(string("combo : ") + to_string(combo));
 }
 
-void Status::increaseCombo(int i, const Vec2& posCharacter) {
+void Status::increaseCombo(int i, const Vec2& posCharacter, bool isBlade) {
 
-	if (currentblade<MAX_BLADE)
+	if (currentblade<MAX_BLADE && !isBlade)
 		currentblade += 2*i;
-	bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_HP->getContentSize().height));
+	bar_blade->setTextureRect(Rect(0, 0, getContentSize().width * currentblade / MAX_BLADE, bar_gauge->getContentSize().height));
 
 	combo += i;
 	if (combo > MAX_COMBO)
