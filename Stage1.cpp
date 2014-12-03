@@ -75,7 +75,7 @@ void Stage1::decreaseCharacterHP() {
 }
 
 void Stage1::replaceNextScene() {
-	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    Stage::replaceNextScene();
     Director::getInstance()->replaceScene(BonusStage::createScene(new Status(*status)));
 }
 
@@ -91,14 +91,14 @@ bool Stage1::onContactBegin(PhysicsContact& contact) {
 }
 
 bool Stage1::isLevelEnd() {
-    return level==fileBuilding.cend();
+    return level>=fileBuilding.cend();
 }
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		removeChild(P_Label);
-		removeChild(P_Layer);
 		CCDirector::sharedDirector()->resume();
+        P_Layer->setVisible(false);
+        P_Label->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
@@ -137,8 +137,8 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
                 if(building->attack(false)) {
 					if (isLevelEnd())
                         replaceNextScene();
-					
-                    setNextBuilding();
+					else
+                        setNextBuilding();
                     break;
                 }
             }
@@ -259,7 +259,8 @@ void Stage1::blade_scheduler(float time){
             if(building->isEmpty()) {
                 if (isLevelEnd())
                     replaceNextScene();
-                setNextBuilding();
+                else
+                    setNextBuilding();
             }
         }
     }

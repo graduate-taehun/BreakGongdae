@@ -207,8 +207,8 @@ void Stairs78::restructure() {
         auto shapebox = PhysicsShapeBox::create((*i)->getContentSize(),material,(*i)->getPosition());
         getPhysicsBody()->addShape(shapebox);
     }
-    
-    nextBuilding->setPosition(Vec2(nextBuilding->getPosition().x, nextBuilding->getPosition().y-blocksize.height/2));
+    if(nextBuilding!=nullptr)
+        nextBuilding->setPosition(Vec2(nextBuilding->getPosition().x, nextBuilding->getPosition().y-blocksize.height/2));
     
     auto shapeRoof=PhysicsShapeBox::create(Size(blocksize.width, blocksize.height/10),material,Vec2(0,getContentSize().height/2-blocksize.height/20));
     getPhysicsBody()->addShape(shapeRoof);
@@ -223,9 +223,9 @@ bool Stairs78::attack(bool isBlade) {
         
         vector<int> durabTemp;
         if(currentDurab+UNIT_NUM_78>durabilities.at(FILE_78).cend()) {
-            durabTemp=vector<int>(currentDurab,durabilities.at(FILE_78).cend()+1);
+            durabTemp=vector<int>(currentDurab,durabilities.at(FILE_78).cend());
             Building::initWithDurabilities(FILE_STAGE1+"78_final.png", Block::SIZE_78_BLOCK, durabTemp);
-            
+            nextBuilding=nullptr;
             currentDurab=durabilities.at(FILE_78).cend();
             removeChild(nextBuilding);
         }

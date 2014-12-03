@@ -53,7 +53,7 @@ bool BonusStage::init(Status* _status) {
 }
 
 void BonusStage::replace_scheduler(float time) {
-	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    Stage::replaceNextScene();
     Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 }
 

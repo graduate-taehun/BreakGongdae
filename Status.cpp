@@ -82,7 +82,7 @@ Status* Status::createWithHeight(float height) {
 }
 
 Status::Status(const Status & st) {
-    Status::init();
+    Status::initWithHeight(st.getContentSize().height);
     
     score = st.score;
     lbScore->setString(st.lbScore->getString());

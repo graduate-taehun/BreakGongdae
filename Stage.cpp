@@ -129,9 +129,24 @@ bool Stage::init(Status* _status=nullptr)
     lbTitle = LabelBMFont::create("Stage", FILE_FONT+"futura-48.fnt");
     lbTitle->setPosition(posTitle);
     addChild(lbTitle, MENU_Z_ORDER);
-   
+    
+    P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
+    P_Label->setColor(ccc3(0, 0, 0));
+    P_Label->setVisible(false);
+    addChild(P_Label, MENU_Z_ORDER);
+
+    P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
+    P_Layer->setOpacity(100);
+    
+    P_Layer->setVisible(false);
+    addChild(P_Layer, MENU_Z_ORDER-1);
     return true;
 }
+
+void Stage::replaceNextScene() {
+    CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+}
+
 void Stage::setViewPoint(float threshold) {
     if(threshold>=visibleSize.height/2) {
         status->setPosition(posStatus.x, threshold + posStatus.y-visibleSize.height/2);
@@ -167,6 +182,8 @@ void Stage::jump_scheduler(float time) {
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
 		CCDirector::sharedDirector()->resume();
+        P_Layer->setVisible(false);
+        P_Label->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
@@ -188,16 +205,11 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             if (Game_Pause == 0) {
 				CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 				CCDirector::sharedDirector()->pause();
-				P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
-				P_Label->setColor(ccc3(0, 0, 0));
-				P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
-				P_Label->setTag(125);
-				addChild(P_Label, 50);
-				P_Layer = Sprite::create(FILE_BACKGROUND + "P_Layer.png");
-				P_Layer->setTag(126);
-				P_Layer->setOpacity(100);
-				P_Layer->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
-				addChild(P_Layer, 49);
+                P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
+                P_Layer->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
+                P_Layer->setVisible(true);
+                P_Label->setVisible(true);
+
 				Game_Pause = 1;
             }
         }		
