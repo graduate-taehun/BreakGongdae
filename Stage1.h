@@ -25,7 +25,7 @@ protected:
 	Sprite* B_Label;
     virtual bool isLevelEnd();
     
-    virtual void setNextBuilding();
+    virtual void setNextBuilding(int weight=0);
     
     void decreaseCharacterHP();
     

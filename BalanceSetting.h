@@ -50,9 +50,9 @@ using namespace std;
 #define TIME_BLADE_STOP 0.3
 
 //Bonus Score
-#define HONEY_BSCORE 2
-#define NORMAL_BSCORE 1
-#define HARD_BSCORE 0
+#define HONEY_BSCORE 1
+#define NORMAL_BSCORE 2
+#define HARD_BSCORE 3
 
 
 //Files

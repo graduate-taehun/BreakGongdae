@@ -8,7 +8,7 @@
 #include "BonusStage.h"
 #include "Stage2.h"
 
-Scene* BonusStage::createScene(Status* _status=nullptr)
+Scene* BonusStage::createScene(Status* _status)
 {
 	auto scene = Stage::createScene();
 	scene->removeChildByTag(Stage::THIS_TAG);
@@ -81,17 +81,17 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
     string strForLabel;
     
     if(course->getTag()==HONEY_TAG) {
-        Label->setColor(ccc3(0, 255, 0));
+        Label->setColor(Color3B(0, 255, 0));
         strForLabel=" Perfect!";
         status->increaseBScore(HONEY_BSCORE);
     }
     else if(course->getTag()==NORMAL_TAG) {
-        Label->setColor(ccc3(0, 0, 255));
+        Label->setColor(Color3B(0, 0, 255));
         strForLabel=" SoSo~";
         status->increaseBScore(NORMAL_BSCORE);
     }
     else {
-        Label->setColor(ccc3(255, 0, 0));
+        Label->setColor(Color3B(255, 0, 0));
         strForLabel="Uh....Bad";
         status->increaseBScore(HARD_BSCORE);
     }

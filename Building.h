@@ -40,10 +40,10 @@ protected:
     
     virtual void restructure();
     
-    bool initWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities);
+    bool init(string filename, Size _blocksize, const vector<int>& currentDurabilities, int weight);
     static Building* createWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities);
 public:
-    static Building* create(string filename);
+    static Building* createWithWeight(string filename, int weight);
     void setPositionOfBottom(float bottom);
     float getPositionOfTop();
     float getPositionOfBottom();

@@ -11,7 +11,7 @@
 
 //const vector<string> Stage2::fileBuilding={FILE_BUILDINGS_STAGE2};
 
-Scene* Stage2::createScene(Status* _status=nullptr)
+Scene* Stage2::createScene(Status* _status)
 {
     auto scene=Stage1::createScene();
     scene->removeChildByTag(Stage1::THIS_TAG);
@@ -63,7 +63,7 @@ Stage2::~Stage2() {
 }
 
 void Stage2::replaceNextScene() {
-
+    Director::getInstance()->replaceScene(EndScene::createScene(*status,true));
 }
 
 bool Stage2::isLevelEnd() {

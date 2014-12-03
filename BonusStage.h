@@ -28,7 +28,7 @@ private:
     void makeCourses();
 
 public:
-	static cocos2d::Scene* createScene(Status* _status);
+	static cocos2d::Scene* createScene(Status* _status=nullptr);
     static BonusStage* create(Status* _status);
 
 };

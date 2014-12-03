@@ -44,7 +44,7 @@ void Block::attack() {
 //
 //Building
 //
-bool Building::initWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities) {
+bool Building::init(string filename, Size _blocksize, const vector<int>& currentDurabilities, int weight=0) {
     if(!Layer::init()) return false;
     blocksize=_blocksize;
     //const vector<int>& currentDurabilities=durabilities.at(filename);
@@ -67,7 +67,9 @@ bool Building::initWithDurabilities(string filename, Size _blocksize, const vect
     
     //block들 생성
     for(int i=0; i<currentDurabilities.size(); i++) {
-        auto block=Block::create(currentDurabilities.at(i),filename,i);
+        auto block=Block::create((int)
+                                    ((float)currentDurabilities.at(i)
+                                        +( 1.0+(float)weight/16  )   ),filename,i);
         block->setContentSize(blocksize);
         block->setPosition(Vec2(0,((float)i+0.5)*blocksize.height-getContentSize().height/2));
         
@@ -90,15 +92,25 @@ bool Building::initWithDurabilities(string filename, Size _blocksize, const vect
     return true;
 }
 
-Building* Building::create(string filename) {
-    if(filename==FILE_STAGE1+"78.png")
-        return Stairs78::create();
-    return Building::createWithDurabilities(filename, Block::SIZE_DEFAULT_BLOCK, durabilities.at(filename));
+Building* Building::createWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities) {
+    
+    Building *pRet = new Building();
+    if (pRet && pRet->init(filename, _blocksize, currentDurabilities)){
+        pRet->autorelease();
+        return pRet;
+    }
+    else{
+        delete pRet;
+        pRet = NULL;
+        return NULL;
+    }
 }
 
-Building* Building::createWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities) {
+Building* Building::createWithWeight(string filename, int weight) {
+    if(filename==FILE_STAGE1+"78.png")
+        return Stairs78::create();
     Building *pRet = new Building();
-    if (pRet && pRet->initWithDurabilities(filename, _blocksize, currentDurabilities)){
+    if (pRet && pRet->init(filename, Block::SIZE_DEFAULT_BLOCK, durabilities.at(filename), weight)){
         pRet->autorelease();
         return pRet;
     }
@@ -180,7 +192,7 @@ bool Stairs78::init() {
     currentDurab=durabilities.at(FILE_78).cbegin();
     auto durabTemp=vector<int>(currentDurab,currentDurab+UNIT_NUM_78);
     
-    if(!Building::initWithDurabilities(FILE_78,Block::SIZE_78_BLOCK, durabTemp)) return false;
+    if(!Building::init(FILE_78,Block::SIZE_78_BLOCK, durabTemp)) return false;
     
     currentDurab+=UNIT_NUM_78;
     nextBuilding=Sprite::create(FILE_78);
@@ -224,14 +236,14 @@ bool Stairs78::attack(bool isBlade) {
         vector<int> durabTemp;
         if(currentDurab+UNIT_NUM_78>durabilities.at(FILE_78).cend()) {
             durabTemp=vector<int>(currentDurab,durabilities.at(FILE_78).cend());
-            Building::initWithDurabilities(FILE_STAGE1+"78_final.png", Block::SIZE_78_BLOCK, durabTemp);
+            Building::init(FILE_STAGE1+"78_final.png", Block::SIZE_78_BLOCK, durabTemp);
             nextBuilding=nullptr;
             currentDurab=durabilities.at(FILE_78).cend();
             removeChild(nextBuilding);
         }
         else {
             durabTemp=vector<int>(currentDurab,currentDurab+UNIT_NUM_78);
-            Building::initWithDurabilities(FILE_78, Block::SIZE_78_BLOCK, durabTemp);
+            Building::init(FILE_78, Block::SIZE_78_BLOCK, durabTemp);
             
             currentDurab+=UNIT_NUM_78;
             if(currentDurab+UNIT_NUM_78>durabilities.at(FILE_78).cend())

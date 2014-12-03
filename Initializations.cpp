@@ -38,7 +38,12 @@ const map<string, const vector<int>> Building::durabilities
     { Stage1::fileBuilding[8], vector<int>{DURABS_OLD_DORM_4} },
     { Stage1::fileBuilding[9], vector<int>{DURABS_OLD_DORM_4} },
     { Stage1::fileBuilding[10], vector<int>{DURABS_78} },
-    { Stage2::fileBuilding[0], vector<int>{DURABS_MUEUNJAE} }
+    
+    { Stage2::fileBuilding[0], vector<int>{DURABS_ABC} },
+    { Stage2::fileBuilding[1], vector<int>{DURABS_BASIC} },
+    { Stage2::fileBuilding[2], vector<int>{DURABS_EE} },
+    { Stage2::fileBuilding[3], vector<int>{DURABS_ENG} },
+    { Stage2::fileBuilding[4], vector<int>{DURABS_MATH} }
 };
 
 //Stairs78

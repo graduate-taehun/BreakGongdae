@@ -54,12 +54,12 @@ bool Stage1::init(Status* _status=nullptr) {
 	setNextBuilding();
     return true;
 }
-void Stage1::setNextBuilding() {
+void Stage1::setNextBuilding(int weight) {
     float posRemoved = 1500;
     if(building!=nullptr)
         posRemoved=building->getPositionOfTop();
     removeChild(building);
-    building = Building::create(*level++);
+    building = Building::createWithWeight(*level++,weight);
     building->setPosition(visibleSize.width / 2, 0);
     building->setPositionOfBottom(GROUND_HEIGHT+posRemoved+BUILDING_START_HEIGHT);
     addChild(building);
@@ -70,7 +70,7 @@ void Stage1::decreaseCharacterHP() {
     
 	if (status->getHP() == 0){
 		CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-        Director::getInstance()->replaceScene(EndScene::createSceneWithScore(*status));
+        Director::getInstance()->replaceScene(EndScene::createScene(*status,true));
 	}
 }
 
@@ -227,7 +227,7 @@ void Stage1::blade_scheduler(float time){
         if(blade->getPosition().y>THIS_BACKGROUND_HEIGHT-visibleSize.height) {
             breaking=false;
             B_Label = Sprite::create(FILE_ETC + "B_Label.png");
-            B_Label->setColor(ccc3(255, 0, 0));
+            B_Label->setColor(Color3B(255, 0, 0));
             B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
             addChild(B_Label, 30);
             unschedule(schedule_selector(Stage1::blade_scheduler));
@@ -239,7 +239,7 @@ void Stage1::blade_scheduler(float time){
             if (building->attack(true)){
                 breaking=false;
                 B_Label = Sprite::create(FILE_ETC + "B_Label.png");
-                B_Label->setColor(ccc3(255, 0, 0));
+                B_Label->setColor(Color3B(255, 0, 0));
                 B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
                 addChild(B_Label, 30);
                 unschedule(schedule_selector(Stage1::blade_scheduler));

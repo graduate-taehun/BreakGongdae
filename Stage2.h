@@ -28,7 +28,7 @@ public:
     ~Stage2();
     static const vector<string> fileBuilding;
     
-	static cocos2d::Scene* createScene(Status* _status);
+	static cocos2d::Scene* createScene(Status* _status=nullptr);
     static Stage2* create(Status* status);
     
     void shotbyLaser();

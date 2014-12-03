@@ -131,7 +131,7 @@ bool Stage::init(Status* _status=nullptr)
     addChild(lbTitle, MENU_Z_ORDER);
     
     P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
-    P_Label->setColor(ccc3(0, 0, 0));
+    P_Label->setColor(Color3B(0, 0, 0));
     P_Label->setVisible(false);
     addChild(P_Label, MENU_Z_ORDER);
 

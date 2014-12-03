@@ -39,13 +39,14 @@ public:
 
 class EndScene : public cocos2d::Layer{
 private:
-    virtual bool initWithScore(Status& status);
-    static EndScene* createWithScore(Status& status);
-    
+    virtual bool init(Status& status, bool _allClear);
+    static EndScene* create(Status& status, bool _allClear);
+    bool allClear;
 public:
-    static cocos2d::Scene* createSceneWithScore(Status& status);
+    static cocos2d::Scene* createScene(Status& status, bool _allClear=false);
     
     void menuCloseCallback(cocos2d::Ref* pSender);
 };
+
 
 #endif /* defined(__BreakGongDae__Menu_Score__) */
