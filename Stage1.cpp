@@ -214,8 +214,7 @@ void Stage1::blade_return_scheduler(float time) {
 	removeChild(B_Label);
 }
 void Stage1::blade_scheduler(float time){
-	if (isScheduled(schedule_selector(Stage1::jump_scheduler)))
-	{
+	if (isScheduled(schedule_selector(Stage1::jump_scheduler))) {
 		unschedule(schedule_selector(Stage1::jump_scheduler));
 		removeChild(B_Label);
 	}
@@ -226,7 +225,10 @@ void Stage1::blade_scheduler(float time){
         setViewPoint(blade->getPosition().y);
         if(blade->getPosition().y>THIS_BACKGROUND_HEIGHT-visibleSize.height) {
             breaking=false;
-            
+            B_Label = Sprite::create(FILE_ETC + "B_Label.png");
+            B_Label->setColor(ccc3(255, 0, 0));
+            B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
+            addChild(B_Label, 30);
             unschedule(schedule_selector(Stage1::blade_scheduler));
             schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
         }
@@ -235,7 +237,10 @@ void Stage1::blade_scheduler(float time){
             status->increaseCombo(1, blade->getPosition() + Vec2(0, 400));
             if (building->attack(true)){
                 breaking=false;
-                
+                B_Label = Sprite::create(FILE_ETC + "B_Label.png");
+                B_Label->setColor(ccc3(255, 0, 0));
+                B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
+                addChild(B_Label, 30);
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }
