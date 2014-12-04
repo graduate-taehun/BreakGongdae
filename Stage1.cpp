@@ -36,6 +36,9 @@ Stage1* Stage1::create() {
 }
 bool Stage1::init(Status* _status=nullptr) {
     if(!Stage::init(_status)) return false;
+    
+    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), true);
+    
     level=fileBuilding.cbegin();
     building=nullptr;
     blade=nullptr;

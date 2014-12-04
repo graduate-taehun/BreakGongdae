@@ -89,8 +89,6 @@ bool Stage::init(Status* _status=nullptr)
 	menuClose->setPosition(Vec2::ZERO);
 	addChild(menuClose,MENU_Z_ORDER+2);
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("main.mp3"), false);
-	
 	auto keylistener = EventListenerKeyboard::create();
     keylistener->onKeyPressed = CC_CALLBACK_2(Stage::onKeyPressed, this);
     keylistener->onKeyReleased = CC_CALLBACK_2(Stage::onKeyReleased, this);

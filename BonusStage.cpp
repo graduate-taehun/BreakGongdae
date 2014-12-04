@@ -9,22 +9,6 @@
 #include "Stage2.h"
 #include <vector>
 using namespace std;
-/*
-vector <string> courses_name = {
-	"회로이론",
-	"디시설",
-	"신호",
-	"DS",
-	"오토마타",
-	"객체",
-	"이산수학",
-	"집합론",
-	"미분기하",
-	"화생공",
-	"유기화학",
-	"열역학"
-};*/
-int cnt = 0;
 
 Scene* BonusStage::createScene(Status* _status){
 	auto scene = Stage::createScene();
@@ -53,8 +37,8 @@ BonusStage* BonusStage::create(Status *_status) {
 
 bool BonusStage::init(Status* _status) {
 	if (!Stage::init(_status)) return false;
-
-	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("bonus.mp3"), false);
+    
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("bonus.mp3"), true);
 
 	lbTitle->setString("Bonus");
 	splashScreen = Sprite::create(FILE_BACKGROUND+"bonus_stage_start.png");
@@ -64,13 +48,13 @@ bool BonusStage::init(Status* _status) {
 	schedule(schedule_selector(BonusStage::scene_scheduler), 2, 1, 2);
 
 	cntMajor = majors.cbegin();
+    
 	makeCourses();
 	
 	return true;
 }
 
 void BonusStage::replace_scheduler(float time) {
-	cnt = 0;
 	Stage::replaceNextScene();
     Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 }
@@ -148,12 +132,11 @@ void BonusStage::makeCourses() {
 			k++;
 	}
 
-    for(int i=0; i<3; i++) {
+    for(unsigned long i=0; i<3; i++) {
         courses[i]=Sprite::create(FILE_BOUNS_STAGE+*cntMajor + "_" + to_string(i+1) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
-		name[i] = Label::createWithSystemFont(courses_name[cnt++], "Arial Rounded MT Bold", 30);
+		name[i] = Label::createWithSystemFont(courses_name.at(*cntMajor)[i], "Arial Rounded MT Bold", 30);
 		name[i]->setPosition(Vec2(posCharacter[course_select[i]], 500));
-	//	name[i]->setAnchorPoint(Vec2(0, 0.5));
 		name[i]->setColor(Color3B(0, 0, 0));
 		addChild(name[i]);
 

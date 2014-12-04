@@ -19,6 +19,8 @@ private:
 	
     vector<string>::const_iterator cntMajor;
     const static vector<string> majors; //FILES_MAJORS in BalanceSettings.h
+    const static map<string, vector<string>> courses_name; //{majors[], "이름"}
+    
     Sprite* courses[3];
 	Label* name[3];
     
