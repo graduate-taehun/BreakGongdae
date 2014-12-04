@@ -17,7 +17,7 @@ USING_NS_CC;
 using namespace std;
 
 //For_Debug
-#define START_SCENE     Stage2::createScene()
+#define START_SCENE     Stage1::createScene()
 #define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
@@ -25,7 +25,8 @@ using namespace std;
 #define BUILDING_VEL_AFTER_BLOCKING 100
 #define COST_BLOCKING 50
 #define MIN_COST_BLOCKING 15
-#define BLOCKING_GAUGE_VELOCITY 0.5
+#define BLOCKING_GAUGE_CHARGE_VELOCITY 0.5
+#define BLOCKING_GAUGE_REDUCE_VELOCITY 0.6
 
 //Building
 #define BUILDING_VEL_LIMIT 600

@@ -33,7 +33,7 @@ bool Status::initWithHeight(float height) {
     setAnchorPoint(Vec2(0.5,0.5));
 
     bar_HP = Sprite::create(FILE_ETC+"life.png");
-	bar_HP->setPosition(Vec2(0, state->getContentSize().height+bar_HP->getContentSize().height/2));
+	bar_HP->setPosition(Vec2(0, state->getContentSize().height+bar_HP->getContentSize().height/2+LABEL_INTERVAL_Y));
     bar_HP->setAnchorPoint(Vec2(0,0.5));
     addChild(bar_HP);
     
@@ -107,7 +107,7 @@ Status::Status(const Status & st) {
 }
 void Status::decreaseHP() {
     currentHP -= MAX_HP/3;
-    bar_HP->setTextureRect(Rect(0, 0, GAUGE_WIDTH * currentHP /MAX_HP, bar_HP->getContentSize().height));
+    bar_HP->setTextureRect(Rect(0, 0, getContentSize().width * currentHP /MAX_HP, bar_HP->getContentSize().height));
 }
 
 void Status::resetCombo() {
@@ -168,8 +168,8 @@ void Status::resetBlade() {
 }
 
 void Status::gauge_scheduler(float time) {
-    if(currentGauge>targetGauge) currentGauge-=BLOCKING_GAUGE_VELOCITY;
-    else if(currentGauge<targetGauge) currentGauge+=BLOCKING_GAUGE_VELOCITY;
+    if(currentGauge>targetGauge) currentGauge-=BLOCKING_GAUGE_REDUCE_VELOCITY;
+    else if(currentGauge<targetGauge) currentGauge+=BLOCKING_GAUGE_CHARGE_VELOCITY;
 
     bar_gauge->setTextureRect(Rect(0, 0, GAUGE_WIDTH * currentGauge /MAX_GAUGE, bar_gauge->getContentSize().height));
 }
@@ -193,6 +193,9 @@ void Status::increaseScore(int i) {
     lbScore->setString(string("Score : ") + to_string(score));
 }
 
+
+void Status::increaseBScore(int i) { B_Score = B_Score + i; }
+
 int Status::getHP(){ return currentHP; }
 int Status::getMAX_HP(){ return MAX_HP; }
 int Status::getScore(){ return score; }
@@ -200,6 +203,5 @@ int Status::getCombo(){ return combo; }
 bool Status::bladeIsPossible(){ return currentblade==MAX_BLADE; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
 int Status::getMAX_BLADE(){ return MAX_BLADE; }
-void Status::increaseBScore(int i) { B_Score = B_Score + i; }
 int Status::getBScore() { return B_Score; }
 

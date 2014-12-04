@@ -47,6 +47,11 @@ bool Stage1::init(Status* _status=nullptr) {
 	addChild(st_scene, MENU_Z_ORDER+5);
 	schedule(schedule_selector(Stage1::scene_scheduler), 2, 1, 2);
 
+    bladeText = Sprite::create(FILE_ETC + "Blade_Text.png");
+    bladeText->setColor(Color3B(255, 0, 0));
+    bladeText->setVisible(false);
+    addChild(bladeText, MENU_Z_ORDER);
+    
 	setNextBuilding();
     return true;
 }
@@ -208,12 +213,10 @@ void Stage1::blade_return_scheduler(float time) {
     
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
-	removeChild(bladeText);
 }
 void Stage1::blade_scheduler(float time){
 	if (isScheduled(schedule_selector(Stage1::jump_scheduler))) {
 		unschedule(schedule_selector(Stage1::jump_scheduler));
-		removeChild(bladeText);
 	}
  
 	static bool breaking=true;
@@ -222,10 +225,10 @@ void Stage1::blade_scheduler(float time){
         setViewPoint(blade->getPosition().y);
         if(blade->getPosition().y>THIS_BACKGROUND_HEIGHT-visibleSize.height) {
             breaking=false;
-            bladeText = Sprite::create(FILE_ETC + "bladeText.png");
-            bladeText->setColor(Color3B(255, 0, 0));
+            
             bladeText->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
-            addChild(bladeText, 30);
+            bladeText->setVisible(true);
+            
             unschedule(schedule_selector(Stage1::blade_scheduler));
             schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
         }
@@ -234,10 +237,10 @@ void Stage1::blade_scheduler(float time){
             status->increaseCombo(1, blade->getPosition() + Vec2(0, 400), true);
             if (building->attack(true)){
                 breaking=false;
-                bladeText = Sprite::create(FILE_ETC + "Blade_Text.png");
-                bladeText->setColor(Color3B(255, 0, 0));
+                
                 bladeText->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
-                addChild(bladeText, 30);
+                bladeText->setVisible(true);
+                
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }
@@ -250,6 +253,7 @@ void Stage1::blade_scheduler(float time){
             unschedule(schedule_selector(Stage1::blade_scheduler));
             schedule(schedule_selector(Stage1::jump_scheduler));
             removeChild(blade);
+            bladeText->setVisible(false);
             blade=nullptr;
             character->setActionState(None);
             if(building->isEmpty()) {
