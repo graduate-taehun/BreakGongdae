@@ -7,9 +7,26 @@
 //
 #include "BonusStage.h"
 #include "Stage2.h"
+#include <vector>
+using namespace std;
+/*
+vector <string> courses_name = {
+	"회로이론",
+	"디시설",
+	"신호",
+	"DS",
+	"오토마타",
+	"객체",
+	"이산수학",
+	"집합론",
+	"미분기하",
+	"화생공",
+	"유기화학",
+	"열역학"
+};*/
+int cnt = 0;
 
-Scene* BonusStage::createScene(Status* _status)
-{
+Scene* BonusStage::createScene(Status* _status){
 	auto scene = Stage::createScene();
 	scene->removeChildByTag(Stage::THIS_TAG);
 
@@ -53,7 +70,8 @@ bool BonusStage::init(Status* _status) {
 }
 
 void BonusStage::replace_scheduler(float time) {
-    Stage::replaceNextScene();
+	cnt = 0;
+	Stage::replaceNextScene();
     Director::getInstance()->replaceScene(Stage2::createScene(new Status(*status)));
 }
 
@@ -101,8 +119,10 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
     Label->setString(strForLabel);
     addChild(Label, MENU_Z_ORDER-1);
     
-    for(int i=0; i<3; i++)
+	for (int i = 0; i < 3; i++){
         removeChild(courses[i]);
+		removeChild(name[i]);
+	}
 
 	if (cntMajor == majors.cend())
 		replaceNextScene();
@@ -113,7 +133,7 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
 }
 void BonusStage::makeCourses() {
 	PhysicsMaterial	material = PhysicsMaterial(10000000.0f, 0.0f, 0.0f);
-	int k=0, course_select[3];
+	int k = 0, course_select[3];
 
 	while (k < 3) {
 		int check = 0;
@@ -131,7 +151,12 @@ void BonusStage::makeCourses() {
     for(int i=0; i<3; i++) {
         courses[i]=Sprite::create(FILE_BOUNS_STAGE+*cntMajor + "_" + to_string(i+1) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
-    
+		name[i] = Label::createWithSystemFont(courses_name[cnt++], "Arial Rounded MT Bold", 30);
+		name[i]->setPosition(Vec2(posCharacter[course_select[i]], 500));
+	//	name[i]->setAnchorPoint(Vec2(0, 0.5));
+		name[i]->setColor(Color3B(0, 0, 0));
+		addChild(name[i]);
+
 		auto body = PhysicsBody::createBox(courses[i]->getContentSize(), material);
         body->setCategoryBitmask(0x03);
         body->setContactTestBitmask(0x08);
