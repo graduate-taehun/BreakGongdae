@@ -21,10 +21,10 @@ const vector<string> Stage1::fileBuilding={FILE_BUILDINGS_STAGE1};
 const vector<string> BonusStage::majors={FILE_MAJORS};
 const map<string, vector<string>> BonusStage::courses_name
 = {
-    {BonusStage::majors[0],{"회로이론","디시설","신호"}},
-    {BonusStage::majors[1],{"DS","오토마타","객체"}},
-    {BonusStage::majors[2],{"이산수학","집합론","미분기하"}},
-    {BonusStage::majors[3],{"화생공","유기화학","열역학"}}
+    {BonusStage::majors[0],{"Circuit\nTheory","Digital\nSystem\nDesign","Signal\nand\nSystem"}},
+    {BonusStage::majors[1],{"DS","Automata","OOP"}},
+    {BonusStage::majors[2],{"Discrete\nMathematics","Set\nTheory","Differential\nGeometry"}},
+    {BonusStage::majors[3],{"Organic\nChemistry","Chemical\nBiomelecular\nEngineering","Thermodynamics"}}
 };
 
 //Stage2

@@ -136,6 +136,7 @@ void BonusStage::makeCourses() {
         courses[i]=Sprite::create(FILE_BOUNS_STAGE+*cntMajor + "_" + to_string(i+1) + ".png");
         courses[i]->setPosition(Vec2(posCharacter[course_select[i]], BUILDING_START_HEIGHT));
 		name[i] = Label::createWithSystemFont(courses_name.at(*cntMajor)[i], "Arial Rounded MT Bold", 30);
+		name[i]->setAlignment(TextHAlignment::CENTER);
 		name[i]->setPosition(Vec2(posCharacter[course_select[i]], 500));
 		name[i]->setColor(Color3B(0, 0, 0));
 		addChild(name[i]);
