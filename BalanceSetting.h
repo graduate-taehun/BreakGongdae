@@ -17,7 +17,7 @@ USING_NS_CC;
 using namespace std;
 
 //For_Debug
-#define START_SCENE     Stage1::createScene()
+#define START_SCENE     Stage2::createScene()
 #define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
@@ -113,11 +113,31 @@ using namespace std;
     FILE_STAGE2+"english.png", \
     FILE_STAGE2+"math.png"
 
-#define DURABS_ABC
-#define DURABS_BASIC
-#define DURABS_EE
-#define DURABS_ENG
-#define DURABS_MATH
+#define DURABS_ABC 1,1,1,2,4
+#define DURABS_BASIC \
+    2,1, \
+    3,2,2, \
+    2,5,2, \
+    2,3,2, \
+    3,2,3, \
+    2,5,2
+#define DURABS_EE \
+    3,2,4, \
+    2,2, \
+    2,8,8,8, \
+    3,8,10
+#define DURABS_ENG \
+    2, \
+    5, \
+    1,1, \
+    1,3, \
+    3,4,4, \
+    2,3,3,3
+#define DURABS_MATH \
+    2,2,2, \
+    3,4, \
+    2,2, \
+    3,7,7,8 \
 
 #endif
 /*

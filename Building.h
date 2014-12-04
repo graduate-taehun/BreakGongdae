@@ -23,13 +23,13 @@ public:
     int getDurability();
     void attack();
     static Block* create(int _durability, string filename, int index);
-    const static Size SIZE_DEFAULT_BLOCK; //(780.260)
-    const static Size SIZE_78_BLOCK; //(880.261)
+    const static Size SIZE_DEFAULT_BLOCK; //(780,260)
+    const static Size SIZE_78_BLOCK; //(880,261)
 };
 
 class Building : public Layer {
 protected:
-    queue<Block *>* blocks;
+    queue<Block *> blocks;
     Sprite* background;
     Size blocksize;
     

@@ -42,12 +42,7 @@ bool Stage2::init(Status *_status) {
     level=Stage2::fileBuilding.cbegin();
 	lbTitle->setString("Stage2");
 
-	removeChild(st_scene);
-	st_scene = Sprite::create(FILE_BACKGROUND+"stage2_start.png");
-	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
-	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
-	addChild(st_scene, MENU_Z_ORDER + 2);
-	schedule(schedule_selector(Stage2::scene_scheduler), 2, 1, 2);
+    splashScreen->setTexture(FILE_BACKGROUND+"stage2_start.png");
 
 	building->setPositionOfBottom(-building->getContentSize().height);
     setNextBuilding(status->getBScore());
@@ -67,7 +62,9 @@ bool Stage2::isLevelEnd() {
 }
 
 void Stage2::makeLaser_scheduler(float time) {
-    if(rand()%10<3 && laserwarning==nullptr) {
+    if(splashScreen !=nullptr || laserwarning!=nullptr) return;
+    
+    if(rand()%10<3) {
         laserposition=rand()%3;
         laserwarning = LaserWarning::create();
         laserwarning->ignoreAnchorPointForPosition(false);

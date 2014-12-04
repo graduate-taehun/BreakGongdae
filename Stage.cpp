@@ -157,7 +157,8 @@ void Stage::setViewPoint(float threshold) {
     }
 }
 void Stage::scene_scheduler(float time) {
-	removeChild(st_scene);
+	removeChild(splashScreen);
+    splashScreen=nullptr;
 }
 
 void Stage::jump_scheduler(float time) {

@@ -41,10 +41,9 @@ bool Stage1::init(Status* _status=nullptr) {
     blade=nullptr;
 	lbTitle->setString("Stage1");
 
-	st_scene = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
-	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
-	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
-	addChild(st_scene, MENU_Z_ORDER+5);
+	splashScreen = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
+	splashScreen->setPosition(visibleSize.width / 2, visibleSize.height /2);
+	addChild(splashScreen, MENU_Z_ORDER+5);
 	schedule(schedule_selector(Stage1::scene_scheduler), 2, 1, 2);
 
     bladeText = Sprite::create(FILE_ETC + "Blade_Text.png");

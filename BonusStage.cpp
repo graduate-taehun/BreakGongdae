@@ -40,10 +40,10 @@ bool BonusStage::init(Status* _status) {
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(FILE_BGM("bonus.mp3"), false);
 
 	lbTitle->setString("Bonus");
-	st_scene = Sprite::create(FILE_BACKGROUND+"bonus_stage_start.png");
-	st_scene->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
-	st_scene->setPosition(visibleSize.width / 2, visibleSize.height * 5);
-	addChild(st_scene, MENU_Z_ORDER + 2);
+	splashScreen = Sprite::create(FILE_BACKGROUND+"bonus_stage_start.png");
+	splashScreen->setContentSize(Size(visibleSize.width, visibleSize.height * 10));
+	splashScreen->setPosition(visibleSize.width / 2, visibleSize.height * 5);
+	addChild(splashScreen, MENU_Z_ORDER + 2);
 	schedule(schedule_selector(BonusStage::scene_scheduler), 2, 1, 2);
 
 	cntMajor = majors.cbegin();

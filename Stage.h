@@ -50,7 +50,7 @@ protected:
     Status* status;
 	Sprite* groundNode;
     Character* character;
-	Sprite* st_scene;
+	Sprite* splashScreen;
 
     virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event) {}

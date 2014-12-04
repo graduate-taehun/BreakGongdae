@@ -58,7 +58,7 @@ bool Building::init(string filename, Size _blocksize, const vector<int>& current
     background->setPosition(Vec2(getContentSize().width/2,getContentSize().height/2));
     addChild(background);
     
-    blocks=new queue<Block *>();
+    blocks=queue<Block *>();
     auto body = PhysicsBody::createBox(getContentSize(),material);
     body->setRotationEnable(false);
     body->removeAllShapes();
@@ -75,7 +75,7 @@ bool Building::init(string filename, Size _blocksize, const vector<int>& current
         auto shapebox = PhysicsShapeBox::create(block->getContentSize(),material,block->getPosition());
         
         body->addShape(shapebox);
-        blocks->push(block);
+        blocks.push(block);
         addChild(block);
     }
     auto shapeRoof=PhysicsShapeBox::create(Size(blocksize.width, blocksize.height/10),material,Vec2(0,getContentSize().height/2-blocksize.height/20));
@@ -145,7 +145,7 @@ void Building::restructure() {
 }
 
 bool Building::attack(bool isBlade) {
-    auto bottom=blocks->front();
+    auto bottom=blocks.front();
     if(!isBlade)
     bottom->attack();
     
@@ -153,9 +153,9 @@ bool Building::attack(bool isBlade) {
         setPosition(Vec2(getPosition().x,getPosition().y+blocksize.height/2));
 
         removeChild(bottom);
-        blocks->pop();
+        blocks.pop();
         
-        if(blocks->size()==0) {
+        if(blocks.size()==0) {
             removeAllChildren();
             return true;
         }
@@ -179,7 +179,7 @@ float Building::getPositionOfBottom() {
 }
 
 bool Building::isEmpty() {
-    return blocks->size()==0;
+    return blocks.size()==0;
 }
 
 //
