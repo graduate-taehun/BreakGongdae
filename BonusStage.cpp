@@ -85,20 +85,20 @@ bool BonusStage::onContactBegin(PhysicsContact& contact) {
     if(course->getTag()==HONEY_TAG) {
         Label->setColor(Color3B(0, 255, 0));
         strForLabel=" Perfect!";
-        status->increase(HONEY_BONUS_SCORE);
+        status->increaseBonusScore(HONEY_BONUS_SCORE);
     }
     else if(course->getTag()==NORMAL_TAG) {
         Label->setColor(Color3B(0, 0, 255));
         strForLabel=" SoSo~";
-        status->increase(NORMAL_BONUS_SCORE);
+        status->increaseBonusScore(NORMAL_BONUS_SCORE);
     }
     else {
         Label->setColor(Color3B(255, 0, 0));
         strForLabel="Uh....Bad";
-        status->increase(HARD_BONUS_SCORE);
+        status->increaseBonusScore(HARD_BONUS_SCORE);
     }
     
-    status->increaseScore(status->get());
+    status->increaseScore(status->getBonusScore());
     
     Label->setString(strForLabel);
     addChild(Label, MENU_Z_ORDER-1);

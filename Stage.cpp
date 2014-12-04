@@ -80,7 +80,7 @@ bool Stage::init(Status* _status=nullptr)
 	groundNode->setPhysicsBody(body);
 	addChild(groundNode, MENU_Z_ORDER-1);
 
-	Game_Pause = 0;
+	Game_Pause = false;
 	btnClose = MenuItemImage::create(FILE_ETC+"CloseNormal.png", FILE_ETC+"CloseSelected.png", CC_CALLBACK_1(Stage::menuCloseCallback, this));
     posClose=Vec2(visibleSize.width - btnClose->getContentSize().width / 2, btnClose->getContentSize().height / 2);
 	btnClose->setPosition(posClose);
@@ -170,15 +170,15 @@ void Stage::jump_scheduler(float time) {
 }
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
-	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
+	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause) {
 		Director::getInstance()->resume();
         pauseCover->setVisible(false);
         lbPause->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-		Game_Pause = 0;
+		Game_Pause = false;
         return;
 	}
-    if(Game_Pause==1) return;
+    if(Game_Pause) return;
     
     switch (keyCode){
         case EventKeyboard::KeyCode::KEY_LEFT_ARROW: {
@@ -192,15 +192,16 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
             break;
         }
         case EventKeyboard::KeyCode::KEY_ESCAPE: {
-            if (Game_Pause == 0) {
+            if (!Game_Pause) {
 				CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 				Director::getInstance()->pause();
-                lbPause->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
+                lbPause->setPosition(Vec2(Status::LABEL_X, max(visibleSize.height / 2, character->getPosition().y) + 200));
+                lbPause->setAnchorPoint(Vec2(0,0.5));
                 pauseCover->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
                 pauseCover->setVisible(true);
                 lbPause->setVisible(true);
 
-				Game_Pause = 1;
+				Game_Pause = true;
             }
         }		
         default:

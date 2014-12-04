@@ -17,12 +17,12 @@
 class Block : public Sprite {
 private:
     int durability;
-    virtual bool init(int _durability, string filename, int index);
+    virtual bool init(int _durability);
     
 public:
     int getDurability();
     void attack();
-    static Block* create(int _durability, string filename, int index);
+    static Block* create(int _durability);
     const static Size SIZE_DEFAULT_BLOCK; //(780,260)
     const static Size SIZE_78_BLOCK; //(880,261)
 };
@@ -41,7 +41,6 @@ protected:
     virtual void restructure();
     
     bool init(string filename, Size _blocksize, const vector<int>& currentDurabilities, int weight);
-    static Building* createWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities);
 public:
     static Building* createWithWeight(string filename, int weight);
     void setPositionOfBottom(float bottom);

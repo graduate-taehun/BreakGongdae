@@ -40,12 +40,13 @@ bool Stage2::init(Status *_status) {
     schedule(schedule_selector(Stage2::makeLaser_scheduler),1,INT_MAX,1);
     laserwarning=nullptr;
     level=Stage2::fileBuilding.cbegin();
+    status->setBladeGaugeUnit(STAGE2_BLADE_GAUGE_UNIT);
 	lbTitle->setString("Stage2");
 
     splashScreen->setTexture(FILE_BACKGROUND+"stage2_start.png");
 
 	building->setPositionOfBottom(-building->getContentSize().height);
-    setNextBuilding(status->get());
+    setNextBuilding(status->getBonusScore());
 	return true;
 }
 
@@ -73,7 +74,7 @@ void Stage2::makeLaser_scheduler(float time) {
         laserwarning->setPosition(Vec2(posCharacter[laserposition],0));
         
         addChild(laserwarning,256);
-        CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(0.05);
+        CocosDenshion::SimpleAudioEngine::getInstance()->setEffectsVolume(0.15);
         CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(FILE_BGM("warning.wav"));
     }
 }

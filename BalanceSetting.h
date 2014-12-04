@@ -46,7 +46,8 @@ using namespace std;
 #define INTERVAL_REPLACE_BONUS_TO_STAGE2 1
 
 //Blade(Lethal Move)
-#define BLADE_GAUGE_UNIT 1.7
+#define STAGE1_BLADE_GAUGE_UNIT 1.7
+#define STAGE2_BLADE_GAUGE_UNIT 1.5
 #define BLADE_VELOCITY 1000
 #define TIME_BLADE_STOP 0.3
 

@@ -42,6 +42,7 @@ bool Stage1::init(Status* _status=nullptr) {
     level=fileBuilding.cbegin();
     building=nullptr;
     blade=nullptr;
+    status->setBladeGaugeUnit(STAGE1_BLADE_GAUGE_UNIT);
 	lbTitle->setString("Stage1");
 
 	splashScreen = Sprite::create(FILE_BACKGROUND+"stage1_start.png");
@@ -98,15 +99,15 @@ bool Stage1::isLevelEnd() {
 }
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
-    if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
+    if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause) {
 		Director::getInstance()->resume();
         pauseCover->setVisible(false);
         lbPause->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-		Game_Pause = 0;
+		Game_Pause = false;
         return;
     }
-    if(Game_Pause==1) return;
+    if(Game_Pause) return;
     if(isScheduled(schedule_selector(Stage1::blade_scheduler))
        || isScheduled(schedule_selector(Stage1::blade_return_scheduler))) {
         Stage::onKeyPressed(keyCode, event);
@@ -141,7 +142,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 					if (isLevelEnd())
                         replaceNextScene();
 					else
-                        setNextBuilding(status->get());
+                        setNextBuilding(status->getBonusScore());
                     break;
                 }
             }
@@ -262,7 +263,7 @@ void Stage1::blade_scheduler(float time){
                 if (isLevelEnd())
                     replaceNextScene();
                 else
-                    setNextBuilding(status->get());
+                    setNextBuilding(status->getBonusScore());
             }
         }
     }

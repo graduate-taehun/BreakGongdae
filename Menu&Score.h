@@ -23,7 +23,7 @@ public:
     CREATE_FUNC(ScoreBoard)
 };
 
-class MenuStage : public Layer{
+class MenuStage : public Layer {
 private:
     virtual bool init();
 

@@ -40,10 +40,14 @@ private:
     Label* lbScore;
     Label* lbCombo;
     
+    float STATUS_WIDTH;
+    float GAUGE_WIDTH;
+    
+    float BLADE_GAUGE_UNIT;//=STAGE1_BLADE_GAUGE_UNIT or STAGE2_BLADE_GAUGE_UNIT
+    
     const static int BAR_BLADE_Y=65;
     const static int BAR_GAUGE_Y=28;
     const static int BAR_X=78;
-    const static int LABEL_X=20;
     const static int LABEL_INTERVAL_Y=5;
     
     virtual bool initWithHeight(float height);
@@ -53,13 +57,10 @@ public:
     Status(const Status & st);
     static Status* createWithHeight(float height);
 
-    float STATUS_WIDTH;
-    float GAUGE_WIDTH;
+    const static int LABEL_X=20;
     
-	int getWidth();
-
-	int get();
-    void increase(int i);
+	int getBonusScore();
+    void increaseBonusScore(int i);
     
     int getCombo();
 	void resetCombo();
@@ -68,11 +69,9 @@ public:
 	bool bladeIsPossible();
     void resetBlade();
 	
-    int getMAX_BLADE();
 	int getMAX_COMBO();
 
 	int getHP();
-	int getMAX_HP();
 	void decreaseHP();
 
 	int getScore();
@@ -81,5 +80,7 @@ public:
     bool blockingIsPossible();
     void decreaseGauge(bool onGround);
     void setBlockingGaugeMode(bool decrease);
+    
+    void setBladeGaugeUnit(float _unit);
 };
 #endif /* defined(__BreakGongDae__Status__) */

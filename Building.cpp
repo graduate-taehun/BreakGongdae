@@ -12,7 +12,7 @@
 //
 //Block
 //
-bool Block::init(int _durability, string filename, int index) {
+bool Block::init(int _durability) {
     if(!Sprite::init()) return false;
     
     durability=_durability;
@@ -20,9 +20,9 @@ bool Block::init(int _durability, string filename, int index) {
     return true;
 }
 
-Block* Block::create(int _durability, string filename, int index) {
+Block* Block::create(int _durability) {
     Block *pRet = new Block();
-    if (pRet && pRet->init(_durability, filename, index)) {
+    if (pRet && pRet->init(_durability)) {
         pRet->autorelease();
         return pRet;
     }
@@ -67,7 +67,7 @@ bool Building::init(string filename, Size _blocksize, const vector<int>& current
     for(unsigned long i=0; i<currentDurabilities.size(); i++) {
         auto block=Block::create((int)
                                     ((float)currentDurabilities.at(i)
-                                        +( 1.0+(float)weight/16  )   ),filename,i);
+                                        +( 1.0+(float)weight/16  )   ));
         block->setContentSize(blocksize);
         block->setPosition(Vec2(0,((float)i+0.5)*blocksize.height-getContentSize().height/2));
         
@@ -88,20 +88,6 @@ bool Building::init(string filename, Size _blocksize, const vector<int>& current
     setPhysicsBody(body);
     
     return true;
-}
-
-Building* Building::createWithDurabilities(string filename, Size _blocksize, const vector<int>& currentDurabilities) {
-    
-    Building *pRet = new Building();
-    if (pRet && pRet->init(filename, _blocksize, currentDurabilities)){
-        pRet->autorelease();
-        return pRet;
-    }
-    else{
-        delete pRet;
-        pRet = NULL;
-        return NULL;
-    }
 }
 
 Building* Building::createWithWeight(string filename, int weight) {
