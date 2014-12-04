@@ -92,9 +92,9 @@ bool Stage1::isLevelEnd() {
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		CCDirector::getInstance()->resume();
-        P_Layer->setVisible(false);
-        P_Label->setVisible(false);
+		Director::getInstance()->resume();
+        pauseCover->setVisible(false);
+        lbPause->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 		Game_Pause = 0;
         return;
@@ -208,12 +208,12 @@ void Stage1::blade_return_scheduler(float time) {
     
     schedule(schedule_selector(Stage1::blade_scheduler));
     unschedule(schedule_selector(Stage1::blade_return_scheduler));
-	removeChild(B_Label);
+	removeChild(bladeText);
 }
 void Stage1::blade_scheduler(float time){
 	if (isScheduled(schedule_selector(Stage1::jump_scheduler))) {
 		unschedule(schedule_selector(Stage1::jump_scheduler));
-		removeChild(B_Label);
+		removeChild(bladeText);
 	}
  
 	static bool breaking=true;
@@ -222,10 +222,10 @@ void Stage1::blade_scheduler(float time){
         setViewPoint(blade->getPosition().y);
         if(blade->getPosition().y>THIS_BACKGROUND_HEIGHT-visibleSize.height) {
             breaking=false;
-            B_Label = Sprite::create(FILE_ETC + "B_Label.png");
-            B_Label->setColor(Color3B(255, 0, 0));
-            B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
-            addChild(B_Label, 30);
+            bladeText = Sprite::create(FILE_ETC + "bladeText.png");
+            bladeText->setColor(Color3B(255, 0, 0));
+            bladeText->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
+            addChild(bladeText, 30);
             unschedule(schedule_selector(Stage1::blade_scheduler));
             schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
         }
@@ -234,10 +234,10 @@ void Stage1::blade_scheduler(float time){
             status->increaseCombo(1, blade->getPosition() + Vec2(0, 400), true);
             if (building->attack(true)){
                 breaking=false;
-                B_Label = Sprite::create(FILE_ETC + "B_Label.png");
-                B_Label->setColor(Color3B(255, 0, 0));
-                B_Label->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
-                addChild(B_Label, 30);
+                bladeText = Sprite::create(FILE_ETC + "Blade_Text.png");
+                bladeText->setColor(Color3B(255, 0, 0));
+                bladeText->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, blade->getPosition().y)));
+                addChild(bladeText, 30);
                 unschedule(schedule_selector(Stage1::blade_scheduler));
                 schedule(schedule_selector(Stage1::blade_return_scheduler),TIME_BLADE_STOP, 1, TIME_BLADE_STOP);
             }

@@ -21,9 +21,9 @@ private:
     void stopAttackAction();
     void pre_jump_scheduler(float time);
 public:
-    const static float ATTACK_FRAME;
+    const static float ATTACK_FRAME; //=0.05f
     const static int ATTACK_TAG = 21;
-    const static float CHARACTER_OFFSET;
+    const static float CHARACTER_OFFSET; //=49
     virtual bool init();
     
     CREATE_FUNC(Character)

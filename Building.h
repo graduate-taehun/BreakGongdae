@@ -23,8 +23,8 @@ public:
     int getDurability();
     void attack();
     static Block* create(int _durability, string filename, int index);
-    const static Size SIZE_DEFAULT_BLOCK;
-    const static Size SIZE_78_BLOCK;
+    const static Size SIZE_DEFAULT_BLOCK; //(780.260)
+    const static Size SIZE_78_BLOCK; //(880.261)
 };
 
 class Building : public Layer {
@@ -33,7 +33,9 @@ protected:
     Sprite* background;
     Size blocksize;
     
-    const static PhysicsMaterial material;
+    const static PhysicsMaterial material; //(10000000.0f,0.0f,0.0f)
+    
+    // {Stage::fileBuilding , vector<int>{DURABS_XX}}
     const static map<string,const vector<int>> durabilities;
     
     virtual void restructure();
@@ -51,7 +53,7 @@ public:
 
 class Stairs78 : public Building {
 private:
-    const static string FILE_78;
+    const static string FILE_78; //=FILE_STAGE1+"78.png"
     const static int UNIT_NUM_78=9;
     
     Sprite* nextBuilding;

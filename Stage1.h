@@ -22,7 +22,7 @@ protected:
     vector<string>::const_iterator level;
     Building* building;
     Sprite* blade;
-	Sprite* B_Label;
+	Sprite* bladeText;
     virtual bool isLevelEnd();
     
     virtual void setNextBuilding(int weight=0);
@@ -38,7 +38,7 @@ protected:
     virtual bool init(Status* _status);
     
 public:
-    static const vector<string> fileBuilding;
+    static const vector<string> fileBuilding; //FILE_BUILDINGS_STAGE1 in BalanceSettings.h
     static cocos2d::Scene* createScene();
     static Stage1* create();
 };

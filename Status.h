@@ -14,8 +14,10 @@
 class Status : public Layer {
 private:
 	int score;
-	int combo;
+	
+    int combo;
 	int MAX_COMBO;
+    
     int currentHP;
     static const int MAX_HP = 30;
 	
@@ -53,8 +55,6 @@ public:
 
     float STATUS_WIDTH;
     float GAUGE_WIDTH;
-    
-    
     
 	int getWidth();
 

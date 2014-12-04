@@ -18,7 +18,7 @@ private:
     const static int HARD_TAG=102;
 	
     vector<string>::const_iterator cntMajor;
-    const static vector<string> majors;
+    const static vector<string> majors; //FILES_MAJORS in BalanceSettings.h
     Sprite* courses[3];
     
     virtual bool init(Status* _status);

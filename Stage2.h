@@ -26,7 +26,7 @@ private:
 
 public:
     ~Stage2();
-    static const vector<string> fileBuilding;
+    static const vector<string> fileBuilding; //FILE_BUILDINGS_STAGE2 in BalanceSettings.h
     
 	static cocos2d::Scene* createScene(Status* _status=nullptr);
     static Stage2* create(Status* status);

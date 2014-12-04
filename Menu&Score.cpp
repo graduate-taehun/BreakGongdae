@@ -54,7 +54,7 @@ bool ScoreBoard::init()
     
     // string filePath = CCFileUtils::getInstance()->fullPathForFilename("Score.txt");
     // "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
-    string filePath = CCFileUtils::getInstance()->getWritablePath() + "Score.txt";
+    string filePath = FileUtils::getInstance()->getWritablePath() + "Score.txt";
     ifstream in;
     in.open(filePath.c_str());
     
@@ -213,7 +213,7 @@ bool EndScene::init(Status& status, bool _allClear) {
 	addChild(combo);
 
 	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
-	string filePath = CCFileUtils::getInstance()->getWritablePath() + "Score.txt";
+	string filePath = FileUtils::getInstance()->getWritablePath() + "Score.txt";
 	ofstream out;
 	out.open(filePath.c_str(), ios::app);
 
