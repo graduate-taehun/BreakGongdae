@@ -21,7 +21,7 @@ private:
     int currentHP;
     static const int MAX_HP = 30;
 	
-	int B_Score;
+	int BonusScore;
     
 	int currentblade;
 	static const int MAX_BLADE = 30;

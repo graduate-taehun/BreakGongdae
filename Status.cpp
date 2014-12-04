@@ -16,7 +16,7 @@ bool Status::initWithHeight(float height) {
     combo = 0;
 	MAX_COMBO = 0;
     currentHP = MAX_HP;
-    B_Score=0;
+    BonusScore=0;
 	currentblade = 0;
     currentGauge = MAX_GAUGE;
     targetGauge = MAX_GAUGE;
@@ -93,7 +93,7 @@ Status::Status(const Status & st) {
     currentHP = st.currentHP;
     bar_HP->setTextureRect(st.bar_HP->getTextureRect());
     
-    B_Score=st.B_Score;
+    BonusScore=st.BonusScore;
 	
     MAX_COMBO = st.MAX_COMBO;
     
@@ -194,7 +194,7 @@ void Status::increaseScore(int i) {
 }
 
 
-void Status::increaseBScore(int i) { B_Score = B_Score + i; }
+void Status::increaseBScore(int i) { BonusScore = BonusScore + i; }
 
 int Status::getHP(){ return currentHP; }
 int Status::getMAX_HP(){ return MAX_HP; }
@@ -203,5 +203,5 @@ int Status::getCombo(){ return combo; }
 bool Status::bladeIsPossible(){ return currentblade==MAX_BLADE; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
 int Status::getMAX_BLADE(){ return MAX_BLADE; }
-int Status::getBScore() { return B_Score; }
+int Status::getBScore() { return BonusScore; }
 
