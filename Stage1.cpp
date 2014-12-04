@@ -141,7 +141,7 @@ void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 					if (isLevelEnd())
                         replaceNextScene();
 					else
-                        setNextBuilding(status->getBScore());
+                        setNextBuilding(status->get());
                     break;
                 }
             }
@@ -262,7 +262,7 @@ void Stage1::blade_scheduler(float time){
                 if (isLevelEnd())
                     replaceNextScene();
                 else
-                    setNextBuilding(status->getBScore());
+                    setNextBuilding(status->get());
             }
         }
     }

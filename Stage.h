@@ -25,11 +25,9 @@ private:
      
     static const int GROUND_TAG = 0;
 protected:
-    static const int GROUND_HEIGHT = 50;
     static const int THIS_TAG = 2;
     static const int MENU_Z_ORDER = 255;
     static const int THIS_HEIGHT = 5500;
-    static const int THIS_BACKGROUND_HEIGHT=3192;
     
     //캐릭터가 현재 어디 있는지 posCharacter의 index로 나타냄. 처음은 중앙이므로 1
     int cntofPosCharacter;
@@ -63,6 +61,8 @@ protected:
     virtual void replaceNextScene();
     
 public:
+    static const int GROUND_HEIGHT = 50;
+    static const int THIS_BACKGROUND_HEIGHT=3192;
 	static cocos2d::Scene* createScene();
 
     static Stage* create();

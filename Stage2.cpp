@@ -45,7 +45,7 @@ bool Stage2::init(Status *_status) {
     splashScreen->setTexture(FILE_BACKGROUND+"stage2_start.png");
 
 	building->setPositionOfBottom(-building->getContentSize().height);
-    setNextBuilding(status->getBScore());
+    setNextBuilding(status->get());
 	return true;
 }
 

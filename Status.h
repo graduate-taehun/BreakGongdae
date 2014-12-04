@@ -58,8 +58,8 @@ public:
     
 	int getWidth();
 
-	int getBScore();
-    void increaseBScore(int i);
+	int get();
+    void increase(int i);
     
     int getCombo();
 	void resetCombo();

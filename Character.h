@@ -26,6 +26,9 @@ public:
     const static float CHARACTER_OFFSET; //=49
     virtual bool init();
     
+    virtual void setPosition(const Vec2& _pos);
+    virtual void setPosition(float x, float y);
+    
     CREATE_FUNC(Character)
     
     State getState();

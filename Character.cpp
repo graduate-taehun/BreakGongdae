@@ -7,6 +7,7 @@
 //
 
 #include "Character.h"
+#include "Stage.h"
 
 bool Character::init() {
     if(!Sprite::initWithFile(FILE_CHARACTER+"ch_base.png"))
@@ -16,14 +17,24 @@ bool Character::init() {
 
     body->setRotationEnable(false);
 	setPhysicsBody(body);
-    
     setState(sGround);
     action = None;
-	
+    
     return true;
 }
 void Character::stopAttackAction(){
     setActionState(None);
+}
+
+void Character::setPosition(const Vec2& _pos) {
+    if(_pos.y<=Stage::THIS_BACKGROUND_HEIGHT)
+        Sprite::setPosition(_pos.x,_pos.y);
+    else
+        Sprite::setPosition(getPosition().x,Stage::GROUND_HEIGHT+getContentSize().height/2);
+}
+
+void Character::setPosition(float x, float y) {
+    Character::setPosition(Vec2(x,y));
 }
 
 void Character::doAttackAction() {

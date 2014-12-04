@@ -51,9 +51,9 @@ using namespace std;
 #define TIME_BLADE_STOP 0.3
 
 //Bonus Score
-#define HONEY_BSCORE 1
-#define NORMAL_BSCORE 2
-#define HARD_BSCORE 3
+#define HONEY_BONUS_SCORE 1
+#define NORMAL_BONUS_SCORE 2
+#define HARD_BONUS_SCORE 3
 
 //Folders
 #define ROOT_RESOURCES      string("Resources/")

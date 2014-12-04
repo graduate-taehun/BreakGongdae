@@ -193,8 +193,7 @@ void Status::increaseScore(int i) {
     lbScore->setString(string("Score : ") + to_string(score));
 }
 
-
-void Status::increaseBScore(int i) { BonusScore = BonusScore + i; }
+void Status::increase(int i) { BonusScore = BonusScore + i; }
 
 int Status::getHP(){ return currentHP; }
 int Status::getMAX_HP(){ return MAX_HP; }
@@ -203,5 +202,5 @@ int Status::getCombo(){ return combo; }
 bool Status::bladeIsPossible(){ return currentblade==MAX_BLADE; }
 int Status::getMAX_COMBO(){ return MAX_COMBO; }
 int Status::getMAX_BLADE(){ return MAX_BLADE; }
-int Status::getBScore() { return BonusScore; }
+int Status::get() { return BonusScore; }
 
