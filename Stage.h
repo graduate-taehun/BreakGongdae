@@ -45,8 +45,8 @@ protected:
 	Sprite* P_Layer;
     Menu* menuClose;
 	MenuItemImage* btnClose;
-    LabelBMFont *lbTitle;
-	LabelTTF *P_Label;
+    Label *lbTitle;
+	Label *P_Label;
     Status* status;
 	Sprite* groundNode;
     Character* character;

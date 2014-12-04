@@ -35,8 +35,8 @@ private:
     Sprite* bar_gauge;
     Sprite* bar_HP;
 	Sprite* bar_blade;
-    CCLabelTTF* lbScore;
-    CCLabelTTF* lbCombo;
+    Label* lbScore;
+    Label* lbCombo;
     
     const static int BAR_BLADE_Y=65;
     const static int BAR_GAUGE_Y=28;

@@ -92,7 +92,7 @@ bool Stage1::isLevelEnd() {
 
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		CCDirector::sharedDirector()->resume();
+		CCDirector::getInstance()->resume();
         P_Layer->setVisible(false);
         P_Label->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
@@ -177,7 +177,9 @@ void Stage1::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Eve
             
             status->setBlockingGaugeMode(false);
             unschedule(schedule_selector(Stage1::block_scheduler));
+            break;
         }
+        default: break;
     }
 }
 

@@ -48,13 +48,13 @@ bool ScoreBoard::init()
 	background->setPosition(visibleSize.width / 2, visibleSize.height * 5);
 	addChild(background);
 
-	auto label = LabelTTF::create("** Ranking **", "Arial Rounded MT Bold", 60);
+	auto label = Label::createWithSystemFont("** Ranking **", "Arial Rounded MT Bold", 60);
     label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 200);
     this->addChild(label);
     
-    // string filePath = CCFileUtils::sharedFileUtils()->fullPathForFilename("Score.txt");
+    // string filePath = CCFileUtils::getInstance()->fullPathForFilename("Score.txt");
     // "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
-    string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
+    string filePath = CCFileUtils::getInstance()->getWritablePath() + "Score.txt";
     ifstream in;
     in.open(filePath.c_str());
     
@@ -67,21 +67,21 @@ bool ScoreBoard::init()
 		int a = stoi(score);
 		temp_score.push_back(a);
 	}
-	LabelTTF* lbtemp;
+	Label* lbtemp;
 	sort(temp_score.begin(), temp_score.end(), comp);
 
-	for (int i = 1; i <= 5; i++){	
+	for (unsigned long i = 1; i <= 5; i++){
 		if (i > temp_score.size())
 			break;
 
 		if (i == 1)
-			lbtemp = LabelTTF::create(to_string(i) + "st        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+			lbtemp = Label::createWithSystemFont(to_string(i) + "st        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
 		else if (i == 2)
-			lbtemp = LabelTTF::create(to_string(i) + "nd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+			lbtemp = Label::createWithSystemFont(to_string(i) + "nd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
 		else if (i == 3)
-			lbtemp = LabelTTF::create(to_string(i) + "rd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+			lbtemp = Label::createWithSystemFont(to_string(i) + "rd        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
 		else
-			lbtemp = LabelTTF::create(to_string(i) + "th        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
+			lbtemp = Label::createWithSystemFont(to_string(i) + "th        " + to_string(temp_score[i-1]), "Arial Rounded MT Bold", 35);
 
 		lbtemp->setPosition(Vec2(origin.x + visibleSize.width *9 / 24, origin.y + visibleSize.height / 2 + 100 - 50 * i));
 		lbtemp->setAnchorPoint(Vec2(0, 0.5));
@@ -138,7 +138,7 @@ bool MenuStage::init(){
 	auto item_2 = MenuItemLabel::create(item2, CC_CALLBACK_1(MenuStage::menuCallbackforScoreBoard, this));
 	item_2->setScale(2, 2);
 		
-	auto item3 = LabelBMFont::create("EXIT", FILE_FONT+"bitmapFontTest3.fnt");
+	auto item3 = Label::createWithBMFont(FILE_FONT+"bitmapFontTest3.fnt","EXIT");
 	auto item_3 = MenuItemLabel::create(item3, CC_CALLBACK_1(MenuStage::menuCallbackforExit, this));
 	item_3->setScale(2, 2);
 
@@ -202,18 +202,18 @@ bool EndScene::init(Status& status, bool _allClear) {
 	menu->setPosition(Vec2::ZERO);
 	addChild(menu);
 	
-	auto score = LabelTTF::create("Score : " + to_string(status.getScore()), "Arial Rounded MT Bold", 45);
+	auto score = Label::createWithSystemFont("Score : " + to_string(status.getScore()), "Arial Rounded MT Bold", 45);
 	score->setColor(Color3B(0, 0, 0));
     score->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + (allClear?-120:240)));
 	addChild(score);
 
-	auto combo = LabelTTF::create("MAX Combo : " + to_string(status.getMAX_COMBO()), "Arial Rounded MT Bold", 45);
+	auto combo = Label::createWithSystemFont("MAX Combo : " + to_string(status.getMAX_COMBO()), "Arial Rounded MT Bold", 45);
 	combo->setColor(Color3B(0, 0, 0));
 	combo->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + (allClear?-40:180)));
 	addChild(combo);
 
 	// "C:/Users/LeeSangmin/AppData/Local/GongDae/Score.txt"
-	string filePath = CCFileUtils::sharedFileUtils()->getWritablePath() + "Score.txt";
+	string filePath = CCFileUtils::getInstance()->getWritablePath() + "Score.txt";
 	ofstream out;
 	out.open(filePath.c_str(), ios::app);
 

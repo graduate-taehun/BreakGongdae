@@ -54,25 +54,16 @@ using namespace std;
 #define NORMAL_BSCORE 2
 #define HARD_BSCORE 3
 
-//Files
-//Seperator
-#if (CC_TARGET_PLATFORM==CC_PLATFORM_MAC) \
- || (CC_TARGET_PLATFORM==CC_PLATFORM_IOS)
-    #define DIR_SEPERATOR "/"
-#else
-    #define DIR_SEPERATOR "/"
-#endif
-
 //Folders
-#define ROOT_RESOURCES      string("Resources")+DIR_SEPERATOR
-#define FILE_BACKGROUND     ROOT_RESOURCES+"0. Background"+DIR_SEPERATOR
-#define FILE_CHARACTER      ROOT_RESOURCES+"1. Character"+DIR_SEPERATOR
-#define FILE_STAGE1         ROOT_RESOURCES+"2. Stage 1"+DIR_SEPERATOR
-#define FILE_BOUNS_STAGE    ROOT_RESOURCES+"3. Bonus Stage"+DIR_SEPERATOR
-#define FILE_STAGE2         ROOT_RESOURCES+"4. Stage 2"+DIR_SEPERATOR
-#define FILE_BGM(__mp3__)   (ROOT_RESOURCES+"5. BGM"+DIR_SEPERATOR+__mp3__).data()
-#define FILE_FONT           ROOT_RESOURCES"6. FONT"+DIR_SEPERATOR
-#define FILE_ETC            ROOT_RESOURCES+"7. etc"+DIR_SEPERATOR
+#define ROOT_RESOURCES      string("Resources/")
+#define FILE_BACKGROUND     ROOT_RESOURCES+"0. Background/"
+#define FILE_CHARACTER      ROOT_RESOURCES+"1. Character/"
+#define FILE_STAGE1         ROOT_RESOURCES+"2. Stage 1/"
+#define FILE_BOUNS_STAGE    ROOT_RESOURCES+"3. Bonus Stage/"
+#define FILE_STAGE2         ROOT_RESOURCES+"4. Stage 2/"
+#define FILE_BGM(__mp3__)   (ROOT_RESOURCES+"5. BGM/"+__mp3__).data()
+#define FILE_FONT           ROOT_RESOURCES+"6. FONT/"
+#define FILE_ETC            ROOT_RESOURCES+"7. etc/"
 
 //Files_Stage1
 #define FILE_BUILDINGS_STAGE1 \

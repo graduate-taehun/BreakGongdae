@@ -49,13 +49,13 @@ bool Status::initWithHeight(float height) {
 	bar_blade->setAnchorPoint(Vec2(0, 0.5));
 	addChild(bar_blade);
 
-	lbScore = LabelTTF::create("Score : 0", "Arial Rounded MT Bold", 30);
+	lbScore = Label::createWithSystemFont("Score : 0", "Arial Rounded MT Bold", 30);
     lbScore->setPosition(Vec2(LABEL_X, height-lbScore->getContentSize().height/2-LABEL_INTERVAL_Y));
     lbScore->setAnchorPoint(Vec2(0,0.5));
     lbScore->setColor(Color3B(0, 0, 0));
     addChild(lbScore);
     
-	lbCombo = LabelTTF::create("Combo : 0", "Arial Rounded MT Bold", 25);
+	lbCombo = Label::createWithSystemFont("Combo : 0", "Arial Rounded MT Bold", 25);
     lbCombo->setPosition(Vec2(LABEL_X, height-lbScore->getContentSize().height-lbCombo->getContentSize().height/2-LABEL_INTERVAL_Y));
     lbCombo->setAnchorPoint(Vec2(0,0.5));
     lbCombo->setColor(Color3B(0, 0, 0));
@@ -124,7 +124,7 @@ void Status::increaseCombo(int i, const Vec2& posCharacter, bool isBlade) {
 	if (combo > MAX_COMBO) MAX_COMBO = combo;
 
 	lbCombo->setString(string("Combo : ") + to_string(combo));
-	auto *Label_Combo = CCLabelTTF::create(to_string(combo) + " Combo!", "Arial Rounded MT Bold", 30);
+	auto *Label_Combo = Label::createWithSystemFont(to_string(combo) + " Combo!", "Arial Rounded MT Bold", 30);
 	Label_Combo->setColor(Color3B(0, 0, 0));
 
 	bool leftorright = rand() % 2;

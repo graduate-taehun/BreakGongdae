@@ -56,7 +56,7 @@ bool Stage::init(Status* _status=nullptr)
     if (!Layer::init())
         return false;
     
-	CCDirector::sharedDirector()->resume();
+	CCDirector::getInstance()->resume();
 	
     setContentSize(Size(visibleSize.width,Stage::THIS_HEIGHT));
     
@@ -117,11 +117,11 @@ bool Stage::init(Status* _status=nullptr)
     status->setPosition(posStatus);
     addChild(status, MENU_Z_ORDER);
 
-    lbTitle = LabelBMFont::create("Stage", FILE_FONT+"futura-48.fnt");
+    lbTitle = Label::createWithBMFont(FILE_FONT+"futura-48.fnt","Stage");
     lbTitle->setPosition(posTitle);
     addChild(lbTitle, MENU_Z_ORDER);
     
-    P_Label = LabelTTF::create("Pause", "Arial Rounded MT Bold", 45);
+    P_Label = Label::createWithSystemFont("Pause", "Arial Rounded MT Bold", 45);
     P_Label->setColor(Color3B(0, 0, 0));
     P_Label->setVisible(false);
     addChild(P_Label, MENU_Z_ORDER);
@@ -172,7 +172,7 @@ void Stage::jump_scheduler(float time) {
 
 void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause == 1) {
-		CCDirector::sharedDirector()->resume();
+		CCDirector::getInstance()->resume();
         P_Layer->setVisible(false);
         P_Label->setVisible(false);
 		CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
@@ -195,7 +195,7 @@ void Stage::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
         case EventKeyboard::KeyCode::KEY_ESCAPE: {
             if (Game_Pause == 0) {
 				CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-				CCDirector::sharedDirector()->pause();
+				CCDirector::getInstance()->pause();
                 P_Label->setPosition(Vec2(visibleSize.width / 2 - 400, max(visibleSize.height / 2, character->getPosition().y) + 250));
                 P_Layer->setPosition(Vec2(visibleSize.width / 2, max(visibleSize.height / 2, character->getPosition().y)));
                 P_Layer->setVisible(true);

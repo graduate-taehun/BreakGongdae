@@ -64,7 +64,7 @@ bool Building::init(string filename, Size _blocksize, const vector<int>& current
     body->removeAllShapes();
     
     //block들 생성
-    for(int i=0; i<currentDurabilities.size(); i++) {
+    for(unsigned long i=0; i<currentDurabilities.size(); i++) {
         auto block=Block::create((int)
                                     ((float)currentDurabilities.at(i)
                                         +( 1.0+(float)weight/16  )   ),filename,i);

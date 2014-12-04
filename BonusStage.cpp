@@ -64,7 +64,7 @@ void BonusStage::replaceNextScene() {
 bool BonusStage::onContactBegin(PhysicsContact& contact) {
 	if (!Stage::onContactBegin(contact)) return false;
 
-    auto Label = CCLabelTTF::create("", "Arial Rounded MT Bold", 30);
+    auto Label = Label::createWithSystemFont("", "Arial Rounded MT Bold", 30);
     bool leftorright = rand() % 2;
     Label->setPosition(character->getPosition().x + (leftorright ? 80 : -80), character->getPositionOfTop() + 80);
     Label->setPhysicsBody(PhysicsBody::createBox(Label->getContentSize()));
