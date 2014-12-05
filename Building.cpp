@@ -67,7 +67,7 @@ bool Building::init(string filename, Size _blocksize, const vector<int>& current
     for(unsigned long i=0; i<currentDurabilities.size(); i++) {
         auto block=Block::create((int)
                                     ((float)currentDurabilities.at(i)
-                                        +( 1.0+(float)weight/16  )   ));
+                                        +( 1.0+(float)weight/12  )   ));
         block->setContentSize(blocksize);
         block->setPosition(Vec2(0,((float)i+0.5)*blocksize.height-getContentSize().height/2));
         

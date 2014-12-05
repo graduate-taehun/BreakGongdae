@@ -17,6 +17,7 @@ private:
     void blade_scheduler(float time);
     void blade_return_scheduler(float time);    
     void block_scheduler(float time);
+    void jump_scheduler(float time); //점프하면 반복적으로 호출되는 함수
 
 protected:
     vector<string>::const_iterator level;

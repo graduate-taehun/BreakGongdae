@@ -98,6 +98,16 @@ bool Stage1::isLevelEnd() {
     return level>=fileBuilding.cend();
 }
 
+void Stage1::jump_scheduler(float time) {
+    setViewPoint(character->getPositionOfBottom()+character->getHeight()/2);
+    if(character->getPositionOfBottom()<=GROUND_HEIGHT+10) {
+        character->getPhysicsBody()->setVelocity(Vec2(0.,0.));
+        character->setPosition(Vec2(character->getPosition().x,GROUND_HEIGHT+character->getContentSize().height/2));
+        character->setState(sGround);
+        unschedule(schedule_selector(Stage1::jump_scheduler));
+    }
+}
+
 void Stage1::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE && Game_Pause) {
 		Director::getInstance()->resume();
