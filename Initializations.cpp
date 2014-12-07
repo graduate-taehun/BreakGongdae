@@ -24,7 +24,7 @@ const map<string, vector<string>> BonusStage::courses_name
     {BonusStage::majors[0],{"Circuit\nTheory","Digital\nSystem\nDesign","Signal\nand\nSystem"}},
     {BonusStage::majors[1],{"DS","Automata","OOP"}},
     {BonusStage::majors[2],{"Discrete\nMathematics","Set\nTheory","Differential\nGeometry"}},
-    {BonusStage::majors[3],{"Organic\nChemistry","Chemical\nBiomelecular\nEngineering","Thermodynamics"}}
+    {BonusStage::majors[3],{"Organic\nChemistry","Chemical\nBiomolecular\nEngineering","Thermodynamics"}}
 };
 
 //Stage2

@@ -57,7 +57,6 @@ protected:
     virtual bool onContactBegin(PhysicsContact& contact) { return true; }
     
 	void scene_scheduler(float time);
-	void gauge_up_scheduler(float time);
     
     virtual void replaceNextScene();
 public:

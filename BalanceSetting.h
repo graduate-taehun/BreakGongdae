@@ -17,7 +17,7 @@ USING_NS_CC;
 using namespace std;
 
 //For_Debug
-#define START_SCENE     Stage1::createScene()
+#define START_SCENE     Stage2::createScene()
 #define DEBUG_MODE      PhysicsWorld::DEBUGDRAW_NONE
 
 //Blocking
